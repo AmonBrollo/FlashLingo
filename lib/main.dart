@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 void main() {
   runApp(const FlashcardApp());
@@ -21,6 +23,10 @@ class Flashcard {
   final String word;
 
   Flashcard({required this.imagePath, required this.word});
+
+  factory Flashcard.fromJson(Map<String, dynamic> json) {
+    return Flashcard(imagePath: json['imagePath'], word: json['word']);
+  }
 }
 
 class FlashcardScreen extends StatefulWidget {
@@ -31,14 +37,27 @@ class FlashcardScreen extends StatefulWidget {
 }
 
 class _FlashcardScreenState extends State<FlashcardScreen> {
-  bool isFlipped = false;
+  List<Flashcard> flashcards = [];
   int currentIndex = 0;
+  bool isFlipped = false;
 
-  final List<Flashcard> flashcards = [
-    Flashcard(imagePath: 'assets/images/bread.png', word: 'Kenyér'),
-    Flashcard(imagePath: 'assets/images/egg.png', word: 'tolyas'),
-    Flashcard(imagePath: 'assets/images/chicken.png', word: 'csirke'),
-  ];
+  Future<void> loadFlashcards() async {
+    final String jsonString = await rootBundle.loadString(
+      'assets/data/flashcards.json',
+    );
+
+    final List<dynamic> jsonData = json.decode(jsonString);
+
+    setState(() {
+      flashcards = jsonData.map((item) => Flashcard.fromJson(item)).toList();
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadFlashcards();
+  }
 
   void flipCard() {
     setState(() {
@@ -47,25 +66,29 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
   }
 
   void nextCard() {
-    setState(() {
-      if (currentIndex < flashcards.length - 1) {
+    if (currentIndex < flashcards.length - 1) {
+      setState(() {
         currentIndex++;
         isFlipped = false;
-      }
-    });
+      });
+    }
   }
 
   void prevCard() {
-    setState(() {
-      if (currentIndex > 0) {
+    if (currentIndex > 0) {
+      setState(() {
         currentIndex--;
         isFlipped = false;
-      }
-    });
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    if (flashcards.isEmpty) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+
     final flashcard = flashcards[currentIndex];
 
     return Scaffold(

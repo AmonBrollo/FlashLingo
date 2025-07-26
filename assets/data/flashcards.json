@@ -1,0 +1,14 @@
+[
+    {
+        "imagePath": "assets/images/bread.png",
+        "word": "Kenyér"
+    },
+    {
+        "imagePath": "assets/images/egg.png",
+        "word": "Tolyas"
+    },
+    {
+        "imagePath": "assets/images/chicken.png",
+        "word": "Csirke"
+    }
+]
