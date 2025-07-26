@@ -3,6 +3,8 @@
         android:label="flashlingo"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

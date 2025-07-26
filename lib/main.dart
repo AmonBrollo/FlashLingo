@@ -90,6 +90,22 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
     }
   }
 
+  Future<void> changeCurrentImage() async {
+    final pickedFile = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+    );
+
+    if (pickedFile != null) {
+      setState(() {
+        flashcards[currentIndex] = Flashcard(
+          imagePath: pickedFile.path,
+          word: flashcards[currentIndex].word,
+          isAsset: false,
+        );
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (flashcards.isEmpty) {
@@ -134,18 +150,31 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
                         fontWeight: FontWeight.bold,
                       ),
                     )
-                  : flashcard.isAsset
-                  ? Image.asset(
-                      flashcard.imagePath,
-                      fit: BoxFit.cover,
-                      width: 250,
-                      height: 250,
-                    )
-                  : Image.file(
-                      File(flashcard.imagePath),
-                      fit: BoxFit.cover,
-                      width: 250,
-                      height: 250,
+                  : Stack(
+                      alignment: Alignment.bottomCenter,
+                      children: [
+                        flashcard.isAsset
+                            ? Image.asset(
+                                flashcard.imagePath,
+                                width: 250,
+                                height: 250,
+                                fit: BoxFit.cover,
+                              )
+                            : Image.file(
+                                File(flashcard.imagePath),
+                                width: 250,
+                                height: 250,
+                                fit: BoxFit.cover,
+                              ),
+                        Positioned(
+                          bottom: 8,
+                          child: IconButton(
+                            icon: const Icon(Icons.edit, color: Colors.black87),
+                            tooltip: 'Change image',
+                            onPressed: changeCurrentImage,
+                          ),
+                        ),
+                      ],
                     ),
             ),
           ),
@@ -215,16 +244,16 @@ class _AddFlashcardScreenState extends State<AddFlashcardScreen> {
   }
 
   void submit() {
-    if (imageFile != null && wordController.text.isNotEmpty) {
-      final newFlashcard = Flashcard(
-        imagePath: imageFile!.path,
-        word: wordController.text.trim(),
-        isAsset: false,
-      );
+    if (wordController.text.trim().isEmpty) return;
 
-      widget.onAdd(newFlashcard);
-      Navigator.pop(context);
-    }
+    final newFlashcard = Flashcard(
+      imagePath: imageFile?.path ?? 'assets/images/default.png',
+      word: wordController.text.trim(),
+      isAsset: imageFile == null,
+    );
+
+    widget.onAdd(newFlashcard);
+    Navigator.pop(context);
   }
 
   @override
