@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 
 void main() {
   runApp(const FlashcardApp());
@@ -21,11 +23,16 @@ class FlashcardApp extends StatelessWidget {
 class Flashcard {
   final String imagePath;
   final String word;
+  final bool isAsset;
 
-  Flashcard({required this.imagePath, required this.word});
+  Flashcard({required this.imagePath, required this.word, this.isAsset = true});
 
   factory Flashcard.fromJson(Map<String, dynamic> json) {
-    return Flashcard(imagePath: json['imagePath'], word: json['word']);
+    return Flashcard(
+      imagePath: json['imagePath'],
+      word: json['word'],
+      isAsset: true,
+    );
   }
 }
 
@@ -96,6 +103,28 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
       appBar: AppBar(
         title: const Text('Flashlingo'),
         backgroundColor: Colors.brown,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            tooltip: 'Add Flashcard',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => AddFlashcardScreen(
+                    onAdd: (newCard) {
+                      setState(() {
+                        flashcards.add(newCard);
+                        currentIndex = flashcards.length - 1;
+                        isFlipped = false;
+                      });
+                    },
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -127,8 +156,15 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
                         fontWeight: FontWeight.bold,
                       ),
                     )
-                  : Image.asset(
+                  : flashcard.isAsset
+                  ? Image.asset(
                       flashcard.imagePath,
+                      fit: BoxFit.cover,
+                      width: 250,
+                      height: 250,
+                    )
+                  : Image.file(
+                      File(flashcard.imagePath),
                       fit: BoxFit.cover,
                       width: 250,
                       height: 250,
@@ -151,6 +187,85 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
             ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+class AddFlashcardScreen extends StatefulWidget {
+  final Function(Flashcard) onAdd;
+
+  const AddFlashcardScreen({super.key, required this.onAdd});
+
+  @override
+  State<AddFlashcardScreen> createState() => _AddFlashcardScreenState();
+}
+
+class _AddFlashcardScreenState extends State<AddFlashcardScreen> {
+  final TextEditingController wordController = TextEditingController();
+  File? imageFile;
+
+  Future<void> pickImage() async {
+    final picker = ImagePicker();
+    final picked = await picker.pickImage(source: ImageSource.gallery);
+
+    if (picked != null) {
+      setState(() {
+        imageFile = File(picked.path);
+      });
+    }
+  }
+
+  void submit() {
+    if (imageFile != null && wordController.text.isNotEmpty) {
+      final newFlashcard = Flashcard(
+        imagePath: imageFile!.path,
+        word: wordController.text.trim(),
+        isAsset: false,
+      );
+
+      widget.onAdd(newFlashcard);
+      Navigator.pop(context);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Add Flashcard'),
+        backgroundColor: Colors.brown,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            GestureDetector(
+              onTap: pickImage,
+              child: Container(
+                width: 200,
+                height: 200,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.brown),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: imageFile != null
+                    ? Image.file(imageFile!, fit: BoxFit.cover)
+                    : const Center(child: Text("Tap to pick image")),
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: wordController,
+              decoration: const InputDecoration(labelText: 'Enter word'),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: submit,
+              child: const Text("Add Flashcard"),
+            ),
+          ],
+        ),
       ),
     );
   }
