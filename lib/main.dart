@@ -103,28 +103,6 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
       appBar: AppBar(
         title: const Text('Flashlingo'),
         backgroundColor: Colors.brown,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            tooltip: 'Add Flashcard',
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => AddFlashcardScreen(
-                    onAdd: (newCard) {
-                      setState(() {
-                        flashcards.add(newCard);
-                        currentIndex = flashcards.length - 1;
-                        isFlipped = false;
-                      });
-                    },
-                  ),
-                ),
-              );
-            },
-          ),
-        ],
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -187,6 +165,26 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
             ],
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => AddFlashcardScreen(
+                onAdd: (newCard) {
+                  setState(() {
+                    flashcards.add(newCard);
+                    currentIndex = flashcards.length - 1;
+                    isFlipped = false;
+                  });
+                },
+              ),
+            ),
+          );
+        },
+        backgroundColor: Colors.brown,
+        child: const Icon(Icons.add),
       ),
     );
   }
