@@ -21,17 +21,21 @@ class FlashcardApp extends StatelessWidget {
 }
 
 class Flashcard {
-  final String imagePath;
-  final String word;
-  final bool isAsset;
+  final String english;
+  final String hungarian;
+  final String? imagePath;
 
-  Flashcard({required this.imagePath, required this.word, this.isAsset = true});
+  Flashcard({
+    required this.english,
+    required this.hungarian,
+    required this.imagePath,
+  });
 
   factory Flashcard.fromJson(Map<String, dynamic> json) {
     return Flashcard(
-      imagePath: json['imagePath'],
-      word: json['word'],
-      isAsset: true,
+      english: json['english'],
+      hungarian: json['hungarian'],
+      imagePath: null,
     );
   }
 }
@@ -98,9 +102,9 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
     if (pickedFile != null) {
       setState(() {
         flashcards[currentIndex] = Flashcard(
+          english: flashcards[currentIndex].english,
+          hungarian: flashcards[currentIndex].hungarian,
           imagePath: pickedFile.path,
-          word: flashcards[currentIndex].word,
-          isAsset: false,
         );
       });
     }
@@ -142,74 +146,85 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
                 ],
               ),
               alignment: Alignment.center,
-              child: isFlipped
-                  ? Text(
-                      flashcard.word,
-                      style: const TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    )
-                  : Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Center(
-                          child: flashcard.isAsset
-                              ? Image.asset(
-                                  flashcard.imagePath,
-                                  width: 250,
-                                  height: 250,
-                                  fit: BoxFit.cover,
-                                )
-                              : Image.file(
-                                  File(flashcard.imagePath),
-                                  width: 250,
-                                  height: 250,
-                                  fit: BoxFit.cover,
-                                ),
-                        ),
-                        const SizedBox(height: 8),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 16.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Center(
+                    child: isFlipped
+                        ? Text(
+                            flashcard.hungarian,
+                            style: const TextStyle(
+                              fontSize: 32,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        : Column(
                             children: [
-                              IconButton(
-                                icon: const Icon(
-                                  Icons.edit,
-                                  color: Colors.black87,
+                              Text(
+                                flashcard.english,
+                                style: const TextStyle(
+                                  fontSize: 32,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                                tooltip: 'Change image',
-                                onPressed: changeCurrentImage,
                               ),
+                              const SizedBox(height: 12),
+                              flashcard.imagePath != null
+                                  ? Image.file(
+                                      File(flashcard.imagePath!),
+                                      width: 250,
+                                      height: 250,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : const Text(
+                                      'No image yet. \n Tap ✏️ to add one.',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
                             ],
                           ),
+                  ),
+                  const SizedBox(height: 8),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 16.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.edit, color: Colors.black87),
+                          tooltip: 'Add image',
+                          onPressed: changeCurrentImage,
                         ),
                       ],
                     ),
+                  ),
+                ],
+              ),
             ),
           ),
-          const SizedBox(height: 30),
+          const SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ElevatedButton(
+              IconButton(
+                icon: const Icon(Icons.arrow_back),
                 onPressed: prevCard,
-                child: const Icon(Icons.arrow_back),
               ),
               const SizedBox(width: 20),
-              ElevatedButton(
+              IconButton(
+                icon: const Icon(Icons.arrow_forward),
                 onPressed: nextCard,
-                child: const Icon(Icons.arrow_forward),
               ),
             ],
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
+        onPressed: () async {
+          final newCard = await Navigator.push(
             context,
             MaterialPageRoute(
               builder: (_) => AddFlashcardScreen(
@@ -241,27 +256,16 @@ class AddFlashcardScreen extends StatefulWidget {
 }
 
 class _AddFlashcardScreenState extends State<AddFlashcardScreen> {
-  final TextEditingController wordController = TextEditingController();
-  File? imageFile;
-
-  Future<void> pickImage() async {
-    final picker = ImagePicker();
-    final picked = await picker.pickImage(source: ImageSource.gallery);
-
-    if (picked != null) {
-      setState(() {
-        imageFile = File(picked.path);
-      });
-    }
-  }
+  final TextEditingController englishController = TextEditingController();
+  final TextEditingController hungarianController = TextEditingController();
 
   void submit() {
-    if (wordController.text.trim().isEmpty) return;
+    if (englishController.text.trim().isEmpty) return;
 
     final newFlashcard = Flashcard(
-      imagePath: imageFile?.path ?? 'assets/images/default.png',
-      word: wordController.text.trim(),
-      isAsset: imageFile == null,
+      english: englishController.text.trim(),
+      hungarian: hungarianController.text.trim(),
+      imagePath: null,
     );
 
     widget.onAdd(newFlashcard);
@@ -279,24 +283,19 @@ class _AddFlashcardScreenState extends State<AddFlashcardScreen> {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            GestureDetector(
-              onTap: pickImage,
-              child: Container(
-                width: 200,
-                height: 200,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.brown),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: imageFile != null
-                    ? Image.file(imageFile!, fit: BoxFit.cover)
-                    : const Center(child: Text("Tap to pick image")),
+            const SizedBox(height: 16),
+            TextField(
+              controller: englishController,
+              decoration: const InputDecoration(
+                labelText: 'Enter English word',
               ),
             ),
             const SizedBox(height: 16),
             TextField(
-              controller: wordController,
-              decoration: const InputDecoration(labelText: 'Enter word'),
+              controller: hungarianController,
+              decoration: const InputDecoration(
+                labelText: 'Enter hungarian word',
+              ),
             ),
             const SizedBox(height: 20),
             ElevatedButton(

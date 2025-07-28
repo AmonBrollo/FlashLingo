@@ -1,14 +1,17 @@
 [
     {
-        "imagePath": "assets/images/bread.png",
-        "word": "Kenyér"
+        "english": "Bread",
+        "hungarian": "Kenyér",
+        "imagePath": "assets/images/bread.png"
     },
     {
-        "imagePath": "assets/images/egg.png",
-        "word": "Tolyas"
+        "english": "Egg",
+        "hungarian": "Tojás",
+        "imagePath": "assets/images/egg.png"
     },
     {
-        "imagePath": "assets/images/chicken.png",
-        "word": "Csirke"
+        "english": "Chicken",
+        "hungarian": "Csirke",
+        "imagePath": "assets/images/chicken.png"
     }
 ]
