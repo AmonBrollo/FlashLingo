@@ -150,28 +150,40 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
                         fontWeight: FontWeight.bold,
                       ),
                     )
-                  : Stack(
-                      alignment: Alignment.bottomCenter,
+                  : Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        flashcard.isAsset
-                            ? Image.asset(
-                                flashcard.imagePath,
-                                width: 250,
-                                height: 250,
-                                fit: BoxFit.cover,
-                              )
-                            : Image.file(
-                                File(flashcard.imagePath),
-                                width: 250,
-                                height: 250,
-                                fit: BoxFit.cover,
+                        Center(
+                          child: flashcard.isAsset
+                              ? Image.asset(
+                                  flashcard.imagePath,
+                                  width: 250,
+                                  height: 250,
+                                  fit: BoxFit.cover,
+                                )
+                              : Image.file(
+                                  File(flashcard.imagePath),
+                                  width: 250,
+                                  height: 250,
+                                  fit: BoxFit.cover,
+                                ),
+                        ),
+                        const SizedBox(height: 8),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 16.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              IconButton(
+                                icon: const Icon(
+                                  Icons.edit,
+                                  color: Colors.black87,
+                                ),
+                                tooltip: 'Change image',
+                                onPressed: changeCurrentImage,
                               ),
-                        Positioned(
-                          bottom: 8,
-                          child: IconButton(
-                            icon: const Icon(Icons.edit, color: Colors.black87),
-                            tooltip: 'Change image',
-                            onPressed: changeCurrentImage,
+                            ],
                           ),
                         ),
                       ],
