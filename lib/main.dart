@@ -127,81 +127,97 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          GestureDetector(
-            onTap: flipCard,
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-              width: 300,
-              height: 400,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.black26,
-                    blurRadius: 8,
-                    offset: Offset(0, 4),
-                  ),
-                ],
-              ),
-              alignment: Alignment.center,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Center(
-                    child: isFlipped
-                        ? Text(
-                            flashcard.hungarian,
-                            style: const TextStyle(
-                              fontSize: 32,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          )
-                        : Column(
-                            children: [
-                              Text(
-                                flashcard.english,
-                                style: const TextStyle(
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const SizedBox(height: 12),
-                              flashcard.imagePath != null
-                                  ? Image.file(
-                                      File(flashcard.imagePath!),
-                                      width: 250,
-                                      height: 250,
-                                      fit: BoxFit.cover,
-                                    )
-                                  : const Text(
-                                      'No image yet. \n Tap ✏️ to add one.',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                            ],
-                          ),
-                  ),
-                  const SizedBox(height: 8),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 16.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.edit, color: Colors.black87),
-                          tooltip: 'Add image',
-                          onPressed: changeCurrentImage,
-                        ),
-                      ],
+          Dismissible(
+            key: ValueKey(currentIndex),
+            direction: DismissDirection.horizontal,
+            onDismissed: (direction) {
+              setState(() {
+                if (currentIndex < flashcards.length - 1) {
+                  currentIndex++;
+                } else {
+                  currentIndex = 0;
+                }
+                isFlipped = false;
+              });
+            },
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  isFlipped = !isFlipped;
+                });
+              },
+
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.easeInOut,
+                width: 300,
+                height: 400,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 8,
+                      offset: Offset(0, 4),
                     ),
-                  ),
-                ],
+                  ],
+                ),
+                alignment: Alignment.center,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Center(
+                      child: isFlipped
+                          ? Text(
+                              flashcard.hungarian,
+                              style: const TextStyle(
+                                fontSize: 32,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            )
+                          : Column(
+                              children: [
+                                Text(
+                                  flashcard.english,
+                                  style: const TextStyle(
+                                    fontSize: 32,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(height: 12),
+                                flashcard.imagePath != null
+                                    ? Image.file(
+                                        File(flashcard.imagePath!),
+                                        width: 250,
+                                        height: 250,
+                                        fit: BoxFit.cover,
+                                      )
+                                    : const Text(
+                                        'No image yet. \n Tap ✏️ to add one.',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(fontSize: 18),
+                                      ),
+                              ],
+                            ),
+                    ),
+                    const SizedBox(height: 8),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.edit, color: Colors.black87),
+                            tooltip: 'Add image',
+                            onPressed: changeCurrentImage,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -224,7 +240,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          final newCard = await Navigator.push(
+          await Navigator.push(
             context,
             MaterialPageRoute(
               builder: (_) => AddFlashcardScreen(
@@ -294,7 +310,7 @@ class _AddFlashcardScreenState extends State<AddFlashcardScreen> {
             TextField(
               controller: hungarianController,
               decoration: const InputDecoration(
-                labelText: 'Enter hungarian word',
+                labelText: 'Enter Hungarian word',
               ),
             ),
             const SizedBox(height: 20),
