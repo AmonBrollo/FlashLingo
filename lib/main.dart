@@ -51,6 +51,8 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
   List<Flashcard> flashcards = [];
   int currentIndex = 0;
   bool isFlipped = false;
+  List<Flashcard> remembered = [];
+  List<Flashcard> forgotten = [];
 
   Future<void> loadFlashcards() async {
     final String jsonString = await rootBundle.loadString(
@@ -132,6 +134,11 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
             direction: DismissDirection.horizontal,
             onDismissed: (direction) {
               setState(() {
+                if (direction == DismissDirection.startToEnd) {
+                  remembered.add(flashcards[currentIndex]);
+                } else if (direction == DismissDirection.endToStart) {
+                  forgotten.add(flashcards[currentIndex]);
+                }
                 if (currentIndex < flashcards.length - 1) {
                   currentIndex++;
                 } else {
