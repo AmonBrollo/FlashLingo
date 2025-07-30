@@ -55,6 +55,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
   List<Flashcard> remembered = [];
   List<Flashcard> forgotten = [];
   double _dragDx = 0.0;
+  bool finishedDeck = false;
 
   Future<void> loadFlashcards() async {
     final String jsonString = await rootBundle.loadString(
@@ -96,6 +97,18 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
         isFlipped = false;
       });
     }
+  }
+
+  void _nextCard() {
+    setState(() {
+      if (currentIndex < flashcards.length - 1) {
+        currentIndex++;
+      } else {
+        finishedDeck = true;
+      }
+      isFlipped = false;
+      _dragDx = 0.0;
+    });
   }
 
   Future<void> changeCurrentImage() async {
@@ -145,165 +158,6 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
           ),
         ],
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          GestureDetector(
-            onPanUpdate: (details) {
-              setState(() {
-                _dragDx += details.delta.dx;
-              });
-            },
-            onPanEnd: (details) {
-              if (_dragDx > 100) {
-                setState(() {
-                  remembered.add(flashcards[currentIndex]);
-                  if (currentIndex < flashcards.length - 1) {
-                    currentIndex++;
-                  } else {
-                    currentIndex = 0;
-                  }
-                  isFlipped = false;
-                  _dragDx = 0.0;
-                });
-              } else if (_dragDx < -100) {
-                setState(() {
-                  forgotten.add(flashcards[currentIndex]);
-                  if (currentIndex < flashcards.length - 1) {
-                    currentIndex++;
-                  } else {
-                    currentIndex = 0;
-                  }
-                  isFlipped = false;
-                  _dragDx = 0.0;
-                });
-              } else {
-                setState(() {
-                  _dragDx = 0.0;
-                });
-              }
-            },
-            child: Center(
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Positioned(
-                    left: 30,
-                    child: Opacity(
-                      opacity: _dragDx > 0
-                          ? (_dragDx / 150).clamp(0, 1).toDouble()
-                          : 0,
-                      child: const Icon(
-                        Icons.check_circle,
-                        color: Colors.green,
-                        size: 80,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    right: 30,
-                    child: Opacity(
-                      opacity: _dragDx < 0
-                          ? (-_dragDx / 150).clamp(0, 1).toDouble()
-                          : 0,
-                      child: const Icon(
-                        Icons.cancel,
-                        color: Colors.red,
-                        size: 80,
-                      ),
-                    ),
-                  ),
-                  Transform.translate(
-                    offset: Offset(_dragDx, 0),
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          isFlipped = !isFlipped;
-                        });
-                      },
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeInOut,
-                        width: 300,
-                        height: 400,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(16),
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Colors.black26,
-                              blurRadius: 8,
-                              offset: Offset(0, 4),
-                            ),
-                          ],
-                        ),
-                        alignment: Alignment.center,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Center(
-                              child: isFlipped
-                                  ? Text(
-                                      flashcard.hungarian,
-                                      style: const TextStyle(
-                                        fontSize: 32,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    )
-                                  : Column(
-                                      children: [
-                                        Text(
-                                          flashcard.english,
-                                          style: const TextStyle(
-                                            fontSize: 32,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 12),
-                                        flashcard.imagePath != null
-                                            ? Image.file(
-                                                File(flashcard.imagePath!),
-                                                width: 250,
-                                                height: 250,
-                                                fit: BoxFit.cover,
-                                              )
-                                            : const Text(
-                                                'No image yet.\n Tap ✏️ to add one.',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(fontSize: 18),
-                                              ),
-                                      ],
-                                    ),
-                            ),
-                            const SizedBox(height: 8),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 16.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  IconButton(
-                                    icon: const Icon(
-                                      Icons.edit,
-                                      color: Colors.black87,
-                                    ),
-                                    tooltip: 'Add image',
-                                    onPressed: changeCurrentImage,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await Navigator.push(
@@ -323,6 +177,170 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
         },
         backgroundColor: Colors.brown,
         child: const Icon(Icons.add),
+      ),
+      body: Center(
+        child: finishedDeck
+            ? const Text(
+                "🎉 You've gone through all the flashcards!",
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.brown,
+                ),
+                textAlign: TextAlign.center,
+              )
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onPanUpdate: (details) {
+                      setState(() {
+                        _dragDx += details.delta.dx;
+                      });
+                    },
+                    onPanEnd: (details) {
+                      if (_dragDx > 100) {
+                        remembered.add(flashcards[currentIndex]);
+                        _nextCard();
+                      } else if (_dragDx < -100) {
+                        forgotten.add(flashcards[currentIndex]);
+                        _nextCard();
+                      } else {
+                        setState(() {
+                          _dragDx = 0.0;
+                        });
+                      }
+                    },
+                    child: Center(
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Positioned(
+                            left: 30,
+                            child: Opacity(
+                              opacity: _dragDx > 0
+                                  ? (_dragDx / 150).clamp(0, 1).toDouble()
+                                  : 0,
+                              child: const Icon(
+                                Icons.check_circle,
+                                color: Colors.green,
+                                size: 80,
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            right: 30,
+                            child: Opacity(
+                              opacity: _dragDx < 0
+                                  ? (-_dragDx / 150).clamp(0, 1).toDouble()
+                                  : 0,
+                              child: const Icon(
+                                Icons.cancel,
+                                color: Colors.red,
+                                size: 80,
+                              ),
+                            ),
+                          ),
+                          Transform.translate(
+                            offset: Offset(_dragDx, 0),
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  isFlipped = !isFlipped;
+                                });
+                              },
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 300),
+                                curve: Curves.easeInOut,
+                                width: 300,
+                                height: 400,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(16),
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      color: Colors.black26,
+                                      blurRadius: 8,
+                                      offset: Offset(0, 4),
+                                    ),
+                                  ],
+                                ),
+                                alignment: Alignment.center,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    Center(
+                                      child: isFlipped
+                                          ? Text(
+                                              flashcard.hungarian,
+                                              style: const TextStyle(
+                                                fontSize: 32,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            )
+                                          : Column(
+                                              children: [
+                                                Text(
+                                                  flashcard.english,
+                                                  style: const TextStyle(
+                                                    fontSize: 32,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 12),
+                                                flashcard.imagePath != null
+                                                    ? Image.file(
+                                                        File(
+                                                          flashcard.imagePath!,
+                                                        ),
+                                                        width: 250,
+                                                        height: 250,
+                                                        fit: BoxFit.cover,
+                                                      )
+                                                    : const Text(
+                                                        'No image yet.\n Tap ✏️ to add one.',
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: TextStyle(
+                                                          fontSize: 18,
+                                                        ),
+                                                      ),
+                                              ],
+                                            ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                        right: 16.0,
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          IconButton(
+                                            icon: const Icon(
+                                              Icons.edit,
+                                              color: Colors.black87,
+                                            ),
+                                            tooltip: 'Add image',
+                                            onPressed: changeCurrentImage,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
       ),
     );
   }
