@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'review_screen.dart';
 
 void main() {
   runApp(const FlashcardApp());
@@ -126,6 +127,23 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
       appBar: AppBar(
         title: const Text('Flashlingo'),
         backgroundColor: Colors.brown,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.list),
+            tooltip: 'Review results',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => ReviewScreen(
+                    remembered: remembered,
+                    forgotten: forgotten,
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
