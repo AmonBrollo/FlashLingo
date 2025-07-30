@@ -1,5 +1,6 @@
-import 'main.dart';
 import 'package:flutter/material.dart';
+
+import '../models/flashcard.dart';
 
 class ReviewScreen extends StatelessWidget {
   final List<Flashcard> remembered;

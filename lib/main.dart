@@ -1,9 +1,12 @@
+import 'dart:io';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'dart:io';
 import 'package:image_picker/image_picker.dart';
-import 'review_screen.dart';
+
+import 'models/flashcard.dart';
+import 'screens/review_screen.dart';
+import 'screens/add_flashcard_screen.dart';
 
 void main() {
   runApp(const FlashcardApp());
@@ -17,26 +20,6 @@ class FlashcardApp extends StatelessWidget {
     return const MaterialApp(
       home: FlashcardScreen(),
       debugShowCheckedModeBanner: false,
-    );
-  }
-}
-
-class Flashcard {
-  final String english;
-  final String hungarian;
-  final String? imagePath;
-
-  Flashcard({
-    required this.english,
-    required this.hungarian,
-    required this.imagePath,
-  });
-
-  factory Flashcard.fromJson(Map<String, dynamic> json) {
-    return Flashcard(
-      english: json['english'],
-      hungarian: json['hungarian'],
-      imagePath: null,
     );
   }
 }
@@ -75,30 +58,6 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
     loadFlashcards();
   }
 
-  void flipCard() {
-    setState(() {
-      isFlipped = !isFlipped;
-    });
-  }
-
-  void nextCard() {
-    if (currentIndex < flashcards.length - 1) {
-      setState(() {
-        currentIndex++;
-        isFlipped = false;
-      });
-    }
-  }
-
-  void prevCard() {
-    if (currentIndex > 0) {
-      setState(() {
-        currentIndex--;
-        isFlipped = false;
-      });
-    }
-  }
-
   void _nextCard() {
     setState(() {
       if (currentIndex < flashcards.length - 1) {
@@ -118,9 +77,10 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
 
     if (pickedFile != null) {
       setState(() {
+        final current = flashcards[currentIndex];
         flashcards[currentIndex] = Flashcard(
-          english: flashcards[currentIndex].english,
-          hungarian: flashcards[currentIndex].hungarian,
+          english: current.english,
+          hungarian: current.hungarian,
           imagePath: pickedFile.path,
         );
       });
@@ -211,201 +171,125 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
                         });
                       }
                     },
-                    child: Center(
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Positioned(
-                            left: 30,
-                            child: Opacity(
-                              opacity: _dragDx > 0
-                                  ? (_dragDx / 150).clamp(0, 1).toDouble()
-                                  : 0,
-                              child: const Icon(
-                                Icons.check_circle,
-                                color: Colors.green,
-                                size: 80,
-                              ),
+                    onTap: () {
+                      setState(() {
+                        isFlipped = !isFlipped;
+                      });
+                    },
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Positioned(
+                          left: 30,
+                          child: Opacity(
+                            opacity: _dragDx > 0
+                                ? (_dragDx / 150).clamp(0, 1).toDouble()
+                                : 0,
+                            child: const Icon(
+                              Icons.check_circle,
+                              color: Colors.green,
+                              size: 80,
                             ),
                           ),
-                          Positioned(
-                            right: 30,
-                            child: Opacity(
-                              opacity: _dragDx < 0
-                                  ? (-_dragDx / 150).clamp(0, 1).toDouble()
-                                  : 0,
-                              child: const Icon(
-                                Icons.cancel,
-                                color: Colors.red,
-                                size: 80,
-                              ),
+                        ),
+                        Positioned(
+                          right: 30,
+                          child: Opacity(
+                            opacity: _dragDx < 0
+                                ? (-_dragDx / 150).clamp(0, 1).toDouble()
+                                : 0,
+                            child: const Icon(
+                              Icons.cancel,
+                              color: Colors.red,
+                              size: 80,
                             ),
                           ),
-                          Transform.translate(
-                            offset: Offset(_dragDx, 0),
-                            child: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  isFlipped = !isFlipped;
-                                });
-                              },
-                              child: AnimatedContainer(
-                                duration: const Duration(milliseconds: 300),
-                                curve: Curves.easeInOut,
-                                width: 300,
-                                height: 400,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(16),
-                                  boxShadow: const [
-                                    BoxShadow(
-                                      color: Colors.black26,
-                                      blurRadius: 8,
-                                      offset: Offset(0, 4),
-                                    ),
-                                  ],
+                        ),
+                        Transform.translate(
+                          offset: Offset(_dragDx, 0),
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                            width: 300,
+                            height: 400,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(16),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.black26,
+                                  blurRadius: 8,
+                                  offset: Offset(0, 4),
                                 ),
-                                alignment: Alignment.center,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: [
-                                    Center(
-                                      child: isFlipped
-                                          ? Text(
-                                              flashcard.hungarian,
+                              ],
+                            ),
+                            alignment: Alignment.center,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Center(
+                                  child: isFlipped
+                                      ? Text(
+                                          flashcard.hungarian,
+                                          style: const TextStyle(
+                                            fontSize: 32,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        )
+                                      : Column(
+                                          children: [
+                                            Text(
+                                              flashcard.english,
                                               style: const TextStyle(
                                                 fontSize: 32,
                                                 fontWeight: FontWeight.bold,
                                               ),
-                                            )
-                                          : Column(
-                                              children: [
-                                                Text(
-                                                  flashcard.english,
-                                                  style: const TextStyle(
-                                                    fontSize: 32,
-                                                    fontWeight: FontWeight.bold,
+                                            ),
+                                            const SizedBox(height: 12),
+                                            flashcard.imagePath != null
+                                                ? Image.file(
+                                                    File(flashcard.imagePath!),
+                                                    width: 250,
+                                                    height: 250,
+                                                    fit: BoxFit.cover,
+                                                  )
+                                                : const Text(
+                                                    'No image yet.\nTap ✏️ to add one.',
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                      fontSize: 18,
+                                                    ),
                                                   ),
-                                                ),
-                                                const SizedBox(height: 12),
-                                                flashcard.imagePath != null
-                                                    ? Image.file(
-                                                        File(
-                                                          flashcard.imagePath!,
-                                                        ),
-                                                        width: 250,
-                                                        height: 250,
-                                                        fit: BoxFit.cover,
-                                                      )
-                                                    : const Text(
-                                                        'No image yet.\n Tap ✏️ to add one.',
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: TextStyle(
-                                                          fontSize: 18,
-                                                        ),
-                                                      ),
-                                              ],
-                                            ),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                        right: 16.0,
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: [
-                                          IconButton(
-                                            icon: const Icon(
-                                              Icons.edit,
-                                              color: Colors.black87,
-                                            ),
-                                            tooltip: 'Add image',
-                                            onPressed: changeCurrentImage,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
+                                          ],
+                                        ),
                                 ),
-                              ),
+                                const SizedBox(height: 8),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 16.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      IconButton(
+                                        icon: const Icon(
+                                          Icons.edit,
+                                          color: Colors.black87,
+                                        ),
+                                        tooltip: 'Add image',
+                                        onPressed: changeCurrentImage,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
-      ),
-    );
-  }
-}
-
-class AddFlashcardScreen extends StatefulWidget {
-  final Function(Flashcard) onAdd;
-
-  const AddFlashcardScreen({super.key, required this.onAdd});
-
-  @override
-  State<AddFlashcardScreen> createState() => _AddFlashcardScreenState();
-}
-
-class _AddFlashcardScreenState extends State<AddFlashcardScreen> {
-  final TextEditingController englishController = TextEditingController();
-  final TextEditingController hungarianController = TextEditingController();
-
-  void submit() {
-    if (englishController.text.trim().isEmpty ||
-        hungarianController.text.trim().isEmpty)
-      return;
-
-    final newFlashcard = Flashcard(
-      english: englishController.text.trim(),
-      hungarian: hungarianController.text.trim(),
-      imagePath: null,
-    );
-
-    widget.onAdd(newFlashcard);
-    Navigator.pop(context);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Add Flashcard'),
-        backgroundColor: Colors.brown,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            const SizedBox(height: 16),
-            TextField(
-              controller: englishController,
-              decoration: const InputDecoration(
-                labelText: 'Enter English word',
-              ),
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: hungarianController,
-              decoration: const InputDecoration(
-                labelText: 'Enter Hungarian word',
-              ),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: submit,
-              child: const Text("Add Flashcard"),
-            ),
-          ],
-        ),
       ),
     );
   }
