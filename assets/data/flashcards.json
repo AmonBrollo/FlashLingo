@@ -1,17 +1,258 @@
 [
     {
-        "english": "Bread",
-        "hungarian": "Kenyér",
-        "imagePath": "assets/images/bread.png"
+        "english": "I",
+        "hungarian": "Én"
     },
     {
-        "english": "Egg",
-        "hungarian": "Tojás",
-        "imagePath": "assets/images/egg.png"
+        "english": "he",
+        "hungarian": "Ő"
     },
     {
-        "english": "Chicken",
-        "hungarian": "Csirke",
-        "imagePath": "assets/images/chicken.png"
+        "english": "it",
+        "hungarian": "Az"
+    },
+    {
+        "english": "she",
+        "hungarian": "Ő"
+    },
+    {
+        "english": "they",
+        "hungarian": "Ők"
+    },
+    {
+        "english": "we",
+        "hungarian": "Mi"
+    },
+    {
+        "english": "you",
+        "hungarian": "Te"
+    },
+    {
+        "english": "go",
+        "hungarian": "menni"
+    },
+    {
+        "english": "eat",
+        "hungarian": "enni"
+    },
+    {
+        "english": "drink",
+        "hungarian": "inni"
+    },
+    {
+        "english": "sleep",
+        "hungarian": "aludni"
+    },
+    {
+        "english": "see",
+        "hungarian": "látni"
+    },
+    {
+        "english": "talk",
+        "hungarian": "beszélni"
+    },
+    {
+        "english": "walk",
+        "hungarian": "sétálni"
+    },
+    {
+        "english": "run",
+        "hungarian": "futni"
+    },
+    {
+        "english": "write",
+        "hungarian": "írni"
+    },
+    {
+        "english": "read",
+        "hungarian": "olvasni"
+    },
+    {
+        "english": "love",
+        "hungarian": "szeretni"
+    },
+    {
+        "english": "work",
+        "hungarian": "dolgozni"
+    },
+    {
+        "english": "mother",
+        "hungarian": "anya"
+    },
+    {
+        "english": "father",
+        "hungarian": "apa"
+    },
+    {
+        "english": "man",
+        "hungarian": "férfi"
+    },
+    {
+        "english": "woman",
+        "hungarian": "nő"
+    },
+    {
+        "english": "child",
+        "hungarian": "gyerek"
+    },
+    {
+        "english": "friend",
+        "hungarian": "barát"
+    },
+    {
+        "english": "day",
+        "hungarian": "nap"
+    },
+    {
+        "english": "night",
+        "hungarian": "éjszaka"
+    },
+    {
+        "english": "year",
+        "hungarian": "év"
+    },
+    {
+        "english": "hour",
+        "hungarian": "óra"
+    },
+    {
+        "english": "minute",
+        "hungarian": "perc"
+    },
+    {
+        "english": "one",
+        "hungarian": "egy"
+    },
+    {
+        "english": "two",
+        "hungarian": "kettő"
+    },
+    {
+        "english": "three",
+        "hungarian": "három"
+    },
+    {
+        "english": "four",
+        "hungarian": "négy"
+    },
+    {
+        "english": "five",
+        "hungarian": "öt"
+    },
+    {
+        "english": "ten",
+        "hungarian": "tíz"
+    },
+    {
+        "english": "bread",
+        "hungarian": "kenyér"
+    },
+    {
+        "english": "water",
+        "hungarian": "víz"
+    },
+    {
+        "english": "coffee",
+        "hungarian": "kávé"
+    },
+    {
+        "english": "milk",
+        "hungarian": "tej"
+    },
+    {
+        "english": "egg",
+        "hungarian": "tojás"
+    },
+    {
+        "english": "chicken",
+        "hungarian": "csirke"
+    },
+    {
+        "english": "red",
+        "hungarian": "piros"
+    },
+    {
+        "english": "blue",
+        "hungarian": "kék"
+    },
+    {
+        "english": "green",
+        "hungarian": "zöld"
+    },
+    {
+        "english": "black",
+        "hungarian": "fekete"
+    },
+    {
+        "english": "white",
+        "hungarian": "fehér"
+    },
+    {
+        "english": "head",
+        "hungarian": "fej"
+    },
+    {
+        "english": "hand",
+        "hungarian": "kéz"
+    },
+    {
+        "english": "eye",
+        "hungarian": "szem"
+    },
+    {
+        "english": "mouth",
+        "hungarian": "száj"
+    },
+    {
+        "english": "ear",
+        "hungarian": "fül"
+    },
+    {
+        "english": "big",
+        "hungarian": "nagy"
+    },
+    {
+        "english": "small",
+        "hungarian": "kicsi"
+    },
+    {
+        "english": "hot",
+        "hungarian": "forró"
+    },
+    {
+        "english": "cold",
+        "hungarian": "hideg"
+    },
+    {
+        "english": "good",
+        "hungarian": "jó"
+    },
+    {
+        "english": "bad",
+        "hungarian": "rossz"
+    },
+    {
+        "english": "happy",
+        "hungarian": "boldog"
+    },
+    {
+        "english": "sad",
+        "hungarian": "szomorú"
+    },
+    {
+        "english": "shirt",
+        "hungarian": "ing"
+    },
+    {
+        "english": "pants",
+        "hungarian": "nadrág"
+    },
+    {
+        "english": "dog",
+        "hungarian": "kutya"
+    },
+    {
+        "english": "cat",
+        "hungarian": "macska"
     }
 ]
