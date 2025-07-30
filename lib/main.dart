@@ -53,6 +53,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
   bool isFlipped = false;
   List<Flashcard> remembered = [];
   List<Flashcard> forgotten = [];
+  double _dragDx = 0.0;
 
   Future<void> loadFlashcards() async {
     final String jsonString = await rootBundle.loadString(
@@ -129,119 +130,159 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Dismissible(
-            key: ValueKey(currentIndex),
-            direction: DismissDirection.horizontal,
-            onDismissed: (direction) {
+          GestureDetector(
+            onPanUpdate: (details) {
               setState(() {
-                if (direction == DismissDirection.startToEnd) {
-                  remembered.add(flashcards[currentIndex]);
-                } else if (direction == DismissDirection.endToStart) {
-                  forgotten.add(flashcards[currentIndex]);
-                }
-                if (currentIndex < flashcards.length - 1) {
-                  currentIndex++;
-                } else {
-                  currentIndex = 0;
-                }
-                isFlipped = false;
+                _dragDx += details.delta.dx;
               });
             },
-            child: GestureDetector(
-              onTap: () {
+            onPanEnd: (details) {
+              if (_dragDx > 100) {
                 setState(() {
-                  isFlipped = !isFlipped;
+                  remembered.add(flashcards[currentIndex]);
+                  if (currentIndex < flashcards.length - 1) {
+                    currentIndex++;
+                  } else {
+                    currentIndex = 0;
+                  }
+                  isFlipped = false;
+                  _dragDx = 0.0;
                 });
-              },
-
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 500),
-                curve: Curves.easeInOut,
-                width: 300,
-                height: 400,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Colors.black26,
-                      blurRadius: 8,
-                      offset: Offset(0, 4),
-                    ),
-                  ],
-                ),
+              } else if (_dragDx < -100) {
+                setState(() {
+                  forgotten.add(flashcards[currentIndex]);
+                  if (currentIndex < flashcards.length - 1) {
+                    currentIndex++;
+                  } else {
+                    currentIndex = 0;
+                  }
+                  isFlipped = false;
+                  _dragDx = 0.0;
+                });
+              } else {
+                setState(() {
+                  _dragDx = 0.0;
+                });
+              }
+            },
+            child: Center(
+              child: Stack(
                 alignment: Alignment.center,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Center(
-                      child: isFlipped
-                          ? Text(
-                              flashcard.hungarian,
-                              style: const TextStyle(
-                                fontSize: 32,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            )
-                          : Column(
-                              children: [
-                                Text(
-                                  flashcard.english,
-                                  style: const TextStyle(
-                                    fontSize: 32,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                const SizedBox(height: 12),
-                                flashcard.imagePath != null
-                                    ? Image.file(
-                                        File(flashcard.imagePath!),
-                                        width: 250,
-                                        height: 250,
-                                        fit: BoxFit.cover,
-                                      )
-                                    : const Text(
-                                        'No image yet. \n Tap ✏️ to add one.',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(fontSize: 18),
-                                      ),
-                              ],
-                            ),
-                    ),
-                    const SizedBox(height: 8),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 16.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.edit, color: Colors.black87),
-                            tooltip: 'Add image',
-                            onPressed: changeCurrentImage,
-                          ),
-                        ],
+                children: [
+                  Positioned(
+                    left: 30,
+                    child: Opacity(
+                      opacity: _dragDx > 0
+                          ? (_dragDx / 150).clamp(0, 1).toDouble()
+                          : 0,
+                      child: const Icon(
+                        Icons.check_circle,
+                        color: Colors.green,
+                        size: 80,
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                  Positioned(
+                    right: 30,
+                    child: Opacity(
+                      opacity: _dragDx < 0
+                          ? (-_dragDx / 150).clamp(0, 1).toDouble()
+                          : 0,
+                      child: const Icon(
+                        Icons.cancel,
+                        color: Colors.red,
+                        size: 80,
+                      ),
+                    ),
+                  ),
+                  Transform.translate(
+                    offset: Offset(_dragDx, 0),
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          isFlipped = !isFlipped;
+                        });
+                      },
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                        width: 300,
+                        height: 400,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.black26,
+                              blurRadius: 8,
+                              offset: Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        alignment: Alignment.center,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Center(
+                              child: isFlipped
+                                  ? Text(
+                                      flashcard.hungarian,
+                                      style: const TextStyle(
+                                        fontSize: 32,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    )
+                                  : Column(
+                                      children: [
+                                        Text(
+                                          flashcard.english,
+                                          style: const TextStyle(
+                                            fontSize: 32,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 12),
+                                        flashcard.imagePath != null
+                                            ? Image.file(
+                                                File(flashcard.imagePath!),
+                                                width: 250,
+                                                height: 250,
+                                                fit: BoxFit.cover,
+                                              )
+                                            : const Text(
+                                                'No image yet.\n Tap ✏️ to add one.',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(fontSize: 18),
+                                              ),
+                                      ],
+                                    ),
+                            ),
+                            const SizedBox(height: 8),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 16.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(
+                                      Icons.edit,
+                                      color: Colors.black87,
+                                    ),
+                                    tooltip: 'Add image',
+                                    onPressed: changeCurrentImage,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ),
-          const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: prevCard,
-              ),
-              const SizedBox(width: 20),
-              IconButton(
-                icon: const Icon(Icons.arrow_forward),
-                onPressed: nextCard,
-              ),
-            ],
           ),
         ],
       ),
@@ -283,7 +324,9 @@ class _AddFlashcardScreenState extends State<AddFlashcardScreen> {
   final TextEditingController hungarianController = TextEditingController();
 
   void submit() {
-    if (englishController.text.trim().isEmpty) return;
+    if (englishController.text.trim().isEmpty ||
+        hungarianController.text.trim().isEmpty)
+      return;
 
     final newFlashcard = Flashcard(
       english: englishController.text.trim(),
