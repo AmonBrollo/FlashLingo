@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:convert';
+import 'package:flashlingo/screens/language_selector_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:image_picker/image_picker.dart';
@@ -18,14 +19,16 @@ class FlashcardApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: FlashcardScreen(),
+      home: LanguageSelectorScreen(),
       debugShowCheckedModeBanner: false,
     );
   }
 }
 
 class FlashcardScreen extends StatefulWidget {
-  const FlashcardScreen({super.key});
+  final String baseLanguage;
+
+  const FlashcardScreen({super.key, required this.baseLanguage});
 
   @override
   State<FlashcardScreen> createState() => _FlashcardScreenState();
@@ -80,6 +83,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
         final current = flashcards[currentIndex];
         flashcards[currentIndex] = Flashcard(
           english: current.english,
+          portuguese: current.portuguese,
           hungarian: current.hungarian,
           imagePath: pickedFile.path,
         );
@@ -131,6 +135,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
                     isFlipped = false;
                   });
                 },
+                baseLanguage: widget.baseLanguage,
               ),
             ),
           );
@@ -240,7 +245,10 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
                                       : Column(
                                           children: [
                                             Text(
-                                              flashcard.english,
+                                              widget.baseLanguage ==
+                                                      "portuguese"
+                                                  ? flashcard.portuguese
+                                                  : flashcard.english,
                                               style: const TextStyle(
                                                 fontSize: 32,
                                                 fontWeight: FontWeight.bold,
