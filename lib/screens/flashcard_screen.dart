@@ -213,10 +213,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
                                 ),
                               ],
                             ),
-                            alignment: Alignment.center,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                            child: Stack(
                               children: [
                                 Center(
                                   child: isFlipped
@@ -227,53 +224,54 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
                                             fontWeight: FontWeight.bold,
                                           ),
                                         )
-                                      : Column(
-                                          children: [
-                                            Text(
-                                              widget.baseLanguage ==
-                                                      "portuguese"
-                                                  ? flashcard.portuguese
-                                                  : flashcard.english,
-                                              style: const TextStyle(
-                                                fontSize: 32,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                            const SizedBox(height: 12),
-                                            flashcard.imagePath != null
-                                                ? Image.file(
-                                                    File(flashcard.imagePath!),
-                                                    width: 250,
-                                                    height: 250,
-                                                    fit: BoxFit.cover,
-                                                  )
-                                                : Text(
-                                                    UiStrings.noImageText(
-                                                      widget.baseLanguage,
-                                                    ),
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      fontSize: 18,
-                                                    ),
-                                                  ),
-                                          ],
-                                        ),
+                                      : (flashcard.imagePath != null
+                                            ? Image.file(
+                                                File(flashcard.imagePath!),
+                                                width: 250,
+                                                height: 250,
+                                                fit: BoxFit.cover,
+                                              )
+                                            : Text(
+                                                widget.baseLanguage ==
+                                                        "portuguese"
+                                                    ? flashcard.portuguese
+                                                    : flashcard.english,
+                                                style: const TextStyle(
+                                                  fontSize: 32,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              )),
                                 ),
-                                const SizedBox(height: 8),
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 16.0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      IconButton(
-                                        icon: const Icon(
-                                          Icons.edit,
-                                          color: Colors.black87,
-                                        ),
-                                        tooltip: 'Add image',
-                                        onPressed: changeCurrentImage,
+
+                                if (flashcard.imagePath == null)
+                                  Positioned(
+                                    bottom: 40,
+                                    left: 0,
+                                    right: 0,
+                                    child: Text(
+                                      widget.baseLanguage == "portuguese"
+                                          ? "Nenhuma imagem ainda"
+                                          : "No image yet",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.grey[600],
+                                        fontStyle: FontStyle.italic,
                                       ),
-                                    ],
+                                    ),
+                                  ),
+                                Positioned(
+                                  bottom: 8,
+                                  right: 8,
+                                  child: IconButton(
+                                    icon: const Icon(
+                                      Icons.edit,
+                                      color: Colors.black54,
+                                    ),
+                                    tooltip: widget.baseLanguage == 'portuguese'
+                                        ? 'Adicionar imagen'
+                                        : 'Add image',
+                                    onPressed: changeCurrentImage,
                                   ),
                                 ),
                               ],
