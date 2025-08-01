@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/flashcard.dart';
+import '../utils/ui_strings.dart';
 
 class AddFlashcardScreen extends StatefulWidget {
   final Function(Flashcard) onAdd;
@@ -44,7 +45,7 @@ class _AddFlashcardScreenState extends State<AddFlashcardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add Flashcard'),
+        title: Text(UiStrings.addFlashcardTitle(widget.baseLanguage)),
         backgroundColor: Colors.brown,
       ),
       body: Padding(
@@ -63,14 +64,14 @@ class _AddFlashcardScreenState extends State<AddFlashcardScreen> {
             const SizedBox(height: 16),
             TextField(
               controller: hungarianController,
-              decoration: const InputDecoration(
-                labelText: 'Enter Hungarian word',
+              decoration: InputDecoration(
+                labelText: UiStrings.addHungarianWord(widget.baseLanguage),
               ),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: submit,
-              child: const Text("Add Flashcard"),
+              child: Text(UiStrings.addFlashcardButton(widget.baseLanguage)),
             ),
           ],
         ),

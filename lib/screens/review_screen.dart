@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
-
 import '../models/flashcard.dart';
+import '../utils/ui_strings.dart';
 
 class ReviewScreen extends StatelessWidget {
   final List<Flashcard> remembered;
   final List<Flashcard> forgotten;
+  final String baseLanguage;
 
   const ReviewScreen({
     super.key,
     required this.remembered,
     required this.forgotten,
+    required this.baseLanguage,
   });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Review Flashcards"),
+        title: Text(UiStrings.reviewTitle(baseLanguage)),
         backgroundColor: Colors.brown,
       ),
       body: Padding(
@@ -29,7 +31,7 @@ class ReviewScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    "Remembered ✅",
+                    "✅",
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -63,7 +65,7 @@ class ReviewScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    "Forgotten ❌",
+                    "❌",
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,

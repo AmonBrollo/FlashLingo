@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'models/flashcard.dart';
 import 'screens/review_screen.dart';
 import 'screens/add_flashcard_screen.dart';
+import 'utils/ui_strings.dart';
 
 void main() {
   runApp(const FlashcardApp());
@@ -115,6 +116,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
                   builder: (_) => ReviewScreen(
                     remembered: remembered,
                     forgotten: forgotten,
+                    baseLanguage: widget.baseLanguage,
                   ),
                 ),
               );
@@ -145,8 +147,8 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
       ),
       body: Center(
         child: finishedDeck
-            ? const Text(
-                "🎉 You've gone through all the flashcards!",
+            ? Text(
+                UiStrings.finishedDeckText(widget.baseLanguage),
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
@@ -262,8 +264,10 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
                                                     height: 250,
                                                     fit: BoxFit.cover,
                                                   )
-                                                : const Text(
-                                                    'No image yet.\nTap ✏️ to add one.',
+                                                : Text(
+                                                    UiStrings.noImageText(
+                                                      widget.baseLanguage,
+                                                    ),
                                                     textAlign: TextAlign.center,
                                                     style: TextStyle(
                                                       fontSize: 18,
