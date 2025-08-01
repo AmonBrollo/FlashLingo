@@ -1,5 +1,5 @@
-import 'package:flashlingo/main.dart';
 import 'package:flutter/material.dart';
+import 'flashcard_screen.dart';
 
 class LanguageSelectorScreen extends StatelessWidget {
   const LanguageSelectorScreen({super.key});
