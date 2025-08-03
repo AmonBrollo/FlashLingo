@@ -1,0 +1,42 @@
+[
+    {
+        "english": "coffee",
+        "portuguese": "café",
+        "hungarian": "kávé"
+    },
+    {
+        "english": "tea",
+        "portuguese": "chá",
+        "hungarian": "tea"
+    },
+    {
+        "english": "wine",
+        "portuguese": "vinho",
+        "hungarian": "bor"
+    },
+    {
+        "english": "beer",
+        "portuguese": "cerveja",
+        "hungarian": "sör"
+    },
+    {
+        "english": "juice",
+        "portuguese": "suco",
+        "hungarian": "gyümölcslé"
+    },
+    {
+        "english": "water",
+        "portuguese": "água",
+        "hungarian": "víz"
+    },
+    {
+        "english": "milk",
+        "portuguese": "leite",
+        "hungarian": "tej"
+    },
+    {
+        "english": "beverage",
+        "portuguese": "bebida",
+        "hungarian": "ital"
+    }
+]

@@ -1,0 +1,87 @@
+[
+    {
+        "english": "top",
+        "portuguese": "topo",
+        "hungarian": "teteje"
+    },
+    {
+        "english": "bottom",
+        "portuguese": "fundo",
+        "hungarian": "alja"
+    },
+    {
+        "english": "side",
+        "portuguese": "lado",
+        "hungarian": "oldal"
+    },
+    {
+        "english": "front",
+        "portuguese": "frente",
+        "hungarian": "eleje"
+    },
+    {
+        "english": "back",
+        "portuguese": "costas",
+        "hungarian": "hátulja"
+    },
+    {
+        "english": "outside",
+        "portuguese": "fora",
+        "hungarian": "kívül"
+    },
+    {
+        "english": "inside",
+        "portuguese": "dentro",
+        "hungarian": "belül"
+    },
+    {
+        "english": "up",
+        "portuguese": "cima",
+        "hungarian": "fel"
+    },
+    {
+        "english": "down",
+        "portuguese": "baixo",
+        "hungarian": "le"
+    },
+    {
+        "english": "left",
+        "portuguese": "esquerda",
+        "hungarian": "bal"
+    },
+    {
+        "english": "right",
+        "portuguese": "direita",
+        "hungarian": "jobb"
+    },
+    {
+        "english": "straight",
+        "portuguese": "reto",
+        "hungarian": "egyenes"
+    },
+    {
+        "english": "north",
+        "portuguese": "norte",
+        "hungarian": "észak"
+    },
+    {
+        "english": "south",
+        "portuguese": "sul",
+        "hungarian": "dél"
+    },
+    {
+        "english": "east",
+        "portuguese": "leste",
+        "hungarian": "kelet"
+    },
+    {
+        "english": "west",
+        "portuguese": "oeste",
+        "hungarian": "nyugat"
+    },
+    {
+        "english": "direction",
+        "portuguese": "direção",
+        "hungarian": "irány"
+    }
+]

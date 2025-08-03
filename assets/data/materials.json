@@ -1,0 +1,62 @@
+[
+    {
+        "english": "glass",
+        "portuguese": "vidro",
+        "hungarian": "üveg"
+    },
+    {
+        "english": "metal",
+        "portuguese": "metal",
+        "hungarian": "fém"
+    },
+    {
+        "english": "plastic",
+        "portuguese": "plástico",
+        "hungarian": "műanyag"
+    },
+    {
+        "english": "wood",
+        "portuguese": "madeira",
+        "hungarian": "fa"
+    },
+    {
+        "english": "stone",
+        "portuguese": "pedra",
+        "hungarian": "kő"
+    },
+    {
+        "english": "diamond",
+        "portuguese": "diamante",
+        "hungarian": "gyémánt"
+    },
+    {
+        "english": "clay",
+        "portuguese": "argila",
+        "hungarian": "agyag"
+    },
+    {
+        "english": "dust",
+        "portuguese": "poeira",
+        "hungarian": "por"
+    },
+    {
+        "english": "gold",
+        "portuguese": "ouro",
+        "hungarian": "arany"
+    },
+    {
+        "english": "copper",
+        "portuguese": "cobre",
+        "hungarian": "réz"
+    },
+    {
+        "english": "silver",
+        "portuguese": "prata",
+        "hungarian": "ezüst"
+    },
+    {
+        "english": "material",
+        "portuguese": "material",
+        "hungarian": "anyag"
+    }
+]

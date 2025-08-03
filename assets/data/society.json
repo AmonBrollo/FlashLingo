@@ -1,0 +1,192 @@
+[
+    {
+        "english": "religion",
+        "portuguese": "religião",
+        "hungarian": "vallás"
+    },
+    {
+        "english": "heaven",
+        "portuguese": "céu",
+        "hungarian": "mennyország"
+    },
+    {
+        "english": "hell",
+        "portuguese": "inferno",
+        "hungarian": "pokol"
+    },
+    {
+        "english": "death",
+        "portuguese": "morte",
+        "hungarian": "halál"
+    },
+    {
+        "english": "medicine",
+        "portuguese": "medicina",
+        "hungarian": "orvosság"
+    },
+    {
+        "english": "money",
+        "portuguese": "dinheiro",
+        "hungarian": "pénz"
+    },
+    {
+        "english": "dollar",
+        "portuguese": "dólar",
+        "hungarian": "dollár"
+    },
+    {
+        "english": "bill",
+        "portuguese": "conta",
+        "hungarian": "számla"
+    },
+    {
+        "english": "marriage",
+        "portuguese": "casamento",
+        "hungarian": "házasság"
+    },
+    {
+        "english": "wedding",
+        "portuguese": "casamento",
+        "hungarian": "esküvő"
+    },
+    {
+        "english": "team",
+        "portuguese": "equipe",
+        "hungarian": "csapat"
+    },
+    {
+        "english": "relationship",
+        "portuguese": "relacionamento",
+        "hungarian": "kapcsolat"
+    },
+    {
+        "english": "race (ethnicity)",
+        "portuguese": "raça",
+        "hungarian": "faj"
+    },
+    {
+        "english": "sex (act)",
+        "portuguese": "sexo",
+        "hungarian": "szex"
+    },
+    {
+        "english": "sex (gender)",
+        "portuguese": "sexo",
+        "hungarian": "nem"
+    },
+    {
+        "english": "murder",
+        "portuguese": "assassinato",
+        "hungarian": "gyilkosság"
+    },
+    {
+        "english": "prison",
+        "portuguese": "prisão",
+        "hungarian": "börtön"
+    },
+    {
+        "english": "technology",
+        "portuguese": "tecnologia",
+        "hungarian": "technológia"
+    },
+    {
+        "english": "energy",
+        "portuguese": "energia",
+        "hungarian": "energia"
+    },
+    {
+        "english": "war",
+        "portuguese": "guerra",
+        "hungarian": "háború"
+    },
+    {
+        "english": "peace",
+        "portuguese": "paz",
+        "hungarian": "béke"
+    },
+    {
+        "english": "attack",
+        "portuguese": "ataque",
+        "hungarian": "támadás"
+    },
+    {
+        "english": "election",
+        "portuguese": "eleição",
+        "hungarian": "választás"
+    },
+    {
+        "english": "magazine",
+        "portuguese": "revista",
+        "hungarian": "magazin"
+    },
+    {
+        "english": "newspaper",
+        "portuguese": "jornal",
+        "hungarian": "újság"
+    },
+    {
+        "english": "poison",
+        "portuguese": "veneno",
+        "hungarian": "méreg"
+    },
+    {
+        "english": "gun",
+        "portuguese": "arma",
+        "hungarian": "fegyver"
+    },
+    {
+        "english": "sport",
+        "portuguese": "esporte",
+        "hungarian": "sport"
+    },
+    {
+        "english": "race (sport)",
+        "portuguese": "corrida",
+        "hungarian": "verseny"
+    },
+    {
+        "english": "exercise",
+        "portuguese": "exercício",
+        "hungarian": "gyakorlat"
+    },
+    {
+        "english": "ball",
+        "portuguese": "bola",
+        "hungarian": "labda"
+    },
+    {
+        "english": "game",
+        "portuguese": "jogo",
+        "hungarian": "játék"
+    },
+    {
+        "english": "price",
+        "portuguese": "preço",
+        "hungarian": "ár"
+    },
+    {
+        "english": "contract",
+        "portuguese": "contrato",
+        "hungarian": "szerződés"
+    },
+    {
+        "english": "drug",
+        "portuguese": "droga",
+        "hungarian": "drog"
+    },
+    {
+        "english": "sign",
+        "portuguese": "sinal",
+        "hungarian": "jel"
+    },
+    {
+        "english": "science",
+        "portuguese": "ciência",
+        "hungarian": "tudomány"
+    },
+    {
+        "english": "God",
+        "portuguese": "Deus",
+        "hungarian": "Isten"
+    }
+]

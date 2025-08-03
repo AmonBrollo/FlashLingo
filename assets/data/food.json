@@ -1,0 +1,142 @@
+[
+    {
+        "english": "egg",
+        "portuguese": "ovo",
+        "hungarian": "tojás"
+    },
+    {
+        "english": "cheese",
+        "portuguese": "queijo",
+        "hungarian": "sajt"
+    },
+    {
+        "english": "bread",
+        "portuguese": "pão",
+        "hungarian": "kenyér"
+    },
+    {
+        "english": "soup",
+        "portuguese": "sopa",
+        "hungarian": "leves"
+    },
+    {
+        "english": "cake",
+        "portuguese": "bolo",
+        "hungarian": "torta"
+    },
+    {
+        "english": "chicken",
+        "portuguese": "frango",
+        "hungarian": "csirke"
+    },
+    {
+        "english": "pork",
+        "portuguese": "porco",
+        "hungarian": "sertés"
+    },
+    {
+        "english": "beef",
+        "portuguese": "carne bovina",
+        "hungarian": "marhahús"
+    },
+    {
+        "english": "apple",
+        "portuguese": "maçã",
+        "hungarian": "alma"
+    },
+    {
+        "english": "banana",
+        "portuguese": "banana",
+        "hungarian": "banán"
+    },
+    {
+        "english": "orange",
+        "portuguese": "laranja",
+        "hungarian": "narancs"
+    },
+    {
+        "english": "lemon",
+        "portuguese": "limão",
+        "hungarian": "citrom"
+    },
+    {
+        "english": "corn",
+        "portuguese": "milho",
+        "hungarian": "kukorica"
+    },
+    {
+        "english": "rice",
+        "portuguese": "arroz",
+        "hungarian": "rizs"
+    },
+    {
+        "english": "oil",
+        "portuguese": "óleo",
+        "hungarian": "olaj"
+    },
+    {
+        "english": "seed",
+        "portuguese": "semente",
+        "hungarian": "mag"
+    },
+    {
+        "english": "knife",
+        "portuguese": "faca",
+        "hungarian": "kés"
+    },
+    {
+        "english": "spoon",
+        "portuguese": "colher",
+        "hungarian": "kanál"
+    },
+    {
+        "english": "fork",
+        "portuguese": "garfo",
+        "hungarian": "villa"
+    },
+    {
+        "english": "plate",
+        "portuguese": "prato",
+        "hungarian": "tányér"
+    },
+    {
+        "english": "cup",
+        "portuguese": "xícara",
+        "hungarian": "csésze"
+    },
+    {
+        "english": "breakfast",
+        "portuguese": "café da manhã",
+        "hungarian": "reggeli"
+    },
+    {
+        "english": "lunch",
+        "portuguese": "almoço",
+        "hungarian": "ebéd"
+    },
+    {
+        "english": "dinner",
+        "portuguese": "jantar",
+        "hungarian": "vacsora"
+    },
+    {
+        "english": "sugar",
+        "portuguese": "açúcar",
+        "hungarian": "cukor"
+    },
+    {
+        "english": "salt",
+        "portuguese": "sal",
+        "hungarian": "só"
+    },
+    {
+        "english": "bottle",
+        "portuguese": "garrafa",
+        "hungarian": "üveg"
+    },
+    {
+        "english": "food",
+        "portuguese": "comida",
+        "hungarian": "étel"
+    }
+]

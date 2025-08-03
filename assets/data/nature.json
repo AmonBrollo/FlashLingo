@@ -1,0 +1,167 @@
+[
+    {
+        "english": "sea",
+        "portuguese": "mar",
+        "hungarian": "tenger"
+    },
+    {
+        "english": "ocean",
+        "portuguese": "oceano",
+        "hungarian": "óceán"
+    },
+    {
+        "english": "river",
+        "portuguese": "rio",
+        "hungarian": "folyó"
+    },
+    {
+        "english": "mountain",
+        "portuguese": "montanha",
+        "hungarian": "hegy"
+    },
+    {
+        "english": "rain",
+        "portuguese": "chuva",
+        "hungarian": "eső"
+    },
+    {
+        "english": "snow",
+        "portuguese": "neve",
+        "hungarian": "hó"
+    },
+    {
+        "english": "tree",
+        "portuguese": "árvore",
+        "hungarian": "fa"
+    },
+    {
+        "english": "sun",
+        "portuguese": "sol",
+        "hungarian": "nap"
+    },
+    {
+        "english": "moon",
+        "portuguese": "lua",
+        "hungarian": "hold"
+    },
+    {
+        "english": "world",
+        "portuguese": "mundo",
+        "hungarian": "világ"
+    },
+    {
+        "english": "Earth",
+        "portuguese": "Terra",
+        "hungarian": "Föld"
+    },
+    {
+        "english": "forest",
+        "portuguese": "floresta",
+        "hungarian": "erdő"
+    },
+    {
+        "english": "sky",
+        "portuguese": "céu",
+        "hungarian": "ég"
+    },
+    {
+        "english": "plant",
+        "portuguese": "planta",
+        "hungarian": "növény"
+    },
+    {
+        "english": "wind",
+        "portuguese": "vento",
+        "hungarian": "szél"
+    },
+    {
+        "english": "soil/earth",
+        "portuguese": "solo/terra",
+        "hungarian": "talaj/föld"
+    },
+    {
+        "english": "flower",
+        "portuguese": "flor",
+        "hungarian": "virág"
+    },
+    {
+        "english": "valley",
+        "portuguese": "vale",
+        "hungarian": "völgy"
+    },
+    {
+        "english": "root",
+        "portuguese": "raiz",
+        "hungarian": "gyökér"
+    },
+    {
+        "english": "lake",
+        "portuguese": "lago",
+        "hungarian": "tó"
+    },
+    {
+        "english": "star",
+        "portuguese": "estrela",
+        "hungarian": "csillag"
+    },
+    {
+        "english": "grass",
+        "portuguese": "grama",
+        "hungarian": "fű"
+    },
+    {
+        "english": "leaf",
+        "portuguese": "folha",
+        "hungarian": "levél"
+    },
+    {
+        "english": "air",
+        "portuguese": "ar",
+        "hungarian": "levegő"
+    },
+    {
+        "english": "sand",
+        "portuguese": "areia",
+        "hungarian": "homok"
+    },
+    {
+        "english": "beach",
+        "portuguese": "praia",
+        "hungarian": "strand"
+    },
+    {
+        "english": "wave",
+        "portuguese": "onda",
+        "hungarian": "hullám"
+    },
+    {
+        "english": "fire",
+        "portuguese": "fogo",
+        "hungarian": "tűz"
+    },
+    {
+        "english": "ice",
+        "portuguese": "gelo",
+        "hungarian": "jég"
+    },
+    {
+        "english": "island",
+        "portuguese": "ilha",
+        "hungarian": "sziget"
+    },
+    {
+        "english": "hill",
+        "portuguese": "colina",
+        "hungarian": "domb"
+    },
+    {
+        "english": "heat",
+        "portuguese": "calor",
+        "hungarian": "hőség"
+    },
+    {
+        "english": "nature",
+        "portuguese": "natureza",
+        "hungarian": "természet"
+    }
+]

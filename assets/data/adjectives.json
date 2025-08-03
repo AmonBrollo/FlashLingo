@@ -1,0 +1,322 @@
+[
+    {
+        "english": "long",
+        "portuguese": "Comprido",
+        "hungarian": "Hosszú"
+    },
+    {
+        "english": "short (vs long)",
+        "portuguese": "Curto",
+        "hungarian": "Rövid"
+    },
+    {
+        "english": "tall",
+        "portuguese": "Alto",
+        "hungarian": "Magas"
+    },
+    {
+        "english": "short (vs tall)",
+        "portuguese": "Baixo",
+        "hungarian": "Alacsony"
+    },
+    {
+        "english": "wide",
+        "portuguese": "Largo",
+        "hungarian": "Széles"
+    },
+    {
+        "english": "narrow",
+        "portuguese": "Estreito",
+        "hungarian": "Keskeny"
+    },
+    {
+        "english": "big/large",
+        "portuguese": "Grande",
+        "hungarian": "Nagy"
+    },
+    {
+        "english": "small/little",
+        "portuguese": "Pequeno",
+        "hungarian": "Kicsi"
+    },
+    {
+        "english": "slow",
+        "portuguese": "Lento",
+        "hungarian": "Lassú"
+    },
+    {
+        "english": "fast",
+        "portuguese": "Rápido",
+        "hungarian": "Gyors"
+    },
+    {
+        "english": "hot",
+        "portuguese": "Quente",
+        "hungarian": "Forró"
+    },
+    {
+        "english": "cold",
+        "portuguese": "Frio",
+        "hungarian": "Hideg"
+    },
+    {
+        "english": "warm",
+        "portuguese": "Morno",
+        "hungarian": "Meleg"
+    },
+    {
+        "english": "cool",
+        "portuguese": "Fresco",
+        "hungarian": "Hűvös"
+    },
+    {
+        "english": "new",
+        "portuguese": "Novo",
+        "hungarian": "Új"
+    },
+    {
+        "english": "old (new)",
+        "portuguese": "Velho",
+        "hungarian": "Régi"
+    },
+    {
+        "english": "young",
+        "portuguese": "Jovem",
+        "hungarian": "Fiatal"
+    },
+    {
+        "english": "old (young)",
+        "portuguese": "Velho",
+        "hungarian": "Idős"
+    },
+    {
+        "english": "good",
+        "portuguese": "Bom",
+        "hungarian": "Jó"
+    },
+    {
+        "english": "bad",
+        "portuguese": "Mau",
+        "hungarian": "Rossz"
+    },
+    {
+        "english": "wet",
+        "portuguese": "Molhado",
+        "hungarian": "Nedves"
+    },
+    {
+        "english": "dry",
+        "portuguese": "Seco",
+        "hungarian": "Száraz"
+    },
+    {
+        "english": "sick",
+        "portuguese": "Doente",
+        "hungarian": "Beteg"
+    },
+    {
+        "english": "healthy",
+        "portuguese": "Saudável",
+        "hungarian": "Egészséges"
+    },
+    {
+        "english": "loud",
+        "portuguese": "Alto (som)",
+        "hungarian": "Hangos"
+    },
+    {
+        "english": "quiet",
+        "portuguese": "Silencioso",
+        "hungarian": "Csendes"
+    },
+    {
+        "english": "happy",
+        "portuguese": "Feliz",
+        "hungarian": "Boldog"
+    },
+    {
+        "english": "sad",
+        "portuguese": "Triste",
+        "hungarian": "Szomorú"
+    },
+    {
+        "english": "beautiful",
+        "portuguese": "Bonito",
+        "hungarian": "Szép"
+    },
+    {
+        "english": "ugly",
+        "portuguese": "Feio",
+        "hungarian": "Csúnya"
+    },
+    {
+        "english": "deaf",
+        "portuguese": "Surdo",
+        "hungarian": "Süket"
+    },
+    {
+        "english": "blind",
+        "portuguese": "Cego",
+        "hungarian": "Vakul"
+    },
+    {
+        "english": "nice",
+        "portuguese": "Simpático",
+        "hungarian": "Kedves"
+    },
+    {
+        "english": "mean",
+        "portuguese": "Mau",
+        "hungarian": "Gonosz"
+    },
+    {
+        "english": "rich",
+        "portuguese": "Rico",
+        "hungarian": "Gazdag"
+    },
+    {
+        "english": "poor",
+        "portuguese": "Pobre",
+        "hungarian": "Szegény"
+    },
+    {
+        "english": "thick",
+        "portuguese": "Grosso",
+        "hungarian": "Vastag"
+    },
+    {
+        "english": "thin",
+        "portuguese": "Fino",
+        "hungarian": "Vékony"
+    },
+    {
+        "english": "expensive",
+        "portuguese": "Caro",
+        "hungarian": "Drága"
+    },
+    {
+        "english": "cheap",
+        "portuguese": "Barato",
+        "hungarian": "Olcsó"
+    },
+    {
+        "english": "flat",
+        "portuguese": "Plano",
+        "hungarian": "Lapos"
+    },
+    {
+        "english": "curved",
+        "portuguese": "Curvo",
+        "hungarian": "Görbe"
+    },
+    {
+        "english": "male",
+        "portuguese": "Masculino",
+        "hungarian": "Férfi"
+    },
+    {
+        "english": "female",
+        "portuguese": "Feminino",
+        "hungarian": "Nő"
+    },
+    {
+        "english": "tight",
+        "portuguese": "Apertado",
+        "hungarian": "Szoros"
+    },
+    {
+        "english": "loose",
+        "portuguese": "Largo",
+        "hungarian": "Laza"
+    },
+    {
+        "english": "high",
+        "portuguese": "Alto",
+        "hungarian": "Magas"
+    },
+    {
+        "english": "low",
+        "portuguese": "Baixo",
+        "hungarian": "Alacsony"
+    },
+    {
+        "english": "soft",
+        "portuguese": "Macio",
+        "hungarian": "Puha"
+    },
+    {
+        "english": "hard",
+        "portuguese": "Duro",
+        "hungarian": "Kemény"
+    },
+    {
+        "english": "deep",
+        "portuguese": "Fundo",
+        "hungarian": "Mély"
+    },
+    {
+        "english": "shallow",
+        "portuguese": "Raso",
+        "hungarian": "Sekély"
+    },
+    {
+        "english": "clean",
+        "portuguese": "Limpo",
+        "hungarian": "Tiszta"
+    },
+    {
+        "english": "dirty",
+        "portuguese": "Sujo",
+        "hungarian": "Piszkos"
+    },
+    {
+        "english": "strong",
+        "portuguese": "Forte",
+        "hungarian": "Erős"
+    },
+    {
+        "english": "weak",
+        "portuguese": "Fraco",
+        "hungarian": "Gyenge"
+    },
+    {
+        "english": "dead",
+        "portuguese": "Morto",
+        "hungarian": "Halott"
+    },
+    {
+        "english": "alive",
+        "portuguese": "Vivo",
+        "hungarian": "Élő"
+    },
+    {
+        "english": "heavy",
+        "portuguese": "Pesado",
+        "hungarian": "Nehéz"
+    },
+    {
+        "english": "light (heavy)",
+        "portuguese": "Leve",
+        "hungarian": "Könnyű"
+    },
+    {
+        "english": "dark",
+        "portuguese": "Escuro",
+        "hungarian": "Sötét"
+    },
+    {
+        "english": "light (dark)",
+        "portuguese": "Claro",
+        "hungarian": "Világos"
+    },
+    {
+        "english": "nuclear",
+        "portuguese": "Nuclear",
+        "hungarian": "Nukleáris"
+    },
+    {
+        "english": "famous",
+        "portuguese": "Famoso",
+        "hungarian": "Híres"
+    }
+]

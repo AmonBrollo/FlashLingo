@@ -1,0 +1,67 @@
+[
+    {
+        "english": "train",
+        "portuguese": "trem",
+        "hungarian": "vonat"
+    },
+    {
+        "english": "plane",
+        "portuguese": "avião",
+        "hungarian": "repülőgép"
+    },
+    {
+        "english": "car",
+        "portuguese": "carro",
+        "hungarian": "autó"
+    },
+    {
+        "english": "truck",
+        "portuguese": "caminhão",
+        "hungarian": "kamion"
+    },
+    {
+        "english": "bicycle",
+        "portuguese": "bicicleta",
+        "hungarian": "kerékpár"
+    },
+    {
+        "english": "bus",
+        "portuguese": "ônibus",
+        "hungarian": "busz"
+    },
+    {
+        "english": "boat",
+        "portuguese": "barco",
+        "hungarian": "hajó"
+    },
+    {
+        "english": "ship",
+        "portuguese": "navio",
+        "hungarian": "hajó"
+    },
+    {
+        "english": "tire",
+        "portuguese": "pneu",
+        "hungarian": "gumi"
+    },
+    {
+        "english": "gasoline",
+        "portuguese": "gasolina",
+        "hungarian": "benzin"
+    },
+    {
+        "english": "engine",
+        "portuguese": "motor",
+        "hungarian": "motor"
+    },
+    {
+        "english": "ticket",
+        "portuguese": "bilhete",
+        "hungarian": "jegy"
+    },
+    {
+        "english": "transportation",
+        "portuguese": "transporte",
+        "hungarian": "közlekedés"
+    }
+]

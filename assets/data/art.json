@@ -1,0 +1,32 @@
+[
+    {
+        "english": "band",
+        "portuguese": "banda",
+        "hungarian": "zenekar"
+    },
+    {
+        "english": "song",
+        "portuguese": "música",
+        "hungarian": "dal"
+    },
+    {
+        "english": "instrument (musical)",
+        "portuguese": "instrumento musical",
+        "hungarian": "hangszer"
+    },
+    {
+        "english": "music",
+        "portuguese": "música",
+        "hungarian": "zene"
+    },
+    {
+        "english": "movie",
+        "portuguese": "filme",
+        "hungarian": "film"
+    },
+    {
+        "english": "art",
+        "portuguese": "arte",
+        "hungarian": "művészet"
+    }
+]

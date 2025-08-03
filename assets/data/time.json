@@ -1,0 +1,62 @@
+[
+    {
+        "english": "year",
+        "portuguese": "Ano",
+        "hungarian": "Év"
+    },
+    {
+        "english": "month",
+        "portuguese": "Mês",
+        "hungarian": "Hónap"
+    },
+    {
+        "english": "week",
+        "portuguese": "Semana",
+        "hungarian": "Hét"
+    },
+    {
+        "english": "day",
+        "portuguese": "Dia",
+        "hungarian": "Nap"
+    },
+    {
+        "english": "hour",
+        "portuguese": "Hora",
+        "hungarian": "Óra"
+    },
+    {
+        "english": "minute",
+        "portuguese": "Minuto",
+        "hungarian": "Perc"
+    },
+    {
+        "english": "second",
+        "portuguese": "Segundo",
+        "hungarian": "Másodperc"
+    },
+    {
+        "english": "morning",
+        "portuguese": "Manhã",
+        "hungarian": "Reggel"
+    },
+    {
+        "english": "afternoon",
+        "portuguese": "Tarde",
+        "hungarian": "Délután"
+    },
+    {
+        "english": "evening",
+        "portuguese": "Noite (início)",
+        "hungarian": "Este"
+    },
+    {
+        "english": "night",
+        "portuguese": "Noite",
+        "hungarian": "Éjszaka"
+    },
+    {
+        "english": "time",
+        "portuguese": "Tempo",
+        "hungarian": "Idő"
+    }
+]

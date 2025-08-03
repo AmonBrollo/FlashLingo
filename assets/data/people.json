@@ -1,0 +1,152 @@
+[
+    {
+        "english": "son",
+        "portuguese": "filho",
+        "hungarian": "fiú"
+    },
+    {
+        "english": "daughter",
+        "portuguese": "filha",
+        "hungarian": "lány"
+    },
+    {
+        "english": "mother",
+        "portuguese": "mãe",
+        "hungarian": "anya"
+    },
+    {
+        "english": "father",
+        "portuguese": "pai",
+        "hungarian": "apa"
+    },
+    {
+        "english": "parent",
+        "portuguese": "pai/mãe",
+        "hungarian": "szülő"
+    },
+    {
+        "english": "baby",
+        "portuguese": "bebê",
+        "hungarian": "baba"
+    },
+    {
+        "english": "man",
+        "portuguese": "homem",
+        "hungarian": "férfi"
+    },
+    {
+        "english": "woman",
+        "portuguese": "mulher",
+        "hungarian": "nő"
+    },
+    {
+        "english": "brother",
+        "portuguese": "irmão",
+        "hungarian": "testvér"
+    },
+    {
+        "english": "sister",
+        "portuguese": "irmã",
+        "hungarian": "nővér"
+    },
+    {
+        "english": "family",
+        "portuguese": "família",
+        "hungarian": "család"
+    },
+    {
+        "english": "grandfather",
+        "portuguese": "avô",
+        "hungarian": "nagyapa"
+    },
+    {
+        "english": "grandmother",
+        "portuguese": "avó",
+        "hungarian": "nagyanya"
+    },
+    {
+        "english": "husband",
+        "portuguese": "marido",
+        "hungarian": "férj"
+    },
+    {
+        "english": "wife",
+        "portuguese": "esposa",
+        "hungarian": "feleség"
+    },
+    {
+        "english": "king",
+        "portuguese": "rei",
+        "hungarian": "király"
+    },
+    {
+        "english": "queen",
+        "portuguese": "rainha",
+        "hungarian": "királynő"
+    },
+    {
+        "english": "president",
+        "portuguese": "presidente",
+        "hungarian": "elnök"
+    },
+    {
+        "english": "neighbor",
+        "portuguese": "vizinho",
+        "hungarian": "szomszéd"
+    },
+    {
+        "english": "boy",
+        "portuguese": "menino",
+        "hungarian": "fiú"
+    },
+    {
+        "english": "girl",
+        "portuguese": "menina",
+        "hungarian": "lány"
+    },
+    {
+        "english": "child",
+        "portuguese": "criança",
+        "hungarian": "gyerek"
+    },
+    {
+        "english": "adult",
+        "portuguese": "adulto",
+        "hungarian": "felnőtt"
+    },
+    {
+        "english": "human",
+        "portuguese": "humano",
+        "hungarian": "ember"
+    },
+    {
+        "english": "friend",
+        "portuguese": "amigo",
+        "hungarian": "barát"
+    },
+    {
+        "english": "victim",
+        "portuguese": "vítima",
+        "hungarian": "áldozat"
+    },
+    {
+        "english": "player",
+        "portuguese": "jogador",
+        "hungarian": "játékos"
+    },
+    {
+        "english": "fan",
+        "portuguese": "fã",
+        "hungarian": "rajongó"
+    },
+    {
+        "english": "crowd",
+        "portuguese": "multidão",
+        "hungarian": "tömeg"
+    },
+    {
+        "english": "person",
+        "portuguese": "pessoa",
+        "hungarian": "személy"
+    }
+]

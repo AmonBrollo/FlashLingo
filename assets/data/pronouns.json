@@ -1,0 +1,42 @@
+[
+    {
+        "english": "I",
+        "portuguese": "Eu",
+        "hungarian": "Én"
+    },
+    {
+        "english": "you (singular)",
+        "portuguese": "Tu",
+        "hungarian": "Te"
+    },
+    {
+        "english": "he",
+        "portuguese": "Ele",
+        "hungarian": "Ő"
+    },
+    {
+        "english": "she",
+        "portuguese": "Ela",
+        "hungarian": "Ő"
+    },
+    {
+        "english": "it",
+        "portuguese": "Isso",
+        "hungarian": "Az"
+    },
+    {
+        "english": "we",
+        "portuguese": "Nós",
+        "hungarian": "Mi"
+    },
+    {
+        "english": "you (plural)",
+        "portuguese": "Vocês",
+        "hungarian": "Ti"
+    },
+    {
+        "english": "they",
+        "portuguese": "Eles",
+        "hungarian": "Ők"
+    }
+]

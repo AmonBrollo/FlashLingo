@@ -1,0 +1,27 @@
+[
+    {
+        "english": "summer",
+        "portuguese": "verão",
+        "hungarian": "nyár"
+    },
+    {
+        "english": "spring",
+        "portuguese": "primavera",
+        "hungarian": "tavasz"
+    },
+    {
+        "english": "winter",
+        "portuguese": "inverno",
+        "hungarian": "tél"
+    },
+    {
+        "english": "fall",
+        "portuguese": "outono",
+        "hungarian": "ősz"
+    },
+    {
+        "english": "season",
+        "portuguese": "estação",
+        "hungarian": "évszak"
+    }
+]

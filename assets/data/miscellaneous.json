@@ -1,0 +1,87 @@
+[
+    {
+        "english": "map",
+        "portuguese": "mapa",
+        "hungarian": "térkép"
+    },
+    {
+        "english": "dot",
+        "portuguese": "ponto",
+        "hungarian": "pont"
+    },
+    {
+        "english": "consonant",
+        "portuguese": "consoante",
+        "hungarian": "mássalhangzó"
+    },
+    {
+        "english": "vowel",
+        "portuguese": "vogal",
+        "hungarian": "magánhangzó"
+    },
+    {
+        "english": "light",
+        "portuguese": "luz",
+        "hungarian": "fény"
+    },
+    {
+        "english": "sound",
+        "portuguese": "som",
+        "hungarian": "hang"
+    },
+    {
+        "english": "yes",
+        "portuguese": "sim",
+        "hungarian": "igen"
+    },
+    {
+        "english": "no",
+        "portuguese": "não",
+        "hungarian": "nem"
+    },
+    {
+        "english": "piece",
+        "portuguese": "pedaço",
+        "hungarian": "darab"
+    },
+    {
+        "english": "pain",
+        "portuguese": "dor",
+        "hungarian": "fájdalom"
+    },
+    {
+        "english": "injury",
+        "portuguese": "ferimento",
+        "hungarian": "sérülés"
+    },
+    {
+        "english": "hole",
+        "portuguese": "buraco",
+        "hungarian": "lyuk"
+    },
+    {
+        "english": "image",
+        "portuguese": "imagem",
+        "hungarian": "kép"
+    },
+    {
+        "english": "pattern",
+        "portuguese": "padrão",
+        "hungarian": "minta"
+    },
+    {
+        "english": "noun",
+        "portuguese": "substantivo",
+        "hungarian": "főnév"
+    },
+    {
+        "english": "verb",
+        "portuguese": "verbo",
+        "hungarian": "ige"
+    },
+    {
+        "english": "adjective",
+        "portuguese": "adjetivo",
+        "hungarian": "melléknév"
+    }
+]

@@ -1,0 +1,162 @@
+[
+    {
+        "english": "city",
+        "portuguese": "cidade",
+        "hungarian": "város"
+    },
+    {
+        "english": "house",
+        "portuguese": "casa",
+        "hungarian": "ház"
+    },
+    {
+        "english": "apartment",
+        "portuguese": "apartamento",
+        "hungarian": "lakás"
+    },
+    {
+        "english": "street/road",
+        "portuguese": "rua/estrada",
+        "hungarian": "utca/út"
+    },
+    {
+        "english": "airport",
+        "portuguese": "aeroporto",
+        "hungarian": "repülőtér"
+    },
+    {
+        "english": "train station",
+        "portuguese": "estação de trem",
+        "hungarian": "vasútállomás"
+    },
+    {
+        "english": "bridge",
+        "portuguese": "ponte",
+        "hungarian": "híd"
+    },
+    {
+        "english": "hotel",
+        "portuguese": "hotel",
+        "hungarian": "szálloda"
+    },
+    {
+        "english": "restaurant",
+        "portuguese": "restaurante",
+        "hungarian": "étterem"
+    },
+    {
+        "english": "farm",
+        "portuguese": "fazenda",
+        "hungarian": "farm"
+    },
+    {
+        "english": "court",
+        "portuguese": "tribunal",
+        "hungarian": "bíróság"
+    },
+    {
+        "english": "school",
+        "portuguese": "escola",
+        "hungarian": "iskola"
+    },
+    {
+        "english": "office",
+        "portuguese": "escritório",
+        "hungarian": "iroda"
+    },
+    {
+        "english": "room",
+        "portuguese": "quarto",
+        "hungarian": "szoba"
+    },
+    {
+        "english": "town",
+        "portuguese": "cidade pequena",
+        "hungarian": "város"
+    },
+    {
+        "english": "university",
+        "portuguese": "universidade",
+        "hungarian": "egyetem"
+    },
+    {
+        "english": "club",
+        "portuguese": "clube",
+        "hungarian": "klub"
+    },
+    {
+        "english": "bar",
+        "portuguese": "bar",
+        "hungarian": "bár"
+    },
+    {
+        "english": "park",
+        "portuguese": "parque",
+        "hungarian": "park"
+    },
+    {
+        "english": "camp",
+        "portuguese": "acampamento",
+        "hungarian": "tábor"
+    },
+    {
+        "english": "store/shop",
+        "portuguese": "loja",
+        "hungarian": "bolt"
+    },
+    {
+        "english": "theater",
+        "portuguese": "teatro",
+        "hungarian": "színház"
+    },
+    {
+        "english": "library",
+        "portuguese": "biblioteca",
+        "hungarian": "könyvtár"
+    },
+    {
+        "english": "hospital",
+        "portuguese": "hospital",
+        "hungarian": "kórház"
+    },
+    {
+        "english": "church",
+        "portuguese": "igreja",
+        "hungarian": "templom"
+    },
+    {
+        "english": "market",
+        "portuguese": "mercado",
+        "hungarian": "piac"
+    },
+    {
+        "english": "country",
+        "portuguese": "país",
+        "hungarian": "ország"
+    },
+    {
+        "english": "building",
+        "portuguese": "prédio",
+        "hungarian": "épület"
+    },
+    {
+        "english": "ground",
+        "portuguese": "chão",
+        "hungarian": "talaj"
+    },
+    {
+        "english": "space",
+        "portuguese": "espaço",
+        "hungarian": "hely"
+    },
+    {
+        "english": "bank",
+        "portuguese": "banco",
+        "hungarian": "bank"
+    },
+    {
+        "english": "location",
+        "portuguese": "localização",
+        "hungarian": "helyszín"
+    }
+]

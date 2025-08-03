@@ -1,0 +1,72 @@
+[
+    {
+        "english": "meter",
+        "portuguese": "metro",
+        "hungarian": "méter"
+    },
+    {
+        "english": "centimeter",
+        "portuguese": "centímetro",
+        "hungarian": "centiméter"
+    },
+    {
+        "english": "kilogram",
+        "portuguese": "quilograma",
+        "hungarian": "kilogramm"
+    },
+    {
+        "english": "inch",
+        "portuguese": "polegada",
+        "hungarian": "hüvelyk"
+    },
+    {
+        "english": "foot",
+        "portuguese": "pé",
+        "hungarian": "láb"
+    },
+    {
+        "english": "pound",
+        "portuguese": "libra",
+        "hungarian": "font"
+    },
+    {
+        "english": "half",
+        "portuguese": "metade",
+        "hungarian": "fél"
+    },
+    {
+        "english": "circle",
+        "portuguese": "círculo",
+        "hungarian": "kör"
+    },
+    {
+        "english": "square",
+        "portuguese": "quadrado",
+        "hungarian": "négyzet"
+    },
+    {
+        "english": "temperature",
+        "portuguese": "temperatura",
+        "hungarian": "hőmérséklet"
+    },
+    {
+        "english": "date",
+        "portuguese": "data",
+        "hungarian": "dátum"
+    },
+    {
+        "english": "weight",
+        "portuguese": "peso",
+        "hungarian": "súly"
+    },
+    {
+        "english": "edge",
+        "portuguese": "borda",
+        "hungarian": "él"
+    },
+    {
+        "english": "corner",
+        "portuguese": "canto",
+        "hungarian": "sarok"
+    }
+]

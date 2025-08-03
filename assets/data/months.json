@@ -1,0 +1,62 @@
+[
+    {
+        "english": "January",
+        "portuguese": "Janeiro",
+        "hungarian": "Január"
+    },
+    {
+        "english": "February",
+        "portuguese": "Fevereiro",
+        "hungarian": "Február"
+    },
+    {
+        "english": "March",
+        "portuguese": "Março",
+        "hungarian": "Március"
+    },
+    {
+        "english": "April",
+        "portuguese": "Abril",
+        "hungarian": "Április"
+    },
+    {
+        "english": "May",
+        "portuguese": "Maio",
+        "hungarian": "Május"
+    },
+    {
+        "english": "June",
+        "portuguese": "Junho",
+        "hungarian": "Június"
+    },
+    {
+        "english": "July",
+        "portuguese": "Julho",
+        "hungarian": "Július"
+    },
+    {
+        "english": "August",
+        "portuguese": "Agosto",
+        "hungarian": "Augusztus"
+    },
+    {
+        "english": "September",
+        "portuguese": "Setembro",
+        "hungarian": "Szeptember"
+    },
+    {
+        "english": "October",
+        "portuguese": "Outubro",
+        "hungarian": "Október"
+    },
+    {
+        "english": "November",
+        "portuguese": "Novembro",
+        "hungarian": "November"
+    },
+    {
+        "english": "December",
+        "portuguese": "Dezembro",
+        "hungarian": "December"
+    }
+]

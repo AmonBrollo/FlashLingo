@@ -1,0 +1,52 @@
+[
+    {
+        "english": "dog",
+        "portuguese": "cachorro",
+        "hungarian": "kutya"
+    },
+    {
+        "english": "cat",
+        "portuguese": "gato",
+        "hungarian": "macska"
+    },
+    {
+        "english": "fish",
+        "portuguese": "peixe",
+        "hungarian": "hal"
+    },
+    {
+        "english": "bird",
+        "portuguese": "pássaro",
+        "hungarian": "madár"
+    },
+    {
+        "english": "cow",
+        "portuguese": "vaca",
+        "hungarian": "tehén"
+    },
+    {
+        "english": "pig",
+        "portuguese": "porco",
+        "hungarian": "disznó"
+    },
+    {
+        "english": "mouse",
+        "portuguese": "rato",
+        "hungarian": "egér"
+    },
+    {
+        "english": "horse",
+        "portuguese": "cavalo",
+        "hungarian": "ló"
+    },
+    {
+        "english": "wing",
+        "portuguese": "asa",
+        "hungarian": "szárny"
+    },
+    {
+        "english": "animal",
+        "portuguese": "animal",
+        "hungarian": "állat"
+    }
+]

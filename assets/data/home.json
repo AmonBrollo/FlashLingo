@@ -1,0 +1,182 @@
+[
+    {
+        "english": "table",
+        "portuguese": "mesa",
+        "hungarian": "asztal"
+    },
+    {
+        "english": "chair",
+        "portuguese": "cadeira",
+        "hungarian": "szék"
+    },
+    {
+        "english": "bed",
+        "portuguese": "cama",
+        "hungarian": "ágy"
+    },
+    {
+        "english": "dream",
+        "portuguese": "sonho",
+        "hungarian": "álom"
+    },
+    {
+        "english": "window",
+        "portuguese": "janela",
+        "hungarian": "ablak"
+    },
+    {
+        "english": "door",
+        "portuguese": "porta",
+        "hungarian": "ajtó"
+    },
+    {
+        "english": "bedroom",
+        "portuguese": "quarto",
+        "hungarian": "hálószoba"
+    },
+    {
+        "english": "kitchen",
+        "portuguese": "cozinha",
+        "hungarian": "konyha"
+    },
+    {
+        "english": "bathroom",
+        "portuguese": "banheiro",
+        "hungarian": "fürdőszoba"
+    },
+    {
+        "english": "pencil",
+        "portuguese": "lápis",
+        "hungarian": "ceruza"
+    },
+    {
+        "english": "pen",
+        "portuguese": "caneta",
+        "hungarian": "toll"
+    },
+    {
+        "english": "photograph",
+        "portuguese": "fotografia",
+        "hungarian": "fénykép"
+    },
+    {
+        "english": "soap",
+        "portuguese": "sabão",
+        "hungarian": "szappan"
+    },
+    {
+        "english": "book",
+        "portuguese": "livro",
+        "hungarian": "könyv"
+    },
+    {
+        "english": "page",
+        "portuguese": "página",
+        "hungarian": "oldal"
+    },
+    {
+        "english": "key",
+        "portuguese": "chave",
+        "hungarian": "kulcs"
+    },
+    {
+        "english": "paint",
+        "portuguese": "tinta",
+        "hungarian": "festék"
+    },
+    {
+        "english": "letter",
+        "portuguese": "carta",
+        "hungarian": "levél"
+    },
+    {
+        "english": "note",
+        "portuguese": "nota",
+        "hungarian": "jegyzet"
+    },
+    {
+        "english": "wall",
+        "portuguese": "parede",
+        "hungarian": "fal"
+    },
+    {
+        "english": "paper",
+        "portuguese": "papel",
+        "hungarian": "papír"
+    },
+    {
+        "english": "floor",
+        "portuguese": "chão",
+        "hungarian": "padló"
+    },
+    {
+        "english": "ceiling",
+        "portuguese": "teto",
+        "hungarian": "mennyezet"
+    },
+    {
+        "english": "roof",
+        "portuguese": "telhado",
+        "hungarian": "tető"
+    },
+    {
+        "english": "pool",
+        "portuguese": "piscina",
+        "hungarian": "medence"
+    },
+    {
+        "english": "lock",
+        "portuguese": "fechadura",
+        "hungarian": "zár"
+    },
+    {
+        "english": "telephone",
+        "portuguese": "telefone",
+        "hungarian": "telefon"
+    },
+    {
+        "english": "garden",
+        "portuguese": "jardim",
+        "hungarian": "kert"
+    },
+    {
+        "english": "yard",
+        "portuguese": "quintal",
+        "hungarian": "udvar"
+    },
+    {
+        "english": "needle",
+        "portuguese": "agulha",
+        "hungarian": "tű"
+    },
+    {
+        "english": "bag",
+        "portuguese": "bolsa",
+        "hungarian": "táska"
+    },
+    {
+        "english": "box",
+        "portuguese": "caixa",
+        "hungarian": "doboz"
+    },
+    {
+        "english": "gift",
+        "portuguese": "presente",
+        "hungarian": "ajándék"
+    },
+    {
+        "english": "card",
+        "portuguese": "cartão",
+        "hungarian": "kártya"
+    },
+    {
+        "english": "ring",
+        "portuguese": "anel",
+        "hungarian": "gyűrű"
+    },
+    {
+        "english": "tool",
+        "portuguese": "ferramenta",
+        "hungarian": "szerszám"
+    }
+]

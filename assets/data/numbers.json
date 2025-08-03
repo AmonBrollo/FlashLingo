@@ -1,0 +1,302 @@
+[
+    {
+        "english": "1",
+        "portuguese": "Um",
+        "hungarian": "Egy"
+    },
+    {
+        "english": "2",
+        "portuguese": "Dois",
+        "hungarian": "Kettő"
+    },
+    {
+        "english": "3",
+        "portuguese": "Três",
+        "hungarian": "Három"
+    },
+    {
+        "english": "4",
+        "portuguese": "Quatro",
+        "hungarian": "Négy"
+    },
+    {
+        "english": "5",
+        "portuguese": "Cinco",
+        "hungarian": "Öt"
+    },
+    {
+        "english": "6",
+        "portuguese": "Seis",
+        "hungarian": "Hat"
+    },
+    {
+        "english": "7",
+        "portuguese": "Sete",
+        "hungarian": "Hét"
+    },
+    {
+        "english": "8",
+        "portuguese": "Oito",
+        "hungarian": "Nyolc"
+    },
+    {
+        "english": "9",
+        "portuguese": "Nove",
+        "hungarian": "Kilenc"
+    },
+    {
+        "english": "10",
+        "portuguese": "Dez",
+        "hungarian": "Tíz"
+    },
+    {
+        "english": "11",
+        "portuguese": "Onze",
+        "hungarian": "Tizenegy"
+    },
+    {
+        "english": "12",
+        "portuguese": "Doze",
+        "hungarian": "Tizenkettő"
+    },
+    {
+        "english": "13",
+        "portuguese": "Treze",
+        "hungarian": "Tizenhárom"
+    },
+    {
+        "english": "14",
+        "portuguese": "Catorze",
+        "hungarian": "Tizennégy"
+    },
+    {
+        "english": "15",
+        "portuguese": "Quinze",
+        "hungarian": "Tizenöt"
+    },
+    {
+        "english": "16",
+        "portuguese": "Dezesseis",
+        "hungarian": "Tizenhat"
+    },
+    {
+        "english": "17",
+        "portuguese": "Dezessete",
+        "hungarian": "Tizenhét"
+    },
+    {
+        "english": "18",
+        "portuguese": "Dezoito",
+        "hungarian": "Tizennyolc"
+    },
+    {
+        "english": "19",
+        "portuguese": "Dezenove",
+        "hungarian": "Tizenkilenc"
+    },
+    {
+        "english": "20",
+        "portuguese": "Vinte",
+        "hungarian": "Húsz"
+    },
+    {
+        "english": "21",
+        "portuguese": "Vinte e um",
+        "hungarian": "Huszonegy"
+    },
+    {
+        "english": "22",
+        "portuguese": "Vinte e dois",
+        "hungarian": "Huszonkettő"
+    },
+    {
+        "english": "30",
+        "portuguese": "Trinta",
+        "hungarian": "Harminc"
+    },
+    {
+        "english": "31",
+        "portuguese": "Trinta e um",
+        "hungarian": "Harmincegy"
+    },
+    {
+        "english": "32",
+        "portuguese": "Trinta e dois",
+        "hungarian": "Harminckettő"
+    },
+    {
+        "english": "40",
+        "portuguese": "Quarenta",
+        "hungarian": "Negyven"
+    },
+    {
+        "english": "41",
+        "portuguese": "Quarenta e um",
+        "hungarian": "Negyvenegy"
+    },
+    {
+        "english": "42",
+        "portuguese": "Quarenta e dois",
+        "hungarian": "Negyvenkettő"
+    },
+    {
+        "english": "50",
+        "portuguese": "Cinquenta",
+        "hungarian": "Ötven"
+    },
+    {
+        "english": "51",
+        "portuguese": "Cinquenta e um",
+        "hungarian": "Ötvenegy"
+    },
+    {
+        "english": "52",
+        "portuguese": "Cinquenta e dois",
+        "hungarian": "Ötvenkettő"
+    },
+    {
+        "english": "60",
+        "portuguese": "Sessenta",
+        "hungarian": "Hatvan"
+    },
+    {
+        "english": "61",
+        "portuguese": "Sessenta e um",
+        "hungarian": "Hatvanegy"
+    },
+    {
+        "english": "62",
+        "portuguese": "Sessenta e dois",
+        "hungarian": "Hatvankettő"
+    },
+    {
+        "english": "70",
+        "portuguese": "Setenta",
+        "hungarian": "Hetven"
+    },
+    {
+        "english": "71",
+        "portuguese": "Setenta e um",
+        "hungarian": "Hetvenegy"
+    },
+    {
+        "english": "72",
+        "portuguese": "Setenta e dois",
+        "hungarian": "Hetvenkettő"
+    },
+    {
+        "english": "80",
+        "portuguese": "Oitenta",
+        "hungarian": "Nyolcvan"
+    },
+    {
+        "english": "81",
+        "portuguese": "Oitenta e um",
+        "hungarian": "Nyolcvanegy"
+    },
+    {
+        "english": "82",
+        "portuguese": "Oitenta e dois",
+        "hungarian": "Nyolcvankettő"
+    },
+    {
+        "english": "90",
+        "portuguese": "Noventa",
+        "hungarian": "Kilencven"
+    },
+    {
+        "english": "91",
+        "portuguese": "Noventa e um",
+        "hungarian": "Kilencvenegy"
+    },
+    {
+        "english": "92",
+        "portuguese": "Noventa e dois",
+        "hungarian": "Kilencvenkettő"
+    },
+    {
+        "english": "100",
+        "portuguese": "Cem",
+        "hungarian": "Száz"
+    },
+    {
+        "english": "101",
+        "portuguese": "Cento e um",
+        "hungarian": "Százegy"
+    },
+    {
+        "english": "102",
+        "portuguese": "Cento e dois",
+        "hungarian": "Százkettő"
+    },
+    {
+        "english": "110",
+        "portuguese": "Cento e dez",
+        "hungarian": "Száztíz"
+    },
+    {
+        "english": "111",
+        "portuguese": "Cento e onze",
+        "hungarian": "Száztizenegy"
+    },
+    {
+        "english": "1000",
+        "portuguese": "Mil",
+        "hungarian": "Ezer"
+    },
+    {
+        "english": "1001",
+        "portuguese": "Mil e um",
+        "hungarian": "Ezeregy"
+    },
+    {
+        "english": "10000",
+        "portuguese": "Dez mil",
+        "hungarian": "Tízezer"
+    },
+    {
+        "english": "100000",
+        "portuguese": "Cem mil",
+        "hungarian": "Százezer"
+    },
+    {
+        "english": "million",
+        "portuguese": "Milhão",
+        "hungarian": "Millió"
+    },
+    {
+        "english": "billion",
+        "portuguese": "Bilhão",
+        "hungarian": "Milliárd"
+    },
+    {
+        "english": "1st",
+        "portuguese": "Primeiro",
+        "hungarian": "Első"
+    },
+    {
+        "english": "2nd",
+        "portuguese": "Segundo",
+        "hungarian": "Második"
+    },
+    {
+        "english": "3rd",
+        "portuguese": "Terceiro",
+        "hungarian": "Harmadik"
+    },
+    {
+        "english": "4th",
+        "portuguese": "Quarto",
+        "hungarian": "Negyedik"
+    },
+    {
+        "english": "5th",
+        "portuguese": "Quinto",
+        "hungarian": "Ötödik"
+    },
+    {
+        "english": "number",
+        "portuguese": "Número",
+        "hungarian": "Szám"
+    }
+]

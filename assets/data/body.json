@@ -1,0 +1,157 @@
+[
+    {
+        "english": "head",
+        "portuguese": "cabeça",
+        "hungarian": "fej"
+    },
+    {
+        "english": "neck",
+        "portuguese": "pescoço",
+        "hungarian": "nyak"
+    },
+    {
+        "english": "face",
+        "portuguese": "rosto",
+        "hungarian": "arc"
+    },
+    {
+        "english": "beard",
+        "portuguese": "barba",
+        "hungarian": "szakáll"
+    },
+    {
+        "english": "hair",
+        "portuguese": "cabelo",
+        "hungarian": "haj"
+    },
+    {
+        "english": "eye",
+        "portuguese": "olho",
+        "hungarian": "szem"
+    },
+    {
+        "english": "mouth",
+        "portuguese": "boca",
+        "hungarian": "száj"
+    },
+    {
+        "english": "lip",
+        "portuguese": "lábio",
+        "hungarian": "ajak"
+    },
+    {
+        "english": "nose",
+        "portuguese": "nariz",
+        "hungarian": "orr"
+    },
+    {
+        "english": "tooth",
+        "portuguese": "dente",
+        "hungarian": "fog"
+    },
+    {
+        "english": "ear",
+        "portuguese": "orelha",
+        "hungarian": "fül"
+    },
+    {
+        "english": "tear",
+        "portuguese": "lágrima",
+        "hungarian": "könny"
+    },
+    {
+        "english": "tongue",
+        "portuguese": "língua",
+        "hungarian": "nyelv"
+    },
+    {
+        "english": "back",
+        "portuguese": "costas",
+        "hungarian": "hát"
+    },
+    {
+        "english": "toe",
+        "portuguese": "dedo do pé",
+        "hungarian": "lábujj"
+    },
+    {
+        "english": "finger",
+        "portuguese": "dedo",
+        "hungarian": "ujj"
+    },
+    {
+        "english": "foot",
+        "portuguese": "pé",
+        "hungarian": "láb"
+    },
+    {
+        "english": "hand",
+        "portuguese": "mão",
+        "hungarian": "kéz"
+    },
+    {
+        "english": "leg",
+        "portuguese": "perna",
+        "hungarian": "láb"
+    },
+    {
+        "english": "arm",
+        "portuguese": "braço",
+        "hungarian": "kar"
+    },
+    {
+        "english": "shoulder",
+        "portuguese": "ombro",
+        "hungarian": "váll"
+    },
+    {
+        "english": "heart",
+        "portuguese": "coração",
+        "hungarian": "szív"
+    },
+    {
+        "english": "blood",
+        "portuguese": "sangue",
+        "hungarian": "vér"
+    },
+    {
+        "english": "brain",
+        "portuguese": "cérebro",
+        "hungarian": "agy"
+    },
+    {
+        "english": "knee",
+        "portuguese": "joelho",
+        "hungarian": "térd"
+    },
+    {
+        "english": "sweat",
+        "portuguese": "suor",
+        "hungarian": "verejték"
+    },
+    {
+        "english": "disease",
+        "portuguese": "doença",
+        "hungarian": "betegség"
+    },
+    {
+        "english": "bone",
+        "portuguese": "osso",
+        "hungarian": "csont"
+    },
+    {
+        "english": "voice",
+        "portuguese": "voz",
+        "hungarian": "hang"
+    },
+    {
+        "english": "skin",
+        "portuguese": "pele",
+        "hungarian": "bőr"
+    },
+    {
+        "english": "body",
+        "portuguese": "corpo",
+        "hungarian": "test"
+    }
+]

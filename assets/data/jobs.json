@@ -1,0 +1,87 @@
+[
+    {
+        "english": "teacher",
+        "portuguese": "professor",
+        "hungarian": "tanár"
+    },
+    {
+        "english": "student",
+        "portuguese": "estudante",
+        "hungarian": "diák"
+    },
+    {
+        "english": "lawyer",
+        "portuguese": "advogado",
+        "hungarian": "ügyvéd"
+    },
+    {
+        "english": "doctor",
+        "portuguese": "médico",
+        "hungarian": "orvos"
+    },
+    {
+        "english": "patient",
+        "portuguese": "paciente",
+        "hungarian": "beteg"
+    },
+    {
+        "english": "waiter",
+        "portuguese": "garçom",
+        "hungarian": "pincér"
+    },
+    {
+        "english": "secretary",
+        "portuguese": "secretário",
+        "hungarian": "titkár"
+    },
+    {
+        "english": "priest",
+        "portuguese": "padre",
+        "hungarian": "pap"
+    },
+    {
+        "english": "police",
+        "portuguese": "polícia",
+        "hungarian": "rendőrség"
+    },
+    {
+        "english": "army",
+        "portuguese": "exército",
+        "hungarian": "hadsereg"
+    },
+    {
+        "english": "soldier",
+        "portuguese": "soldado",
+        "hungarian": "katona"
+    },
+    {
+        "english": "artist",
+        "portuguese": "artista",
+        "hungarian": "művész"
+    },
+    {
+        "english": "author",
+        "portuguese": "autor",
+        "hungarian": "író"
+    },
+    {
+        "english": "manager",
+        "portuguese": "gerente",
+        "hungarian": "menedzser"
+    },
+    {
+        "english": "reporter",
+        "portuguese": "repórter",
+        "hungarian": "riporter"
+    },
+    {
+        "english": "actor",
+        "portuguese": "ator",
+        "hungarian": "színész"
+    },
+    {
+        "english": "job",
+        "portuguese": "trabalho",
+        "hungarian": "munka"
+    }
+]

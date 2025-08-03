@@ -1,0 +1,62 @@
+[
+    {
+        "english": "clock",
+        "portuguese": "relógio",
+        "hungarian": "óra"
+    },
+    {
+        "english": "lamp",
+        "portuguese": "lâmpada",
+        "hungarian": "lámpa"
+    },
+    {
+        "english": "fan",
+        "portuguese": "ventilador",
+        "hungarian": "ventilátor"
+    },
+    {
+        "english": "cell phone",
+        "portuguese": "celular",
+        "hungarian": "mobiltelefon"
+    },
+    {
+        "english": "network",
+        "portuguese": "rede",
+        "hungarian": "hálózat"
+    },
+    {
+        "english": "computer",
+        "portuguese": "computador",
+        "hungarian": "számítógép"
+    },
+    {
+        "english": "program (computer)",
+        "portuguese": "programa",
+        "hungarian": "program"
+    },
+    {
+        "english": "laptop",
+        "portuguese": "laptop",
+        "hungarian": "laptop"
+    },
+    {
+        "english": "screen",
+        "portuguese": "tela",
+        "hungarian": "képernyő"
+    },
+    {
+        "english": "camera",
+        "portuguese": "câmera",
+        "hungarian": "kamera"
+    },
+    {
+        "english": "television",
+        "portuguese": "televisão",
+        "hungarian": "televízió"
+    },
+    {
+        "english": "radio",
+        "portuguese": "rádio",
+        "hungarian": "rádió"
+    }
+]

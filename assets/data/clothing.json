@@ -1,0 +1,62 @@
+[
+    {
+        "english": "hat",
+        "portuguese": "chapéu",
+        "hungarian": "kalap"
+    },
+    {
+        "english": "dress",
+        "portuguese": "vestido",
+        "hungarian": "ruha"
+    },
+    {
+        "english": "suit",
+        "portuguese": "terno",
+        "hungarian": "öltöny"
+    },
+    {
+        "english": "skirt",
+        "portuguese": "saia",
+        "hungarian": "szoknya"
+    },
+    {
+        "english": "shirt",
+        "portuguese": "camisa",
+        "hungarian": "ing"
+    },
+    {
+        "english": "T-shirt",
+        "portuguese": "camiseta",
+        "hungarian": "póló"
+    },
+    {
+        "english": "pants",
+        "portuguese": "calça",
+        "hungarian": "nadrág"
+    },
+    {
+        "english": "shoes",
+        "portuguese": "sapatos",
+        "hungarian": "cipő"
+    },
+    {
+        "english": "pocket",
+        "portuguese": "bolso",
+        "hungarian": "zseb"
+    },
+    {
+        "english": "coat",
+        "portuguese": "casaco",
+        "hungarian": "kabát"
+    },
+    {
+        "english": "stain",
+        "portuguese": "mancha",
+        "hungarian": "folt"
+    },
+    {
+        "english": "clothing",
+        "portuguese": "roupa",
+        "hungarian": "ruházat"
+    }
+]
