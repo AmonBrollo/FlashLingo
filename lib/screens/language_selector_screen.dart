@@ -1,8 +1,21 @@
 import 'package:flutter/material.dart';
-import 'flashcard_screen.dart';
+import '../services/deck_loader.dart';
+import 'deck_selector_screen.dart';
 
 class LanguageSelectorScreen extends StatelessWidget {
   const LanguageSelectorScreen({super.key});
+
+  void _navigateToDecks(BuildContext context, String baseLanguage) {
+    DeckLoader.loadDecks().then((decks) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) =>
+              DeckSelectorScreen(decks: decks, baseLanguage: baseLanguage),
+        ),
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,14 +42,7 @@ class LanguageSelectorScreen extends StatelessWidget {
                 "Português → Húngaro",
                 style: TextStyle(fontSize: 18),
               ),
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => FlashcardScreen(baseLanguage: "portuguese"),
-                  ),
-                );
-              },
+              onPressed: () => _navigateToDecks(context, "portuguese"),
             ),
             const SizedBox(height: 20),
             ElevatedButton.icon(
@@ -52,14 +58,7 @@ class LanguageSelectorScreen extends StatelessWidget {
                 "English → Hungarian",
                 style: TextStyle(fontSize: 18),
               ),
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => FlashcardScreen(baseLanguage: "english"),
-                  ),
-                );
-              },
+              onPressed: () => _navigateToDecks(context, "english"),
             ),
           ],
         ),

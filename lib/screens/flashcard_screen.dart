@@ -11,8 +11,13 @@ import '../utils/ui_strings.dart';
 
 class FlashcardScreen extends StatefulWidget {
   final String baseLanguage;
+  final List<Flashcard> flashcards;
 
-  const FlashcardScreen({super.key, required this.baseLanguage});
+  const FlashcardScreen({
+    super.key,
+    required this.baseLanguage,
+    required this.flashcards,
+  });
 
   @override
   State<FlashcardScreen> createState() => _FlashcardScreenState();
@@ -43,6 +48,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
   void initState() {
     super.initState();
     loadFlashcards();
+    flashcards = widget.flashcards;
   }
 
   void _nextCard() {
