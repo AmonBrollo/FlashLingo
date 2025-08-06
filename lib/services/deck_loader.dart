@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
 import '../models/flashcard.dart';
 import '../models/flashcard_deck.dart';
+import '../utils/topic_names.dart';
 
 class DeckLoader {
   static Future<List<FlashcardDeck>> loadDecks() async {
@@ -42,9 +43,12 @@ class DeckLoader {
       );
       final List<dynamic> jsonData = json.decode(jsonString);
 
+      final translation = TopicNames.names[topic]!;
+
       decks.add(
         FlashcardDeck(
-          topic: topic[0].toUpperCase() + topic.substring(1),
+          topicEnglish: translation["english"]!,
+          topicPortuguese: translation["portuguese"]!,
           cards: jsonData.map((item) => Flashcard.fromJson(item)).toList(),
         ),
       );

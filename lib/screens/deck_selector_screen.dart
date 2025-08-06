@@ -51,7 +51,9 @@ class DeckSelectorScreen extends StatelessWidget {
                 color: Colors.brown[50],
                 child: Center(
                   child: Text(
-                    deck.topic,
+                    baseLanguage == "portuguese"
+                        ? deck.topicPortuguese
+                        : deck.topicEnglish,
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
