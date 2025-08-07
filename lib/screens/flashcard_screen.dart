@@ -8,6 +8,7 @@ import '../models/flashcard.dart';
 import 'review_screen.dart';
 import 'add_flashcard_screen.dart';
 import '../utils/ui_strings.dart';
+import '../utils/usage_limiter.dart';
 
 class FlashcardScreen extends StatefulWidget {
   final String baseLanguage;
@@ -51,7 +52,36 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
     flashcards = widget.flashcards;
   }
 
-  void _nextCard() {
+  final UsageLimiter limiter = UsageLimiter();
+
+  void _nextCard() async {
+    final allowed = await limiter.canStudy();
+
+    if (!allowed) {
+      final remaining = await limiter.timeUntilReset();
+      final minutes = remaining.inMinutes & 60;
+      final hours = remaining.inHours;
+
+      showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: const Text("Limit reached"),
+          content: Text(
+            "You have studied 30 flashcards.\nCome back in ${hours}h ${minutes}m",
+          ),
+          actions: [
+            TextButton(
+              child: const Text("OK"),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
+        ),
+      );
+      return;
+    }
+
+    await limiter.markStudied();
+
     setState(() {
       if (currentIndex < flashcards.length - 1) {
         currentIndex++;
