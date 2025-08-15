@@ -32,4 +32,17 @@ class UiStrings {
         ? "Digite a palavra em Húngaro"
         : "Enter Hungarian word";
   }
+
+  static String limitReachedMessage(String lang) {
+    return lang == "portuguese" ? "⏳ Limite atingido" : "⏳ Limit reached";
+  }
+
+  static String timeLeftMessage(String lang, Duration duration) {
+    final hours = duration.inHours;
+    final minutes = duration.inMinutes % 60;
+
+    return lang == "portuguese"
+        ? "Volte em ${hours}h ${minutes}m"
+        : "Come back in ${hours}h ${minutes}m";
+  }
 }

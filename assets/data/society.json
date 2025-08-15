@@ -1,192 +1,306 @@
 [
     {
-        "english": "religion",
-        "portuguese": "religião",
-        "hungarian": "vallás"
+        "translations": {
+            "english": "religion",
+            "portuguese": "religião",
+            "hungarian": "vallás"
+        },
+        "imagePath": null
     },
     {
-        "english": "heaven",
-        "portuguese": "céu",
-        "hungarian": "mennyország"
+        "translations": {
+            "english": "heaven",
+            "portuguese": "céu",
+            "hungarian": "mennyország"
+        },
+        "imagePath": null
     },
     {
-        "english": "hell",
-        "portuguese": "inferno",
-        "hungarian": "pokol"
+        "translations": {
+            "english": "hell",
+            "portuguese": "inferno",
+            "hungarian": "pokol"
+        },
+        "imagePath": null
     },
     {
-        "english": "death",
-        "portuguese": "morte",
-        "hungarian": "halál"
+        "translations": {
+            "english": "death",
+            "portuguese": "morte",
+            "hungarian": "halál"
+        },
+        "imagePath": null
     },
     {
-        "english": "medicine",
-        "portuguese": "medicina",
-        "hungarian": "orvosság"
+        "translations": {
+            "english": "medicine",
+            "portuguese": "medicina",
+            "hungarian": "orvosság"
+        },
+        "imagePath": null
     },
     {
-        "english": "money",
-        "portuguese": "dinheiro",
-        "hungarian": "pénz"
+        "translations": {
+            "english": "money",
+            "portuguese": "dinheiro",
+            "hungarian": "pénz"
+        },
+        "imagePath": null
     },
     {
-        "english": "dollar",
-        "portuguese": "dólar",
-        "hungarian": "dollár"
+        "translations": {
+            "english": "dollar",
+            "portuguese": "dólar",
+            "hungarian": "dollár"
+        },
+        "imagePath": null
     },
     {
-        "english": "bill",
-        "portuguese": "conta",
-        "hungarian": "számla"
+        "translations": {
+            "english": "bill",
+            "portuguese": "conta",
+            "hungarian": "számla"
+        },
+        "imagePath": null
     },
     {
-        "english": "marriage",
-        "portuguese": "casamento",
-        "hungarian": "házasság"
+        "translations": {
+            "english": "marriage",
+            "portuguese": "casamento",
+            "hungarian": "házasság"
+        },
+        "imagePath": null
     },
     {
-        "english": "wedding",
-        "portuguese": "casamento",
-        "hungarian": "esküvő"
+        "translations": {
+            "english": "wedding",
+            "portuguese": "casamento",
+            "hungarian": "esküvő"
+        },
+        "imagePath": null
     },
     {
-        "english": "team",
-        "portuguese": "equipe",
-        "hungarian": "csapat"
+        "translations": {
+            "english": "team",
+            "portuguese": "equipe",
+            "hungarian": "csapat"
+        },
+        "imagePath": null
     },
     {
-        "english": "relationship",
-        "portuguese": "relacionamento",
-        "hungarian": "kapcsolat"
+        "translations": {
+            "english": "relationship",
+            "portuguese": "relacionamento",
+            "hungarian": "kapcsolat"
+        },
+        "imagePath": null
     },
     {
-        "english": "race (ethnicity)",
-        "portuguese": "raça",
-        "hungarian": "faj"
+        "translations": {
+            "english": "race (ethnicity)",
+            "portuguese": "raça",
+            "hungarian": "faj"
+        },
+        "imagePath": null
     },
     {
-        "english": "sex (act)",
-        "portuguese": "sexo",
-        "hungarian": "szex"
+        "translations": {
+            "english": "sex (act)",
+            "portuguese": "sexo",
+            "hungarian": "szex"
+        },
+        "imagePath": null
     },
     {
-        "english": "sex (gender)",
-        "portuguese": "sexo",
-        "hungarian": "nem"
+        "translations": {
+            "english": "sex (gender)",
+            "portuguese": "sexo",
+            "hungarian": "nem"
+        },
+        "imagePath": null
     },
     {
-        "english": "murder",
-        "portuguese": "assassinato",
-        "hungarian": "gyilkosság"
+        "translations": {
+            "english": "murder",
+            "portuguese": "assassinato",
+            "hungarian": "gyilkosság"
+        },
+        "imagePath": null
     },
     {
-        "english": "prison",
-        "portuguese": "prisão",
-        "hungarian": "börtön"
+        "translations": {
+            "english": "prison",
+            "portuguese": "prisão",
+            "hungarian": "börtön"
+        },
+        "imagePath": null
     },
     {
-        "english": "technology",
-        "portuguese": "tecnologia",
-        "hungarian": "technológia"
+        "translations": {
+            "english": "technology",
+            "portuguese": "tecnologia",
+            "hungarian": "technológia"
+        },
+        "imagePath": null
     },
     {
-        "english": "energy",
-        "portuguese": "energia",
-        "hungarian": "energia"
+        "translations": {
+            "english": "energy",
+            "portuguese": "energia",
+            "hungarian": "energia"
+        },
+        "imagePath": null
     },
     {
-        "english": "war",
-        "portuguese": "guerra",
-        "hungarian": "háború"
+        "translations": {
+            "english": "war",
+            "portuguese": "guerra",
+            "hungarian": "háború"
+        },
+        "imagePath": null
     },
     {
-        "english": "peace",
-        "portuguese": "paz",
-        "hungarian": "béke"
+        "translations": {
+            "english": "peace",
+            "portuguese": "paz",
+            "hungarian": "béke"
+        },
+        "imagePath": null
     },
     {
-        "english": "attack",
-        "portuguese": "ataque",
-        "hungarian": "támadás"
+        "translations": {
+            "english": "attack",
+            "portuguese": "ataque",
+            "hungarian": "támadás"
+        },
+        "imagePath": null
     },
     {
-        "english": "election",
-        "portuguese": "eleição",
-        "hungarian": "választás"
+        "translations": {
+            "english": "election",
+            "portuguese": "eleição",
+            "hungarian": "választás"
+        },
+        "imagePath": null
     },
     {
-        "english": "magazine",
-        "portuguese": "revista",
-        "hungarian": "magazin"
+        "translations": {
+            "english": "magazine",
+            "portuguese": "revista",
+            "hungarian": "magazin"
+        },
+        "imagePath": null
     },
     {
-        "english": "newspaper",
-        "portuguese": "jornal",
-        "hungarian": "újság"
+        "translations": {
+            "english": "newspaper",
+            "portuguese": "jornal",
+            "hungarian": "újság"
+        },
+        "imagePath": null
     },
     {
-        "english": "poison",
-        "portuguese": "veneno",
-        "hungarian": "méreg"
+        "translations": {
+            "english": "poison",
+            "portuguese": "veneno",
+            "hungarian": "méreg"
+        },
+        "imagePath": null
     },
     {
-        "english": "gun",
-        "portuguese": "arma",
-        "hungarian": "fegyver"
+        "translations": {
+            "english": "gun",
+            "portuguese": "arma",
+            "hungarian": "fegyver"
+        },
+        "imagePath": null
     },
     {
-        "english": "sport",
-        "portuguese": "esporte",
-        "hungarian": "sport"
+        "translations": {
+            "english": "sport",
+            "portuguese": "esporte",
+            "hungarian": "sport"
+        },
+        "imagePath": null
     },
     {
-        "english": "race (sport)",
-        "portuguese": "corrida",
-        "hungarian": "verseny"
+        "translations": {
+            "english": "race (sport)",
+            "portuguese": "corrida",
+            "hungarian": "verseny"
+        },
+        "imagePath": null
     },
     {
-        "english": "exercise",
-        "portuguese": "exercício",
-        "hungarian": "gyakorlat"
+        "translations": {
+            "english": "exercise",
+            "portuguese": "exercício",
+            "hungarian": "gyakorlat"
+        },
+        "imagePath": null
     },
     {
-        "english": "ball",
-        "portuguese": "bola",
-        "hungarian": "labda"
+        "translations": {
+            "english": "ball",
+            "portuguese": "bola",
+            "hungarian": "labda"
+        },
+        "imagePath": null
     },
     {
-        "english": "game",
-        "portuguese": "jogo",
-        "hungarian": "játék"
+        "translations": {
+            "english": "game",
+            "portuguese": "jogo",
+            "hungarian": "játék"
+        },
+        "imagePath": null
     },
     {
-        "english": "price",
-        "portuguese": "preço",
-        "hungarian": "ár"
+        "translations": {
+            "english": "price",
+            "portuguese": "preço",
+            "hungarian": "ár"
+        },
+        "imagePath": null
     },
     {
-        "english": "contract",
-        "portuguese": "contrato",
-        "hungarian": "szerződés"
+        "translations": {
+            "english": "contract",
+            "portuguese": "contrato",
+            "hungarian": "szerződés"
+        },
+        "imagePath": null
     },
     {
-        "english": "drug",
-        "portuguese": "droga",
-        "hungarian": "drog"
+        "translations": {
+            "english": "drug",
+            "portuguese": "droga",
+            "hungarian": "drog"
+        },
+        "imagePath": null
     },
     {
-        "english": "sign",
-        "portuguese": "sinal",
-        "hungarian": "jel"
+        "translations": {
+            "english": "sign",
+            "portuguese": "sinal",
+            "hungarian": "jel"
+        },
+        "imagePath": null
     },
     {
-        "english": "science",
-        "portuguese": "ciência",
-        "hungarian": "tudomány"
+        "translations": {
+            "english": "science",
+            "portuguese": "ciência",
+            "hungarian": "tudomány"
+        },
+        "imagePath": null
     },
     {
-        "english": "God",
-        "portuguese": "Deus",
-        "hungarian": "Isten"
+        "translations": {
+            "english": "God",
+            "portuguese": "Deus",
+            "hungarian": "Isten"
+        },
+        "imagePath": null
     }
 ]

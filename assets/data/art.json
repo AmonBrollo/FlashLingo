@@ -1,32 +1,138 @@
 [
     {
-        "english": "band",
-        "portuguese": "banda",
-        "hungarian": "zenekar"
+        "translations": {
+            "english": "band",
+            "portuguese": "banda",
+            "hungarian": "zenekar"
+        },
+        "imagePath": null
     },
     {
-        "english": "song",
-        "portuguese": "música",
-        "hungarian": "dal"
+        "translations": {
+            "english": "song",
+            "portuguese": "música",
+            "hungarian": "dal"
+        },
+        "imagePath": null
     },
     {
-        "english": "instrument (musical)",
-        "portuguese": "instrumento musical",
-        "hungarian": "hangszer"
+        "translations": {
+            "english": "instrument (musical)",
+            "portuguese": "instrumento musical",
+            "hungarian": "hangszer"
+        },
+        "imagePath": null
     },
     {
-        "english": "music",
-        "portuguese": "música",
-        "hungarian": "zene"
+        "translations": {
+            "english": "music",
+            "portuguese": "música",
+            "hungarian": "zene"
+        },
+        "imagePath": null
     },
     {
-        "english": "movie",
-        "portuguese": "filme",
-        "hungarian": "film"
+        "translations": {
+            "english": "movie",
+            "portuguese": "filme",
+            "hungarian": "film"
+        },
+        "imagePath": null
     },
     {
-        "english": "art",
-        "portuguese": "arte",
-        "hungarian": "művészet"
+        "translations": {
+            "english": "art",
+            "portuguese": "arte",
+            "hungarian": "művészet"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "red",
+            "portuguese": "vermelho",
+            "hungarian": "piros"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "green",
+            "portuguese": "verde",
+            "hungarian": "zöld"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "blue",
+            "portuguese": "azul",
+            "hungarian": "kék"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "yellow",
+            "portuguese": "amarelo",
+            "hungarian": "sárga"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "brown",
+            "portuguese": "marrom",
+            "hungarian": "barna"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "pink",
+            "portuguese": "rosa",
+            "hungarian": "rózsaszín"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "orange",
+            "portuguese": "laranja",
+            "hungarian": "narancs"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "black",
+            "portuguese": "preto",
+            "hungarian": "fekete"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "white",
+            "portuguese": "branco",
+            "hungarian": "fehér"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "gray",
+            "portuguese": "cinza",
+            "hungarian": "szürke"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "color",
+            "portuguese": "cor",
+            "hungarian": "szín"
+        },
+        "imagePath": null
     }
 ]

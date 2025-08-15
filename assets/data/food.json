@@ -1,142 +1,226 @@
 [
     {
-        "english": "egg",
-        "portuguese": "ovo",
-        "hungarian": "tojás"
+        "translations": {
+            "english": "egg",
+            "portuguese": "ovo",
+            "hungarian": "tojás"
+        },
+        "imagePath": null
     },
     {
-        "english": "cheese",
-        "portuguese": "queijo",
-        "hungarian": "sajt"
+        "translations": {
+            "english": "cheese",
+            "portuguese": "queijo",
+            "hungarian": "sajt"
+        },
+        "imagePath": null
     },
     {
-        "english": "bread",
-        "portuguese": "pão",
-        "hungarian": "kenyér"
+        "translations": {
+            "english": "bread",
+            "portuguese": "pão",
+            "hungarian": "kenyér"
+        },
+        "imagePath": null
     },
     {
-        "english": "soup",
-        "portuguese": "sopa",
-        "hungarian": "leves"
+        "translations": {
+            "english": "soup",
+            "portuguese": "sopa",
+            "hungarian": "leves"
+        },
+        "imagePath": null
     },
     {
-        "english": "cake",
-        "portuguese": "bolo",
-        "hungarian": "torta"
+        "translations": {
+            "english": "cake",
+            "portuguese": "bolo",
+            "hungarian": "torta"
+        },
+        "imagePath": null
     },
     {
-        "english": "chicken",
-        "portuguese": "frango",
-        "hungarian": "csirke"
+        "translations": {
+            "english": "chicken",
+            "portuguese": "frango",
+            "hungarian": "csirke"
+        },
+        "imagePath": null
     },
     {
-        "english": "pork",
-        "portuguese": "porco",
-        "hungarian": "sertés"
+        "translations": {
+            "english": "pork",
+            "portuguese": "porco",
+            "hungarian": "sertés"
+        },
+        "imagePath": null
     },
     {
-        "english": "beef",
-        "portuguese": "carne bovina",
-        "hungarian": "marhahús"
+        "translations": {
+            "english": "beef",
+            "portuguese": "carne bovina",
+            "hungarian": "marhahús"
+        },
+        "imagePath": null
     },
     {
-        "english": "apple",
-        "portuguese": "maçã",
-        "hungarian": "alma"
+        "translations": {
+            "english": "apple",
+            "portuguese": "maçã",
+            "hungarian": "alma"
+        },
+        "imagePath": null
     },
     {
-        "english": "banana",
-        "portuguese": "banana",
-        "hungarian": "banán"
+        "translations": {
+            "english": "banana",
+            "portuguese": "banana",
+            "hungarian": "banán"
+        },
+        "imagePath": null
     },
     {
-        "english": "orange",
-        "portuguese": "laranja",
-        "hungarian": "narancs"
+        "translations": {
+            "english": "orange",
+            "portuguese": "laranja",
+            "hungarian": "narancs"
+        },
+        "imagePath": null
     },
     {
-        "english": "lemon",
-        "portuguese": "limão",
-        "hungarian": "citrom"
+        "translations": {
+            "english": "lemon",
+            "portuguese": "limão",
+            "hungarian": "citrom"
+        },
+        "imagePath": null
     },
     {
-        "english": "corn",
-        "portuguese": "milho",
-        "hungarian": "kukorica"
+        "translations": {
+            "english": "corn",
+            "portuguese": "milho",
+            "hungarian": "kukorica"
+        },
+        "imagePath": null
     },
     {
-        "english": "rice",
-        "portuguese": "arroz",
-        "hungarian": "rizs"
+        "translations": {
+            "english": "rice",
+            "portuguese": "arroz",
+            "hungarian": "rizs"
+        },
+        "imagePath": null
     },
     {
-        "english": "oil",
-        "portuguese": "óleo",
-        "hungarian": "olaj"
+        "translations": {
+            "english": "oil",
+            "portuguese": "óleo",
+            "hungarian": "olaj"
+        },
+        "imagePath": null
     },
     {
-        "english": "seed",
-        "portuguese": "semente",
-        "hungarian": "mag"
+        "translations": {
+            "english": "seed",
+            "portuguese": "semente",
+            "hungarian": "mag"
+        },
+        "imagePath": null
     },
     {
-        "english": "knife",
-        "portuguese": "faca",
-        "hungarian": "kés"
+        "translations": {
+            "english": "knife",
+            "portuguese": "faca",
+            "hungarian": "kés"
+        },
+        "imagePath": null
     },
     {
-        "english": "spoon",
-        "portuguese": "colher",
-        "hungarian": "kanál"
+        "translations": {
+            "english": "spoon",
+            "portuguese": "colher",
+            "hungarian": "kanál"
+        },
+        "imagePath": null
     },
     {
-        "english": "fork",
-        "portuguese": "garfo",
-        "hungarian": "villa"
+        "translations": {
+            "english": "fork",
+            "portuguese": "garfo",
+            "hungarian": "villa"
+        },
+        "imagePath": null
     },
     {
-        "english": "plate",
-        "portuguese": "prato",
-        "hungarian": "tányér"
+        "translations": {
+            "english": "plate",
+            "portuguese": "prato",
+            "hungarian": "tányér"
+        },
+        "imagePath": null
     },
     {
-        "english": "cup",
-        "portuguese": "xícara",
-        "hungarian": "csésze"
+        "translations": {
+            "english": "cup",
+            "portuguese": "xícara",
+            "hungarian": "csésze"
+        },
+        "imagePath": null
     },
     {
-        "english": "breakfast",
-        "portuguese": "café da manhã",
-        "hungarian": "reggeli"
+        "translations": {
+            "english": "breakfast",
+            "portuguese": "café da manhã",
+            "hungarian": "reggeli"
+        },
+        "imagePath": null
     },
     {
-        "english": "lunch",
-        "portuguese": "almoço",
-        "hungarian": "ebéd"
+        "translations": {
+            "english": "lunch",
+            "portuguese": "almoço",
+            "hungarian": "ebéd"
+        },
+        "imagePath": null
     },
     {
-        "english": "dinner",
-        "portuguese": "jantar",
-        "hungarian": "vacsora"
+        "translations": {
+            "english": "dinner",
+            "portuguese": "jantar",
+            "hungarian": "vacsora"
+        },
+        "imagePath": null
     },
     {
-        "english": "sugar",
-        "portuguese": "açúcar",
-        "hungarian": "cukor"
+        "translations": {
+            "english": "sugar",
+            "portuguese": "açúcar",
+            "hungarian": "cukor"
+        },
+        "imagePath": null
     },
     {
-        "english": "salt",
-        "portuguese": "sal",
-        "hungarian": "só"
+        "translations": {
+            "english": "salt",
+            "portuguese": "sal",
+            "hungarian": "só"
+        },
+        "imagePath": null
     },
     {
-        "english": "bottle",
-        "portuguese": "garrafa",
-        "hungarian": "üveg"
+        "translations": {
+            "english": "bottle",
+            "portuguese": "garrafa",
+            "hungarian": "üveg"
+        },
+        "imagePath": null
     },
     {
-        "english": "food",
-        "portuguese": "comida",
-        "hungarian": "étel"
+        "translations": {
+            "english": "food",
+            "portuguese": "comida",
+            "hungarian": "étel"
+        },
+        "imagePath": null
     }
 ]

@@ -1,87 +1,138 @@
 [
     {
-        "english": "teacher",
-        "portuguese": "professor",
-        "hungarian": "tanár"
+        "translations": {
+            "english": "teacher",
+            "portuguese": "professor",
+            "hungarian": "tanár"
+        },
+        "imagePath": null
     },
     {
-        "english": "student",
-        "portuguese": "estudante",
-        "hungarian": "diák"
+        "translations": {
+            "english": "student",
+            "portuguese": "estudante",
+            "hungarian": "diák"
+        },
+        "imagePath": null
     },
     {
-        "english": "lawyer",
-        "portuguese": "advogado",
-        "hungarian": "ügyvéd"
+        "translations": {
+            "english": "lawyer",
+            "portuguese": "advogado",
+            "hungarian": "ügyvéd"
+        },
+        "imagePath": null
     },
     {
-        "english": "doctor",
-        "portuguese": "médico",
-        "hungarian": "orvos"
+        "translations": {
+            "english": "doctor",
+            "portuguese": "médico",
+            "hungarian": "orvos"
+        },
+        "imagePath": null
     },
     {
-        "english": "patient",
-        "portuguese": "paciente",
-        "hungarian": "beteg"
+        "translations": {
+            "english": "patient",
+            "portuguese": "paciente",
+            "hungarian": "beteg"
+        },
+        "imagePath": null
     },
     {
-        "english": "waiter",
-        "portuguese": "garçom",
-        "hungarian": "pincér"
+        "translations": {
+            "english": "waiter",
+            "portuguese": "garçom",
+            "hungarian": "pincér"
+        },
+        "imagePath": null
     },
     {
-        "english": "secretary",
-        "portuguese": "secretário",
-        "hungarian": "titkár"
+        "translations": {
+            "english": "secretary",
+            "portuguese": "secretário",
+            "hungarian": "titkár"
+        },
+        "imagePath": null
     },
     {
-        "english": "priest",
-        "portuguese": "padre",
-        "hungarian": "pap"
+        "translations": {
+            "english": "priest",
+            "portuguese": "padre",
+            "hungarian": "pap"
+        },
+        "imagePath": null
     },
     {
-        "english": "police",
-        "portuguese": "polícia",
-        "hungarian": "rendőrség"
+        "translations": {
+            "english": "police",
+            "portuguese": "polícia",
+            "hungarian": "rendőrség"
+        },
+        "imagePath": null
     },
     {
-        "english": "army",
-        "portuguese": "exército",
-        "hungarian": "hadsereg"
+        "translations": {
+            "english": "army",
+            "portuguese": "exército",
+            "hungarian": "hadsereg"
+        },
+        "imagePath": null
     },
     {
-        "english": "soldier",
-        "portuguese": "soldado",
-        "hungarian": "katona"
+        "translations": {
+            "english": "soldier",
+            "portuguese": "soldado",
+            "hungarian": "katona"
+        },
+        "imagePath": null
     },
     {
-        "english": "artist",
-        "portuguese": "artista",
-        "hungarian": "művész"
+        "translations": {
+            "english": "artist",
+            "portuguese": "artista",
+            "hungarian": "művész"
+        },
+        "imagePath": null
     },
     {
-        "english": "author",
-        "portuguese": "autor",
-        "hungarian": "író"
+        "translations": {
+            "english": "author",
+            "portuguese": "autor",
+            "hungarian": "író"
+        },
+        "imagePath": null
     },
     {
-        "english": "manager",
-        "portuguese": "gerente",
-        "hungarian": "menedzser"
+        "translations": {
+            "english": "manager",
+            "portuguese": "gerente",
+            "hungarian": "menedzser"
+        },
+        "imagePath": null
     },
     {
-        "english": "reporter",
-        "portuguese": "repórter",
-        "hungarian": "riporter"
+        "translations": {
+            "english": "reporter",
+            "portuguese": "repórter",
+            "hungarian": "riporter"
+        },
+        "imagePath": null
     },
     {
-        "english": "actor",
-        "portuguese": "ator",
-        "hungarian": "színész"
+        "translations": {
+            "english": "actor",
+            "portuguese": "ator",
+            "hungarian": "színész"
+        },
+        "imagePath": null
     },
     {
-        "english": "job",
-        "portuguese": "trabalho",
-        "hungarian": "munka"
+        "translations": {
+            "english": "job",
+            "portuguese": "trabalho",
+            "hungarian": "munka"
+        },
+        "imagePath": null
     }
 ]

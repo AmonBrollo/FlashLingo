@@ -1,62 +1,98 @@
 [
     {
-        "english": "clock",
-        "portuguese": "relógio",
-        "hungarian": "óra"
+        "translations": {
+            "english": "clock",
+            "portuguese": "relógio",
+            "hungarian": "óra"
+        },
+        "imagePath": null
     },
     {
-        "english": "lamp",
-        "portuguese": "lâmpada",
-        "hungarian": "lámpa"
+        "translations": {
+            "english": "lamp",
+            "portuguese": "lâmpada",
+            "hungarian": "lámpa"
+        },
+        "imagePath": null
     },
     {
-        "english": "fan",
-        "portuguese": "ventilador",
-        "hungarian": "ventilátor"
+        "translations": {
+            "english": "fan",
+            "portuguese": "ventilador",
+            "hungarian": "ventilátor"
+        },
+        "imagePath": null
     },
     {
-        "english": "cell phone",
-        "portuguese": "celular",
-        "hungarian": "mobiltelefon"
+        "translations": {
+            "english": "cell phone",
+            "portuguese": "celular",
+            "hungarian": "mobiltelefon"
+        },
+        "imagePath": null
     },
     {
-        "english": "network",
-        "portuguese": "rede",
-        "hungarian": "hálózat"
+        "translations": {
+            "english": "network",
+            "portuguese": "rede",
+            "hungarian": "hálózat"
+        },
+        "imagePath": null
     },
     {
-        "english": "computer",
-        "portuguese": "computador",
-        "hungarian": "számítógép"
+        "translations": {
+            "english": "computer",
+            "portuguese": "computador",
+            "hungarian": "számítógép"
+        },
+        "imagePath": null
     },
     {
-        "english": "program (computer)",
-        "portuguese": "programa",
-        "hungarian": "program"
+        "translations": {
+            "english": "program (computer)",
+            "portuguese": "programa",
+            "hungarian": "program"
+        },
+        "imagePath": null
     },
     {
-        "english": "laptop",
-        "portuguese": "laptop",
-        "hungarian": "laptop"
+        "translations": {
+            "english": "laptop",
+            "portuguese": "laptop",
+            "hungarian": "laptop"
+        },
+        "imagePath": null
     },
     {
-        "english": "screen",
-        "portuguese": "tela",
-        "hungarian": "képernyő"
+        "translations": {
+            "english": "screen",
+            "portuguese": "tela",
+            "hungarian": "képernyő"
+        },
+        "imagePath": null
     },
     {
-        "english": "camera",
-        "portuguese": "câmera",
-        "hungarian": "kamera"
+        "translations": {
+            "english": "camera",
+            "portuguese": "câmera",
+            "hungarian": "kamera"
+        },
+        "imagePath": null
     },
     {
-        "english": "television",
-        "portuguese": "televisão",
-        "hungarian": "televízió"
+        "translations": {
+            "english": "television",
+            "portuguese": "televisão",
+            "hungarian": "televízió"
+        },
+        "imagePath": null
     },
     {
-        "english": "radio",
-        "portuguese": "rádio",
-        "hungarian": "rádió"
+        "translations": {
+            "english": "radio",
+            "portuguese": "rádio",
+            "hungarian": "rádió"
+        },
+        "imagePath": null
     }
 ]

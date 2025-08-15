@@ -13,11 +13,13 @@ import '../widgets/flashcard_view.dart';
 
 class FlashcardScreen extends StatefulWidget {
   final String baseLanguage;
+  final String targetLanguage;
   final List<Flashcard> flashcards;
 
   const FlashcardScreen({
     super.key,
     required this.baseLanguage,
+    required this.targetLanguage,
     required this.flashcards,
   });
 
@@ -90,9 +92,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
       setState(() {
         final current = flashcards[currentIndex];
         flashcards[currentIndex] = Flashcard(
-          english: current.english,
-          portuguese: current.portuguese,
-          hungarian: current.hungarian,
+          translations: Map<String, String>.from(current.translations),
           imagePath: pickedFile.path,
         );
       });
@@ -122,6 +122,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
                     remembered: remembered,
                     forgotten: forgotten,
                     baseLanguage: widget.baseLanguage,
+                    targetLanguage: widget.targetLanguage,
                   ),
                 ),
               );
@@ -143,6 +144,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
                   });
                 },
                 baseLanguage: widget.baseLanguage,
+                targetLanguage: widget.targetLanguage,
               ),
             ),
           );
@@ -194,7 +196,10 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
           if (!snapshot.hasData) {
             return const CircularProgressIndicator();
           }
-          return LimitReachedCard(timeRemaining: snapshot.data!);
+          return LimitReachedCard(
+            timeRemaining: snapshot.data!,
+            baseLanguage: widget.baseLanguage,
+          );
         },
       );
     } else if (finishedDeck) {
@@ -206,16 +211,9 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
         flashcard: flashcards[currentIndex],
         isFlipped: isFlipped,
         baseLanguage: widget.baseLanguage,
-        onFlip: () => setState(() => isFlipped = !isFlipped),
+        targetLanguage: widget.targetLanguage,
+        dragDx: _dragDx,
         onAddImage: changeCurrentImage,
-        onRemembered: () {
-          remembered.add(flashcards[currentIndex]);
-          _nextCard();
-        },
-        onForgotten: () {
-          forgotten.add(flashcards[currentIndex]);
-          _nextCard();
-        },
       );
     }
   }

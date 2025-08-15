@@ -1,72 +1,114 @@
 [
     {
-        "english": "meter",
-        "portuguese": "metro",
-        "hungarian": "méter"
+        "translations": {
+            "english": "meter",
+            "portuguese": "metro",
+            "hungarian": "méter"
+        },
+        "imagePath": null
     },
     {
-        "english": "centimeter",
-        "portuguese": "centímetro",
-        "hungarian": "centiméter"
+        "translations": {
+            "english": "centimeter",
+            "portuguese": "centímetro",
+            "hungarian": "centiméter"
+        },
+        "imagePath": null
     },
     {
-        "english": "kilogram",
-        "portuguese": "quilograma",
-        "hungarian": "kilogramm"
+        "translations": {
+            "english": "kilogram",
+            "portuguese": "quilograma",
+            "hungarian": "kilogramm"
+        },
+        "imagePath": null
     },
     {
-        "english": "inch",
-        "portuguese": "polegada",
-        "hungarian": "hüvelyk"
+        "translations": {
+            "english": "inch",
+            "portuguese": "polegada",
+            "hungarian": "hüvelyk"
+        },
+        "imagePath": null
     },
     {
-        "english": "foot",
-        "portuguese": "pé",
-        "hungarian": "láb"
+        "translations": {
+            "english": "foot",
+            "portuguese": "pé",
+            "hungarian": "láb"
+        },
+        "imagePath": null
     },
     {
-        "english": "pound",
-        "portuguese": "libra",
-        "hungarian": "font"
+        "translations": {
+            "english": "pound",
+            "portuguese": "libra",
+            "hungarian": "font"
+        },
+        "imagePath": null
     },
     {
-        "english": "half",
-        "portuguese": "metade",
-        "hungarian": "fél"
+        "translations": {
+            "english": "half",
+            "portuguese": "metade",
+            "hungarian": "fél"
+        },
+        "imagePath": null
     },
     {
-        "english": "circle",
-        "portuguese": "círculo",
-        "hungarian": "kör"
+        "translations": {
+            "english": "circle",
+            "portuguese": "círculo",
+            "hungarian": "kör"
+        },
+        "imagePath": null
     },
     {
-        "english": "square",
-        "portuguese": "quadrado",
-        "hungarian": "négyzet"
+        "translations": {
+            "english": "square",
+            "portuguese": "quadrado",
+            "hungarian": "négyzet"
+        },
+        "imagePath": null
     },
     {
-        "english": "temperature",
-        "portuguese": "temperatura",
-        "hungarian": "hőmérséklet"
+        "translations": {
+            "english": "temperature",
+            "portuguese": "temperatura",
+            "hungarian": "hőmérséklet"
+        },
+        "imagePath": null
     },
     {
-        "english": "date",
-        "portuguese": "data",
-        "hungarian": "dátum"
+        "translations": {
+            "english": "date",
+            "portuguese": "data",
+            "hungarian": "dátum"
+        },
+        "imagePath": null
     },
     {
-        "english": "weight",
-        "portuguese": "peso",
-        "hungarian": "súly"
+        "translations": {
+            "english": "weight",
+            "portuguese": "peso",
+            "hungarian": "súly"
+        },
+        "imagePath": null
     },
     {
-        "english": "edge",
-        "portuguese": "borda",
-        "hungarian": "él"
+        "translations": {
+            "english": "edge",
+            "portuguese": "borda",
+            "hungarian": "él"
+        },
+        "imagePath": null
     },
     {
-        "english": "corner",
-        "portuguese": "canto",
-        "hungarian": "sarok"
+        "translations": {
+            "english": "corner",
+            "portuguese": "canto",
+            "hungarian": "sarok"
+        },
+        "imagePath": null
     }
 ]

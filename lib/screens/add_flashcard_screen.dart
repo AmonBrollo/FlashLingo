@@ -5,11 +5,13 @@ import '../utils/ui_strings.dart';
 class AddFlashcardScreen extends StatefulWidget {
   final Function(Flashcard) onAdd;
   final String baseLanguage;
+  final String targetLanguage;
 
   const AddFlashcardScreen({
     super.key,
     required this.onAdd,
     required this.baseLanguage,
+    required this.targetLanguage,
   });
 
   @override
@@ -17,24 +19,20 @@ class AddFlashcardScreen extends StatefulWidget {
 }
 
 class _AddFlashcardScreenState extends State<AddFlashcardScreen> {
-  final TextEditingController baseController = TextEditingController();
-  final TextEditingController hungarianController = TextEditingController();
+  final baseController = TextEditingController();
+  final targetController = TextEditingController();
 
   void submit() {
     if (baseController.text.trim().isEmpty ||
-        hungarianController.text.trim().isEmpty) {
+        targetController.text.trim().isEmpty) {
       return;
     }
 
     final newFlashcard = Flashcard(
-      english: widget.baseLanguage == "english"
-          ? baseController.text.trim()
-          : "",
-      portuguese: widget.baseLanguage == "portuguese"
-          ? baseController.text.trim()
-          : "",
-      hungarian: hungarianController.text.trim(),
-      imagePath: null,
+      translations: {
+        widget.baseLanguage: baseController.text.trim(),
+        widget.targetLanguage: targetController.text.trim(),
+      },
     );
 
     widget.onAdd(newFlashcard);
@@ -63,7 +61,7 @@ class _AddFlashcardScreenState extends State<AddFlashcardScreen> {
             ),
             const SizedBox(height: 16),
             TextField(
-              controller: hungarianController,
+              controller: targetController,
               decoration: InputDecoration(
                 labelText: UiStrings.addHungarianWord(widget.baseLanguage),
               ),

@@ -1,62 +1,98 @@
 [
     {
-        "english": "glass",
-        "portuguese": "vidro",
-        "hungarian": "üveg"
+        "translations": {
+            "english": "glass",
+            "portuguese": "vidro",
+            "hungarian": "üveg"
+        },
+        "imagePath": null
     },
     {
-        "english": "metal",
-        "portuguese": "metal",
-        "hungarian": "fém"
+        "translations": {
+            "english": "metal",
+            "portuguese": "metal",
+            "hungarian": "fém"
+        },
+        "imagePath": null
     },
     {
-        "english": "plastic",
-        "portuguese": "plástico",
-        "hungarian": "műanyag"
+        "translations": {
+            "english": "plastic",
+            "portuguese": "plástico",
+            "hungarian": "műanyag"
+        },
+        "imagePath": null
     },
     {
-        "english": "wood",
-        "portuguese": "madeira",
-        "hungarian": "fa"
+        "translations": {
+            "english": "wood",
+            "portuguese": "madeira",
+            "hungarian": "fa"
+        },
+        "imagePath": null
     },
     {
-        "english": "stone",
-        "portuguese": "pedra",
-        "hungarian": "kő"
+        "translations": {
+            "english": "stone",
+            "portuguese": "pedra",
+            "hungarian": "kő"
+        },
+        "imagePath": null
     },
     {
-        "english": "diamond",
-        "portuguese": "diamante",
-        "hungarian": "gyémánt"
+        "translations": {
+            "english": "diamond",
+            "portuguese": "diamante",
+            "hungarian": "gyémánt"
+        },
+        "imagePath": null
     },
     {
-        "english": "clay",
-        "portuguese": "argila",
-        "hungarian": "agyag"
+        "translations": {
+            "english": "clay",
+            "portuguese": "argila",
+            "hungarian": "agyag"
+        },
+        "imagePath": null
     },
     {
-        "english": "dust",
-        "portuguese": "poeira",
-        "hungarian": "por"
+        "translations": {
+            "english": "dust",
+            "portuguese": "poeira",
+            "hungarian": "por"
+        },
+        "imagePath": null
     },
     {
-        "english": "gold",
-        "portuguese": "ouro",
-        "hungarian": "arany"
+        "translations": {
+            "english": "gold",
+            "portuguese": "ouro",
+            "hungarian": "arany"
+        },
+        "imagePath": null
     },
     {
-        "english": "copper",
-        "portuguese": "cobre",
-        "hungarian": "réz"
+        "translations": {
+            "english": "copper",
+            "portuguese": "cobre",
+            "hungarian": "réz"
+        },
+        "imagePath": null
     },
     {
-        "english": "silver",
-        "portuguese": "prata",
-        "hungarian": "ezüst"
+        "translations": {
+            "english": "silver",
+            "portuguese": "prata",
+            "hungarian": "ezüst"
+        },
+        "imagePath": null
     },
     {
-        "english": "material",
-        "portuguese": "material",
-        "hungarian": "anyag"
+        "translations": {
+            "english": "material",
+            "portuguese": "material",
+            "hungarian": "anyag"
+        },
+        "imagePath": null
     }
 ]

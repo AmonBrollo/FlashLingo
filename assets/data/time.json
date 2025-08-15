@@ -1,62 +1,138 @@
 [
     {
-        "english": "year",
-        "portuguese": "Ano",
-        "hungarian": "Év"
+        "translations": {
+            "english": "year",
+            "portuguese": "Ano",
+            "hungarian": "Év"
+        },
+        "imagePath": null
     },
     {
-        "english": "month",
-        "portuguese": "Mês",
-        "hungarian": "Hónap"
+        "translations": {
+            "english": "month",
+            "portuguese": "Mês",
+            "hungarian": "Hónap"
+        },
+        "imagePath": null
     },
     {
-        "english": "week",
-        "portuguese": "Semana",
-        "hungarian": "Hét"
+        "translations": {
+            "english": "week",
+            "portuguese": "Semana",
+            "hungarian": "Hét"
+        },
+        "imagePath": null
     },
     {
-        "english": "day",
-        "portuguese": "Dia",
-        "hungarian": "Nap"
+        "translations": {
+            "english": "day",
+            "portuguese": "Dia",
+            "hungarian": "Nap"
+        },
+        "imagePath": null
     },
     {
-        "english": "hour",
-        "portuguese": "Hora",
-        "hungarian": "Óra"
+        "translations": {
+            "english": "hour",
+            "portuguese": "Hora",
+            "hungarian": "Óra"
+        },
+        "imagePath": null
     },
     {
-        "english": "minute",
-        "portuguese": "Minuto",
-        "hungarian": "Perc"
+        "translations": {
+            "english": "minute",
+            "portuguese": "Minuto",
+            "hungarian": "Perc"
+        },
+        "imagePath": null
     },
     {
-        "english": "second",
-        "portuguese": "Segundo",
-        "hungarian": "Másodperc"
+        "translations": {
+            "english": "second",
+            "portuguese": "Segundo",
+            "hungarian": "Másodperc"
+        },
+        "imagePath": null
     },
     {
-        "english": "morning",
-        "portuguese": "Manhã",
-        "hungarian": "Reggel"
+        "translations": {
+            "english": "morning",
+            "portuguese": "Manhã",
+            "hungarian": "Reggel"
+        },
+        "imagePath": null
     },
     {
-        "english": "afternoon",
-        "portuguese": "Tarde",
-        "hungarian": "Délután"
+        "translations": {
+            "english": "afternoon",
+            "portuguese": "Tarde",
+            "hungarian": "Délután"
+        },
+        "imagePath": null
     },
     {
-        "english": "evening",
-        "portuguese": "Noite (início)",
-        "hungarian": "Este"
+        "translations": {
+            "english": "evening",
+            "portuguese": "Noite (início)",
+            "hungarian": "Este"
+        },
+        "imagePath": null
     },
     {
-        "english": "night",
-        "portuguese": "Noite",
-        "hungarian": "Éjszaka"
+        "translations": {
+            "english": "night",
+            "portuguese": "Noite",
+            "hungarian": "Éjszaka"
+        },
+        "imagePath": null
     },
     {
-        "english": "time",
-        "portuguese": "Tempo",
-        "hungarian": "Idő"
+        "translations": {
+            "english": "time",
+            "portuguese": "Tempo",
+            "hungarian": "Idő"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "summer",
+            "portuguese": "verão",
+            "hungarian": "nyár"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "spring",
+            "portuguese": "primavera",
+            "hungarian": "tavasz"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "winter",
+            "portuguese": "inverno",
+            "hungarian": "tél"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "fall",
+            "portuguese": "outono",
+            "hungarian": "ősz"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "season",
+            "portuguese": "estação",
+            "hungarian": "évszak"
+        },
+        "imagePath": null
     }
 ]

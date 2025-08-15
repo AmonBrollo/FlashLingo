@@ -1,37 +1,58 @@
 [
     {
-        "english": "Monday",
-        "portuguese": "Segunda-feira",
-        "hungarian": "Hétfő"
+        "translations": {
+            "english": "Monday",
+            "portuguese": "Segunda-feira",
+            "hungarian": "Hétfő"
+        },
+        "imagePath": null
     },
     {
-        "english": "Tuesday",
-        "portuguese": "Terça-feira",
-        "hungarian": "Kedd"
+        "translations": {
+            "english": "Tuesday",
+            "portuguese": "Terça-feira",
+            "hungarian": "Kedd"
+        },
+        "imagePath": null
     },
     {
-        "english": "Wednesday",
-        "portuguese": "Quarta-feira",
-        "hungarian": "Szerda"
+        "translations": {
+            "english": "Wednesday",
+            "portuguese": "Quarta-feira",
+            "hungarian": "Szerda"
+        },
+        "imagePath": null
     },
     {
-        "english": "Thursday",
-        "portuguese": "Quinta-feira",
-        "hungarian": "Csütörtök"
+        "translations": {
+            "english": "Thursday",
+            "portuguese": "Quinta-feira",
+            "hungarian": "Csütörtök"
+        },
+        "imagePath": null
     },
     {
-        "english": "Friday",
-        "portuguese": "Sexta-feira",
-        "hungarian": "Péntek"
+        "translations": {
+            "english": "Friday",
+            "portuguese": "Sexta-feira",
+            "hungarian": "Péntek"
+        },
+        "imagePath": null
     },
     {
-        "english": "Saturday",
-        "portuguese": "Sábado",
-        "hungarian": "Szombat"
+        "translations": {
+            "english": "Saturday",
+            "portuguese": "Sábado",
+            "hungarian": "Szombat"
+        },
+        "imagePath": null
     },
     {
-        "english": "Sunday",
-        "portuguese": "Domingo",
-        "hungarian": "Vasárnap"
+        "translations": {
+            "english": "Sunday",
+            "portuguese": "Domingo",
+            "hungarian": "Vasárnap"
+        },
+        "imagePath": null
     }
 ]

@@ -1,157 +1,250 @@
 [
     {
-        "english": "head",
-        "portuguese": "cabeça",
-        "hungarian": "fej"
+        "translations": {
+            "english": "head",
+            "portuguese": "cabeça",
+            "hungarian": "fej"
+        },
+        "imagePath": null
     },
     {
-        "english": "neck",
-        "portuguese": "pescoço",
-        "hungarian": "nyak"
+        "translations": {
+            "english": "neck",
+            "portuguese": "pescoço",
+            "hungarian": "nyak"
+        },
+        "imagePath": null
     },
     {
-        "english": "face",
-        "portuguese": "rosto",
-        "hungarian": "arc"
+        "translations": {
+            "english": "face",
+            "portuguese": "rosto",
+            "hungarian": "arc"
+        },
+        "imagePath": null
     },
     {
-        "english": "beard",
-        "portuguese": "barba",
-        "hungarian": "szakáll"
+        "translations": {
+            "english": "beard",
+            "portuguese": "barba",
+            "hungarian": "szakáll"
+        },
+        "imagePath": null
     },
     {
-        "english": "hair",
-        "portuguese": "cabelo",
-        "hungarian": "haj"
+        "translations": {
+            "english": "hair",
+            "portuguese": "cabelo",
+            "hungarian": "haj"
+        },
+        "imagePath": null
     },
     {
-        "english": "eye",
-        "portuguese": "olho",
-        "hungarian": "szem"
+        "translations": {
+            "english": "eye",
+            "portuguese": "olho",
+            "hungarian": "szem"
+        },
+        "imagePath": null
     },
     {
-        "english": "mouth",
-        "portuguese": "boca",
-        "hungarian": "száj"
+        "translations": {
+            "english": "mouth",
+            "portuguese": "boca",
+            "hungarian": "száj"
+        },
+        "imagePath": null
     },
     {
-        "english": "lip",
-        "portuguese": "lábio",
-        "hungarian": "ajak"
+        "translations": {
+            "english": "lip",
+            "portuguese": "lábio",
+            "hungarian": "ajak"
+        },
+        "imagePath": null
     },
     {
-        "english": "nose",
-        "portuguese": "nariz",
-        "hungarian": "orr"
+        "translations": {
+            "english": "nose",
+            "portuguese": "nariz",
+            "hungarian": "orr"
+        },
+        "imagePath": null
     },
     {
-        "english": "tooth",
-        "portuguese": "dente",
-        "hungarian": "fog"
+        "translations": {
+            "english": "tooth",
+            "portuguese": "dente",
+            "hungarian": "fog"
+        },
+        "imagePath": null
     },
     {
-        "english": "ear",
-        "portuguese": "orelha",
-        "hungarian": "fül"
+        "translations": {
+            "english": "ear",
+            "portuguese": "orelha",
+            "hungarian": "fül"
+        },
+        "imagePath": null
     },
     {
-        "english": "tear",
-        "portuguese": "lágrima",
-        "hungarian": "könny"
+        "translations": {
+            "english": "tear",
+            "portuguese": "lágrima",
+            "hungarian": "könny"
+        },
+        "imagePath": null
     },
     {
-        "english": "tongue",
-        "portuguese": "língua",
-        "hungarian": "nyelv"
+        "translations": {
+            "english": "tongue",
+            "portuguese": "língua",
+            "hungarian": "nyelv"
+        },
+        "imagePath": null
     },
     {
-        "english": "back",
-        "portuguese": "costas",
-        "hungarian": "hát"
+        "translations": {
+            "english": "back",
+            "portuguese": "costas",
+            "hungarian": "hát"
+        },
+        "imagePath": null
     },
     {
-        "english": "toe",
-        "portuguese": "dedo do pé",
-        "hungarian": "lábujj"
+        "translations": {
+            "english": "toe",
+            "portuguese": "dedo do pé",
+            "hungarian": "lábujj"
+        },
+        "imagePath": null
     },
     {
-        "english": "finger",
-        "portuguese": "dedo",
-        "hungarian": "ujj"
+        "translations": {
+            "english": "finger",
+            "portuguese": "dedo",
+            "hungarian": "ujj"
+        },
+        "imagePath": null
     },
     {
-        "english": "foot",
-        "portuguese": "pé",
-        "hungarian": "láb"
+        "translations": {
+            "english": "foot",
+            "portuguese": "pé",
+            "hungarian": "láb"
+        },
+        "imagePath": null
     },
     {
-        "english": "hand",
-        "portuguese": "mão",
-        "hungarian": "kéz"
+        "translations": {
+            "english": "hand",
+            "portuguese": "mão",
+            "hungarian": "kéz"
+        },
+        "imagePath": null
     },
     {
-        "english": "leg",
-        "portuguese": "perna",
-        "hungarian": "láb"
+        "translations": {
+            "english": "leg",
+            "portuguese": "perna",
+            "hungarian": "láb"
+        },
+        "imagePath": null
     },
     {
-        "english": "arm",
-        "portuguese": "braço",
-        "hungarian": "kar"
+        "translations": {
+            "english": "arm",
+            "portuguese": "braço",
+            "hungarian": "kar"
+        },
+        "imagePath": null
     },
     {
-        "english": "shoulder",
-        "portuguese": "ombro",
-        "hungarian": "váll"
+        "translations": {
+            "english": "shoulder",
+            "portuguese": "ombro",
+            "hungarian": "váll"
+        },
+        "imagePath": null
     },
     {
-        "english": "heart",
-        "portuguese": "coração",
-        "hungarian": "szív"
+        "translations": {
+            "english": "heart",
+            "portuguese": "coração",
+            "hungarian": "szív"
+        },
+        "imagePath": null
     },
     {
-        "english": "blood",
-        "portuguese": "sangue",
-        "hungarian": "vér"
+        "translations": {
+            "english": "blood",
+            "portuguese": "sangue",
+            "hungarian": "vér"
+        },
+        "imagePath": null
     },
     {
-        "english": "brain",
-        "portuguese": "cérebro",
-        "hungarian": "agy"
+        "translations": {
+            "english": "brain",
+            "portuguese": "cérebro",
+            "hungarian": "agy"
+        },
+        "imagePath": null
     },
     {
-        "english": "knee",
-        "portuguese": "joelho",
-        "hungarian": "térd"
+        "translations": {
+            "english": "knee",
+            "portuguese": "joelho",
+            "hungarian": "térd"
+        },
+        "imagePath": null
     },
     {
-        "english": "sweat",
-        "portuguese": "suor",
-        "hungarian": "verejték"
+        "translations": {
+            "english": "sweat",
+            "portuguese": "suor",
+            "hungarian": "verejték"
+        },
+        "imagePath": null
     },
     {
-        "english": "disease",
-        "portuguese": "doença",
-        "hungarian": "betegség"
+        "translations": {
+            "english": "disease",
+            "portuguese": "doença",
+            "hungarian": "betegség"
+        },
+        "imagePath": null
     },
     {
-        "english": "bone",
-        "portuguese": "osso",
-        "hungarian": "csont"
+        "translations": {
+            "english": "bone",
+            "portuguese": "osso",
+            "hungarian": "csont"
+        },
+        "imagePath": null
     },
     {
-        "english": "voice",
-        "portuguese": "voz",
-        "hungarian": "hang"
+        "translations": {
+            "english": "voice",
+            "portuguese": "voz",
+            "hungarian": "hang"
+        },
+        "imagePath": null
     },
     {
-        "english": "skin",
-        "portuguese": "pele",
-        "hungarian": "bőr"
+        "translations": {
+            "english": "skin",
+            "portuguese": "pele",
+            "hungarian": "bőr"
+        },
+        "imagePath": null
     },
     {
-        "english": "body",
-        "portuguese": "corpo",
-        "hungarian": "test"
+        "translations": {
+            "english": "body",
+            "portuguese": "corpo",
+            "hungarian": "test"
+        },
+        "imagePath": null
     }
 ]

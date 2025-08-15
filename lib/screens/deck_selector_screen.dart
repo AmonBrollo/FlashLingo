@@ -5,11 +5,13 @@ import 'flashcard_screen.dart';
 class DeckSelectorScreen extends StatelessWidget {
   final List<FlashcardDeck> decks;
   final String baseLanguage;
+  final String targetLanguage;
 
   const DeckSelectorScreen({
     super.key,
     required this.decks,
     required this.baseLanguage,
+    required this.targetLanguage,
   });
 
   @override
@@ -38,6 +40,7 @@ class DeckSelectorScreen extends StatelessWidget {
                   MaterialPageRoute(
                     builder: (_) => FlashcardScreen(
                       baseLanguage: baseLanguage,
+                      targetLanguage: targetLanguage,
                       flashcards: deck.cards,
                     ),
                   ),

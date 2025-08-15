@@ -1,162 +1,258 @@
 [
     {
-        "english": "city",
-        "portuguese": "cidade",
-        "hungarian": "város"
+        "translations": {
+            "english": "city",
+            "portuguese": "cidade",
+            "hungarian": "város"
+        },
+        "imagePath": null
     },
     {
-        "english": "house",
-        "portuguese": "casa",
-        "hungarian": "ház"
+        "translations": {
+            "english": "house",
+            "portuguese": "casa",
+            "hungarian": "ház"
+        },
+        "imagePath": null
     },
     {
-        "english": "apartment",
-        "portuguese": "apartamento",
-        "hungarian": "lakás"
+        "translations": {
+            "english": "apartment",
+            "portuguese": "apartamento",
+            "hungarian": "lakás"
+        },
+        "imagePath": null
     },
     {
-        "english": "street/road",
-        "portuguese": "rua/estrada",
-        "hungarian": "utca/út"
+        "translations": {
+            "english": "street/road",
+            "portuguese": "rua/estrada",
+            "hungarian": "utca/út"
+        },
+        "imagePath": null
     },
     {
-        "english": "airport",
-        "portuguese": "aeroporto",
-        "hungarian": "repülőtér"
+        "translations": {
+            "english": "airport",
+            "portuguese": "aeroporto",
+            "hungarian": "repülőtér"
+        },
+        "imagePath": null
     },
     {
-        "english": "train station",
-        "portuguese": "estação de trem",
-        "hungarian": "vasútállomás"
+        "translations": {
+            "english": "train station",
+            "portuguese": "estação de trem",
+            "hungarian": "vasútállomás"
+        },
+        "imagePath": null
     },
     {
-        "english": "bridge",
-        "portuguese": "ponte",
-        "hungarian": "híd"
+        "translations": {
+            "english": "bridge",
+            "portuguese": "ponte",
+            "hungarian": "híd"
+        },
+        "imagePath": null
     },
     {
-        "english": "hotel",
-        "portuguese": "hotel",
-        "hungarian": "szálloda"
+        "translations": {
+            "english": "hotel",
+            "portuguese": "hotel",
+            "hungarian": "szálloda"
+        },
+        "imagePath": null
     },
     {
-        "english": "restaurant",
-        "portuguese": "restaurante",
-        "hungarian": "étterem"
+        "translations": {
+            "english": "restaurant",
+            "portuguese": "restaurante",
+            "hungarian": "étterem"
+        },
+        "imagePath": null
     },
     {
-        "english": "farm",
-        "portuguese": "fazenda",
-        "hungarian": "farm"
+        "translations": {
+            "english": "farm",
+            "portuguese": "fazenda",
+            "hungarian": "farm"
+        },
+        "imagePath": null
     },
     {
-        "english": "court",
-        "portuguese": "tribunal",
-        "hungarian": "bíróság"
+        "translations": {
+            "english": "court",
+            "portuguese": "tribunal",
+            "hungarian": "bíróság"
+        },
+        "imagePath": null
     },
     {
-        "english": "school",
-        "portuguese": "escola",
-        "hungarian": "iskola"
+        "translations": {
+            "english": "school",
+            "portuguese": "escola",
+            "hungarian": "iskola"
+        },
+        "imagePath": null
     },
     {
-        "english": "office",
-        "portuguese": "escritório",
-        "hungarian": "iroda"
+        "translations": {
+            "english": "office",
+            "portuguese": "escritório",
+            "hungarian": "iroda"
+        },
+        "imagePath": null
     },
     {
-        "english": "room",
-        "portuguese": "quarto",
-        "hungarian": "szoba"
+        "translations": {
+            "english": "room",
+            "portuguese": "quarto",
+            "hungarian": "szoba"
+        },
+        "imagePath": null
     },
     {
-        "english": "town",
-        "portuguese": "cidade pequena",
-        "hungarian": "város"
+        "translations": {
+            "english": "town",
+            "portuguese": "cidade pequena",
+            "hungarian": "város"
+        },
+        "imagePath": null
     },
     {
-        "english": "university",
-        "portuguese": "universidade",
-        "hungarian": "egyetem"
+        "translations": {
+            "english": "university",
+            "portuguese": "universidade",
+            "hungarian": "egyetem"
+        },
+        "imagePath": null
     },
     {
-        "english": "club",
-        "portuguese": "clube",
-        "hungarian": "klub"
+        "translations": {
+            "english": "club",
+            "portuguese": "clube",
+            "hungarian": "klub"
+        },
+        "imagePath": null
     },
     {
-        "english": "bar",
-        "portuguese": "bar",
-        "hungarian": "bár"
+        "translations": {
+            "english": "bar",
+            "portuguese": "bar",
+            "hungarian": "bár"
+        },
+        "imagePath": null
     },
     {
-        "english": "park",
-        "portuguese": "parque",
-        "hungarian": "park"
+        "translations": {
+            "english": "park",
+            "portuguese": "parque",
+            "hungarian": "park"
+        },
+        "imagePath": null
     },
     {
-        "english": "camp",
-        "portuguese": "acampamento",
-        "hungarian": "tábor"
+        "translations": {
+            "english": "camp",
+            "portuguese": "acampamento",
+            "hungarian": "tábor"
+        },
+        "imagePath": null
     },
     {
-        "english": "store/shop",
-        "portuguese": "loja",
-        "hungarian": "bolt"
+        "translations": {
+            "english": "store/shop",
+            "portuguese": "loja",
+            "hungarian": "bolt"
+        },
+        "imagePath": null
     },
     {
-        "english": "theater",
-        "portuguese": "teatro",
-        "hungarian": "színház"
+        "translations": {
+            "english": "theater",
+            "portuguese": "teatro",
+            "hungarian": "színház"
+        },
+        "imagePath": null
     },
     {
-        "english": "library",
-        "portuguese": "biblioteca",
-        "hungarian": "könyvtár"
+        "translations": {
+            "english": "library",
+            "portuguese": "biblioteca",
+            "hungarian": "könyvtár"
+        },
+        "imagePath": null
     },
     {
-        "english": "hospital",
-        "portuguese": "hospital",
-        "hungarian": "kórház"
+        "translations": {
+            "english": "hospital",
+            "portuguese": "hospital",
+            "hungarian": "kórház"
+        },
+        "imagePath": null
     },
     {
-        "english": "church",
-        "portuguese": "igreja",
-        "hungarian": "templom"
+        "translations": {
+            "english": "church",
+            "portuguese": "igreja",
+            "hungarian": "templom"
+        },
+        "imagePath": null
     },
     {
-        "english": "market",
-        "portuguese": "mercado",
-        "hungarian": "piac"
+        "translations": {
+            "english": "market",
+            "portuguese": "mercado",
+            "hungarian": "piac"
+        },
+        "imagePath": null
     },
     {
-        "english": "country",
-        "portuguese": "país",
-        "hungarian": "ország"
+        "translations": {
+            "english": "country",
+            "portuguese": "país",
+            "hungarian": "ország"
+        },
+        "imagePath": null
     },
     {
-        "english": "building",
-        "portuguese": "prédio",
-        "hungarian": "épület"
+        "translations": {
+            "english": "building",
+            "portuguese": "prédio",
+            "hungarian": "épület"
+        },
+        "imagePath": null
     },
     {
-        "english": "ground",
-        "portuguese": "chão",
-        "hungarian": "talaj"
+        "translations": {
+            "english": "ground",
+            "portuguese": "chão",
+            "hungarian": "talaj"
+        },
+        "imagePath": null
     },
     {
-        "english": "space",
-        "portuguese": "espaço",
-        "hungarian": "hely"
+        "translations": {
+            "english": "space",
+            "portuguese": "espaço",
+            "hungarian": "hely"
+        },
+        "imagePath": null
     },
     {
-        "english": "bank",
-        "portuguese": "banco",
-        "hungarian": "bank"
+        "translations": {
+            "english": "bank",
+            "portuguese": "banco",
+            "hungarian": "bank"
+        },
+        "imagePath": null
     },
     {
-        "english": "location",
-        "portuguese": "localização",
-        "hungarian": "helyszín"
+        "translations": {
+            "english": "location",
+            "portuguese": "localização",
+            "hungarian": "helyszín"
+        },
+        "imagePath": null
     }
 ]

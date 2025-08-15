@@ -6,12 +6,14 @@ class ReviewScreen extends StatelessWidget {
   final List<Flashcard> remembered;
   final List<Flashcard> forgotten;
   final String baseLanguage;
+  final String targetLanguage;
 
   const ReviewScreen({
     super.key,
     required this.remembered,
     required this.forgotten,
     required this.baseLanguage,
+    required this.targetLanguage,
   });
 
   @override
@@ -46,8 +48,8 @@ class ReviewScreen extends StatelessWidget {
                         final card = remembered[index];
                         return Card(
                           child: ListTile(
-                            title: Text(card.english),
-                            subtitle: Text(card.hungarian),
+                            title: Text(card.getTranslation(baseLanguage)),
+                            subtitle: Text(card.getTranslation(targetLanguage)),
                           ),
                         );
                       },
@@ -80,8 +82,8 @@ class ReviewScreen extends StatelessWidget {
                         final card = forgotten[index];
                         return Card(
                           child: ListTile(
-                            title: Text(card.english),
-                            subtitle: Text(card.hungarian),
+                            title: Text(card.getTranslation(baseLanguage)),
+                            subtitle: Text(card.getTranslation(targetLanguage)),
                           ),
                         );
                       },

@@ -1,42 +1,66 @@
 [
     {
-        "english": "coffee",
-        "portuguese": "café",
-        "hungarian": "kávé"
+        "translations": {
+            "english": "coffee",
+            "portuguese": "café",
+            "hungarian": "kávé"
+        },
+        "imagePath": null
     },
     {
-        "english": "tea",
-        "portuguese": "chá",
-        "hungarian": "tea"
+        "translations": {
+            "english": "tea",
+            "portuguese": "chá",
+            "hungarian": "tea"
+        },
+        "imagePath": null
     },
     {
-        "english": "wine",
-        "portuguese": "vinho",
-        "hungarian": "bor"
+        "translations": {
+            "english": "wine",
+            "portuguese": "vinho",
+            "hungarian": "bor"
+        },
+        "imagePath": null
     },
     {
-        "english": "beer",
-        "portuguese": "cerveja",
-        "hungarian": "sör"
+        "translations": {
+            "english": "beer",
+            "portuguese": "cerveja",
+            "hungarian": "sör"
+        },
+        "imagePath": null
     },
     {
-        "english": "juice",
-        "portuguese": "suco",
-        "hungarian": "gyümölcslé"
+        "translations": {
+            "english": "juice",
+            "portuguese": "suco",
+            "hungarian": "gyümölcslé"
+        },
+        "imagePath": null
     },
     {
-        "english": "water",
-        "portuguese": "água",
-        "hungarian": "víz"
+        "translations": {
+            "english": "water",
+            "portuguese": "água",
+            "hungarian": "víz"
+        },
+        "imagePath": null
     },
     {
-        "english": "milk",
-        "portuguese": "leite",
-        "hungarian": "tej"
+        "translations": {
+            "english": "milk",
+            "portuguese": "leite",
+            "hungarian": "tej"
+        },
+        "imagePath": null
     },
     {
-        "english": "beverage",
-        "portuguese": "bebida",
-        "hungarian": "ital"
+        "translations": {
+            "english": "beverage",
+            "portuguese": "bebida",
+            "hungarian": "ital"
+        },
+        "imagePath": null
     }
 ]

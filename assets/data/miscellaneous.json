@@ -1,87 +1,138 @@
 [
     {
-        "english": "map",
-        "portuguese": "mapa",
-        "hungarian": "térkép"
+        "translations": {
+            "english": "map",
+            "portuguese": "mapa",
+            "hungarian": "térkép"
+        },
+        "imagePath": null
     },
     {
-        "english": "dot",
-        "portuguese": "ponto",
-        "hungarian": "pont"
+        "translations": {
+            "english": "dot",
+            "portuguese": "ponto",
+            "hungarian": "pont"
+        },
+        "imagePath": null
     },
     {
-        "english": "consonant",
-        "portuguese": "consoante",
-        "hungarian": "mássalhangzó"
+        "translations": {
+            "english": "consonant",
+            "portuguese": "consoante",
+            "hungarian": "mássalhangzó"
+        },
+        "imagePath": null
     },
     {
-        "english": "vowel",
-        "portuguese": "vogal",
-        "hungarian": "magánhangzó"
+        "translations": {
+            "english": "vowel",
+            "portuguese": "vogal",
+            "hungarian": "magánhangzó"
+        },
+        "imagePath": null
     },
     {
-        "english": "light",
-        "portuguese": "luz",
-        "hungarian": "fény"
+        "translations": {
+            "english": "light",
+            "portuguese": "luz",
+            "hungarian": "fény"
+        },
+        "imagePath": null
     },
     {
-        "english": "sound",
-        "portuguese": "som",
-        "hungarian": "hang"
+        "translations": {
+            "english": "sound",
+            "portuguese": "som",
+            "hungarian": "hang"
+        },
+        "imagePath": null
     },
     {
-        "english": "yes",
-        "portuguese": "sim",
-        "hungarian": "igen"
+        "translations": {
+            "english": "yes",
+            "portuguese": "sim",
+            "hungarian": "igen"
+        },
+        "imagePath": null
     },
     {
-        "english": "no",
-        "portuguese": "não",
-        "hungarian": "nem"
+        "translations": {
+            "english": "no",
+            "portuguese": "não",
+            "hungarian": "nem"
+        },
+        "imagePath": null
     },
     {
-        "english": "piece",
-        "portuguese": "pedaço",
-        "hungarian": "darab"
+        "translations": {
+            "english": "piece",
+            "portuguese": "pedaço",
+            "hungarian": "darab"
+        },
+        "imagePath": null
     },
     {
-        "english": "pain",
-        "portuguese": "dor",
-        "hungarian": "fájdalom"
+        "translations": {
+            "english": "pain",
+            "portuguese": "dor",
+            "hungarian": "fájdalom"
+        },
+        "imagePath": null
     },
     {
-        "english": "injury",
-        "portuguese": "ferimento",
-        "hungarian": "sérülés"
+        "translations": {
+            "english": "injury",
+            "portuguese": "ferimento",
+            "hungarian": "sérülés"
+        },
+        "imagePath": null
     },
     {
-        "english": "hole",
-        "portuguese": "buraco",
-        "hungarian": "lyuk"
+        "translations": {
+            "english": "hole",
+            "portuguese": "buraco",
+            "hungarian": "lyuk"
+        },
+        "imagePath": null
     },
     {
-        "english": "image",
-        "portuguese": "imagem",
-        "hungarian": "kép"
+        "translations": {
+            "english": "image",
+            "portuguese": "imagem",
+            "hungarian": "kép"
+        },
+        "imagePath": null
     },
     {
-        "english": "pattern",
-        "portuguese": "padrão",
-        "hungarian": "minta"
+        "translations": {
+            "english": "pattern",
+            "portuguese": "padrão",
+            "hungarian": "minta"
+        },
+        "imagePath": null
     },
     {
-        "english": "noun",
-        "portuguese": "substantivo",
-        "hungarian": "főnév"
+        "translations": {
+            "english": "noun",
+            "portuguese": "substantivo",
+            "hungarian": "főnév"
+        },
+        "imagePath": null
     },
     {
-        "english": "verb",
-        "portuguese": "verbo",
-        "hungarian": "ige"
+        "translations": {
+            "english": "verb",
+            "portuguese": "verbo",
+            "hungarian": "ige"
+        },
+        "imagePath": null
     },
     {
-        "english": "adjective",
-        "portuguese": "adjetivo",
-        "hungarian": "melléknév"
+        "translations": {
+            "english": "adjective",
+            "portuguese": "adjetivo",
+            "hungarian": "melléknév"
+        },
+        "imagePath": null
     }
 ]

@@ -1,42 +1,66 @@
 [
     {
-        "english": "I",
-        "portuguese": "Eu",
-        "hungarian": "Én"
+        "translations": {
+            "english": "I",
+            "portuguese": "Eu",
+            "hungarian": "Én"
+        },
+        "imagePath": null
     },
     {
-        "english": "you (singular)",
-        "portuguese": "Tu",
-        "hungarian": "Te"
+        "translations": {
+            "english": "you (singular)",
+            "portuguese": "Tu",
+            "hungarian": "Te"
+        },
+        "imagePath": null
     },
     {
-        "english": "he",
-        "portuguese": "Ele",
-        "hungarian": "Ő"
+        "translations": {
+            "english": "he",
+            "portuguese": "Ele",
+            "hungarian": "Ő"
+        },
+        "imagePath": null
     },
     {
-        "english": "she",
-        "portuguese": "Ela",
-        "hungarian": "Ő"
+        "translations": {
+            "english": "she",
+            "portuguese": "Ela",
+            "hungarian": "Ő"
+        },
+        "imagePath": null
     },
     {
-        "english": "it",
-        "portuguese": "Isso",
-        "hungarian": "Az"
+        "translations": {
+            "english": "it",
+            "portuguese": "Isso",
+            "hungarian": "Az"
+        },
+        "imagePath": null
     },
     {
-        "english": "we",
-        "portuguese": "Nós",
-        "hungarian": "Mi"
+        "translations": {
+            "english": "we",
+            "portuguese": "Nós",
+            "hungarian": "Mi"
+        },
+        "imagePath": null
     },
     {
-        "english": "you (plural)",
-        "portuguese": "Vocês",
-        "hungarian": "Ti"
+        "translations": {
+            "english": "you (plural)",
+            "portuguese": "Vocês",
+            "hungarian": "Ti"
+        },
+        "imagePath": null
     },
     {
-        "english": "they",
-        "portuguese": "Eles",
-        "hungarian": "Ők"
+        "translations": {
+            "english": "they",
+            "portuguese": "Eles",
+            "hungarian": "Ők"
+        },
+        "imagePath": null
     }
 ]

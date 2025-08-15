@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'screens/language_selector_screen.dart';
+import 'screens/base_language_selector_screen.dart';
 
 void main() {
   runApp(const FlashcardApp());
@@ -11,7 +11,7 @@ class FlashcardApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: const LanguageSelectorScreen(),
+      home: const BaseLanguageSelectorScreen(),
       debugShowCheckedModeBanner: false,
     );
   }

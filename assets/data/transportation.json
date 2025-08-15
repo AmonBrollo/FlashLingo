@@ -1,67 +1,106 @@
 [
     {
-        "english": "train",
-        "portuguese": "trem",
-        "hungarian": "vonat"
+        "translations": {
+            "english": "train",
+            "portuguese": "trem",
+            "hungarian": "vonat"
+        },
+        "imagePath": null
     },
     {
-        "english": "plane",
-        "portuguese": "avião",
-        "hungarian": "repülőgép"
+        "translations": {
+            "english": "plane",
+            "portuguese": "avião",
+            "hungarian": "repülőgép"
+        },
+        "imagePath": null
     },
     {
-        "english": "car",
-        "portuguese": "carro",
-        "hungarian": "autó"
+        "translations": {
+            "english": "car",
+            "portuguese": "carro",
+            "hungarian": "autó"
+        },
+        "imagePath": null
     },
     {
-        "english": "truck",
-        "portuguese": "caminhão",
-        "hungarian": "kamion"
+        "translations": {
+            "english": "truck",
+            "portuguese": "caminhão",
+            "hungarian": "kamion"
+        },
+        "imagePath": null
     },
     {
-        "english": "bicycle",
-        "portuguese": "bicicleta",
-        "hungarian": "kerékpár"
+        "translations": {
+            "english": "bicycle",
+            "portuguese": "bicicleta",
+            "hungarian": "kerékpár"
+        },
+        "imagePath": null
     },
     {
-        "english": "bus",
-        "portuguese": "ônibus",
-        "hungarian": "busz"
+        "translations": {
+            "english": "bus",
+            "portuguese": "ônibus",
+            "hungarian": "busz"
+        },
+        "imagePath": null
     },
     {
-        "english": "boat",
-        "portuguese": "barco",
-        "hungarian": "hajó"
+        "translations": {
+            "english": "boat",
+            "portuguese": "barco",
+            "hungarian": "hajó"
+        },
+        "imagePath": null
     },
     {
-        "english": "ship",
-        "portuguese": "navio",
-        "hungarian": "hajó"
+        "translations": {
+            "english": "ship",
+            "portuguese": "navio",
+            "hungarian": "hajó"
+        },
+        "imagePath": null
     },
     {
-        "english": "tire",
-        "portuguese": "pneu",
-        "hungarian": "gumi"
+        "translations": {
+            "english": "tire",
+            "portuguese": "pneu",
+            "hungarian": "gumi"
+        },
+        "imagePath": null
     },
     {
-        "english": "gasoline",
-        "portuguese": "gasolina",
-        "hungarian": "benzin"
+        "translations": {
+            "english": "gasoline",
+            "portuguese": "gasolina",
+            "hungarian": "benzin"
+        },
+        "imagePath": null
     },
     {
-        "english": "engine",
-        "portuguese": "motor",
-        "hungarian": "motor"
+        "translations": {
+            "english": "engine",
+            "portuguese": "motor",
+            "hungarian": "motor"
+        },
+        "imagePath": null
     },
     {
-        "english": "ticket",
-        "portuguese": "bilhete",
-        "hungarian": "jegy"
+        "translations": {
+            "english": "ticket",
+            "portuguese": "bilhete",
+            "hungarian": "jegy"
+        },
+        "imagePath": null
     },
     {
-        "english": "transportation",
-        "portuguese": "transporte",
-        "hungarian": "közlekedés"
+        "translations": {
+            "english": "transportation",
+            "portuguese": "transporte",
+            "hungarian": "közlekedés"
+        },
+        "imagePath": null
     }
 ]
