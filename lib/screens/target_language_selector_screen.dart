@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'deck_selector_screen.dart';
 import '../services/deck_loader.dart';
 import '../utils/ui_strings.dart';
+import '../widgets/language_option_button.dart';
 
 class TargetLanguageSelectorScreen extends StatelessWidget {
   final String baseLanguage;
@@ -37,9 +38,11 @@ class TargetLanguageSelectorScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ElevatedButton(
-              onPressed: () => _selectTargetLanguage(context, "hungarian"),
-              child: const Text("Hungarian"),
+            LanguageOptionButton(
+              text: "Magyar",
+              color: Colors.red.shade700,
+              emoji: "🇭🇺",
+              onTap: () => _selectTargetLanguage(context, "hungarian"),
             ),
             // Add more target languages here
           ],
