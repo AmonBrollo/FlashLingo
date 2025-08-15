@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'deck_selector_screen.dart';
 import '../services/deck_loader.dart';
+import '../utils/ui_strings.dart';
 
 class TargetLanguageSelectorScreen extends StatelessWidget {
   final String baseLanguage;
@@ -29,7 +30,7 @@ class TargetLanguageSelectorScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.brown[50],
       appBar: AppBar(
-        title: const Text("Choose Target Language 🎯"),
+        title: Text(UiStrings.selectTargetLanguage(baseLanguage)),
         backgroundColor: Colors.brown,
       ),
       body: Center(

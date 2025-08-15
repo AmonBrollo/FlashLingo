@@ -108,7 +108,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
     return Scaffold(
       backgroundColor: Colors.brown[50],
       appBar: AppBar(
-        title: const Text('Flashlingo'),
+        title: const Text('Flashlango'),
         backgroundColor: Colors.brown,
         actions: [
           IconButton(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../models/flashcard_deck.dart';
 import 'flashcard_screen.dart';
+import '../models/flashcard_deck.dart';
+import '../utils/ui_strings.dart';
 
 class DeckSelectorScreen extends StatelessWidget {
   final List<FlashcardDeck> decks;
@@ -18,7 +19,7 @@ class DeckSelectorScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Select a Deck"),
+        title: Text(UiStrings.selectDeck(baseLanguage)),
         backgroundColor: Colors.brown,
       ),
       body: Padding(

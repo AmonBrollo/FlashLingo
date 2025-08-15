@@ -1,6 +1,12 @@
 class UiStrings {
-  static String appTitle(String lang) {
-    return lang == "portuguese" ? "Flashlingo" : "Flashlingo";
+  static String selectTargetLanguage(String lang) {
+    return lang == "portuguese"
+        ? "Escolha o idioma de destino 🎯"
+        : "Choose Target Language 🎯";
+  }
+
+  static String selectDeck(String lang) {
+    return lang == "portuguese" ? "Selecione um Deck" : "Select a Deck";
   }
 
   static String reviewTitle(String lang) {
@@ -25,6 +31,17 @@ class UiStrings {
     return lang == "portuguese"
         ? "🎉 Você passou por todas as cartas!"
         : "🎉 You've gone through all the flashcards!";
+  }
+
+  static String baseWordLabel(String lang) {
+    switch (lang.toLowerCase()) {
+      case 'portuguese':
+        return 'Digite a palavra em Português';
+      case 'english':
+        return 'Enter English word';
+      default:
+        return 'Enter word';
+    }
   }
 
   static String addHungarianWord(String lang) {

@@ -54,9 +54,7 @@ class _AddFlashcardScreenState extends State<AddFlashcardScreen> {
             TextField(
               controller: baseController,
               decoration: InputDecoration(
-                labelText: widget.baseLanguage == "portuguese"
-                    ? 'Digite a palavra em Português'
-                    : 'Enter English word',
+                labelText: UiStrings.baseWordLabel(widget.baseLanguage),
               ),
             ),
             const SizedBox(height: 16),
