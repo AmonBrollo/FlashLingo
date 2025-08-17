@@ -2,9 +2,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:image_picker/image_picker.dart';
-import '../models/flashcard.dart';
 import 'review_screen.dart';
 import 'add_flashcard_screen.dart';
+import '../models/flashcard.dart';
+import '../services/spaced_repetition_service.dart';
 import '../utils/ui_strings.dart';
 import '../utils/usage_limiter.dart';
 import '../widgets/limit_reached_card.dart';
@@ -39,6 +40,8 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
 
   final UsageLimiter limiter = UsageLimiter();
 
+  final SpacedRepetitionService repetitionService = SpacedRepetitionService();
+
   Future<void> loadFlashcards() async {
     final String jsonString = await rootBundle.loadString(
       'assets/data/flashcards.json',
@@ -48,6 +51,10 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
 
     setState(() {
       flashcards = jsonData.map((item) => Flashcard.fromJson(item)).toList();
+
+      for (final card in flashcards) {
+        repetitionService.getProgress(card);
+      }
     });
   }
 
@@ -73,7 +80,15 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
     await limiter.markStudied();
 
     setState(() {
-      if (currentIndex < flashcards.length - 1) {
+      final dueFlashcards = repetitionService.dueCards(flashcards);
+
+      if (dueFlashcards.isNotEmpty) {
+        final next = dueFlashcards.firstWhere(
+          (card) => flashcards.indexOf(card) != currentIndex,
+          orElse: () => dueFlashcards.first,
+        );
+        currentIndex = flashcards.indexOf(next);
+      } else if (currentIndex < flashcards.length - 1) {
         currentIndex++;
       } else {
         finishedDeck = true;
@@ -213,7 +228,18 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
         baseLanguage: widget.baseLanguage,
         targetLanguage: widget.targetLanguage,
         dragDx: _dragDx,
+        onFlip: () => setState(() => isFlipped = !isFlipped),
         onAddImage: changeCurrentImage,
+        onRemembered: () {
+          repetitionService.markRemembered(flashcards[currentIndex]);
+          remembered.add(flashcards[currentIndex]);
+          _nextCard();
+        },
+        onForgotten: () {
+          repetitionService.markForgotten(flashcards[currentIndex]);
+          forgotten.add(flashcards[currentIndex]);
+          _nextCard();
+        },
       );
     }
   }

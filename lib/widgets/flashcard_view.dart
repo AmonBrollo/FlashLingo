@@ -9,7 +9,10 @@ class FlashcardView extends StatelessWidget {
   final String baseLanguage;
   final String targetLanguage;
   final double dragDx;
+  final VoidCallback onFlip;
   final VoidCallback onAddImage;
+  final VoidCallback onRemembered;
+  final VoidCallback onForgotten;
 
   const FlashcardView({
     super.key,
@@ -18,7 +21,10 @@ class FlashcardView extends StatelessWidget {
     required this.baseLanguage,
     required this.targetLanguage,
     required this.dragDx,
+    required this.onFlip,
     required this.onAddImage,
+    required this.onRemembered,
+    required this.onForgotten,
   });
 
   @override
