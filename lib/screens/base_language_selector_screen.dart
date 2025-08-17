@@ -6,7 +6,7 @@ class BaseLanguageSelectorScreen extends StatelessWidget {
   const BaseLanguageSelectorScreen({super.key});
 
   void _selectBaseLanguage(BuildContext context, String baseLanguage) {
-    Navigator.pushReplacement(
+    Navigator.push(
       context,
       MaterialPageRoute(
         builder: (_) =>

@@ -21,7 +21,7 @@ class _TargetLanguageSelectorScreenState
 
       if (!mounted) return;
 
-      Navigator.pushReplacement(
+      Navigator.push(
         context,
         MaterialPageRoute(
           builder: (_) => DeckSelectorScreen(
