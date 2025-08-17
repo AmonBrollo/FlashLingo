@@ -4,26 +4,40 @@ import '../services/deck_loader.dart';
 import '../utils/ui_strings.dart';
 import '../widgets/language_option_button.dart';
 
-class TargetLanguageSelectorScreen extends StatelessWidget {
+class TargetLanguageSelectorScreen extends StatefulWidget {
   final String baseLanguage;
   const TargetLanguageSelectorScreen({super.key, required this.baseLanguage});
 
-  void _selectTargetLanguage(
-    BuildContext context,
-    String targetLanguage,
-  ) async {
-    DeckLoader.loadDecks().then((decks) {
+  @override
+  State<TargetLanguageSelectorScreen> createState() =>
+      _TargetLanguageSelectorScreenState();
+}
+
+class _TargetLanguageSelectorScreenState
+    extends State<TargetLanguageSelectorScreen> {
+  void _selectTargetLanguage(String targetLanguage) async {
+    try {
+      final decks = await DeckLoader.loadDecks();
+
+      if (!mounted) return;
+
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (_) => DeckSelectorScreen(
-            baseLanguage: baseLanguage,
+            baseLanguage: widget.baseLanguage,
             targetLanguage: targetLanguage,
             decks: decks,
           ),
         ),
       );
-    });
+    } catch (e) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error loading decks: $e')));
+    }
   }
 
   @override
@@ -31,7 +45,7 @@ class TargetLanguageSelectorScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.brown[50],
       appBar: AppBar(
-        title: Text(UiStrings.selectTargetLanguage(baseLanguage)),
+        title: Text(UiStrings.selectTargetLanguage(widget.baseLanguage)),
         backgroundColor: Colors.brown,
       ),
       body: Center(
@@ -42,7 +56,7 @@ class TargetLanguageSelectorScreen extends StatelessWidget {
               text: "Magyar",
               color: Colors.red.shade700,
               emoji: "🇭🇺",
-              onTap: () => _selectTargetLanguage(context, "hungarian"),
+              onTap: () => _selectTargetLanguage("hungarian"),
             ),
             // Add more target languages here
           ],
