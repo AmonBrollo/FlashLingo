@@ -5,7 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'review_screen.dart';
 import 'add_flashcard_screen.dart';
 import '../models/flashcard.dart';
-import '../services/spaced_repetition_service.dart';
+import '../services/repetition_service.dart';
 import '../utils/ui_strings.dart';
 import '../utils/usage_limiter.dart';
 import '../widgets/limit_reached_card.dart';
@@ -40,7 +40,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
 
   final UsageLimiter limiter = UsageLimiter();
 
-  final SpacedRepetitionService repetitionService = SpacedRepetitionService();
+  final RepetitionService repetitionService = RepetitionService();
 
   Future<void> loadFlashcards() async {
     final String jsonString = await rootBundle.loadString(
@@ -78,15 +78,30 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
 
     await limiter.markStudied();
 
-    if (currentIndex < flashcards.length - 1) {
-      setState(() {
-        currentIndex++;
-        isFlipped = false;
-        _dragDx = 0.0;
-      });
-    } else {
-      setState(() => finishedDeck = true);
-    }
+    setState(() {
+      final swipedCards = [...remembered, ...forgotten];
+
+      final dueFlashcards = repetitionService
+          .dueCards(flashcards)
+          .where((card) => !swipedCards.contains(card))
+          .toList();
+
+      if (dueFlashcards.isNotEmpty) {
+        currentIndex = flashcards.indexOf(dueFlashcards.first);
+      } else {
+        final newCards = repetitionService
+            .dueCards(flashcards)
+            .where((card) => !swipedCards.contains(card))
+            .toList();
+        if (newCards.isNotEmpty) {
+          currentIndex = flashcards.indexOf(newCards.first);
+        } else {
+          finishedDeck = true;
+        }
+      }
+      isFlipped = false;
+      _dragDx = 0.0;
+    });
   }
 
   Future<void> changeCurrentImage() async {
@@ -121,11 +136,17 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
             icon: const Icon(Icons.list),
             tooltip: 'Review results',
             onPressed: () {
+              debugPrint(
+                "Pressed review button! rmembered.length = ${remembered.length}",
+              );
+              debugPrint(
+                "Remembered: ${remembered.length}, Forgotten: ${forgotten.length}",
+              );
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (_) => ReviewScreen(
-                    cards: flashcards,
+                    cards: remembered,
                     baseLanguage: widget.baseLanguage,
                     targetLanguage: widget.targetLanguage,
                   ),
@@ -221,8 +242,16 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
         onFlip: () => setState(() => isFlipped = !isFlipped),
         onAddImage: changeCurrentImage,
         onRemembered: () {
-          repetitionService.markRemembered(flashcards[currentIndex]);
-          remembered.add(flashcards[currentIndex]);
+          final currentCard = flashcards[currentIndex];
+          repetitionService.markRemembered(currentCard);
+
+          remembered.add(
+            Flashcard(
+              translations: Map<String, String>.from(currentCard.translations),
+              boxLevel: currentCard.boxLevel,
+              imagePath: currentCard.imagePath,
+            ),
+          );
           _nextCard();
         },
         onForgotten: () {

@@ -1,49 +1,39 @@
 class FlashcardProgress {
-  int boxLevel;
+  int box;
   DateTime nextReview;
 
-  FlashcardProgress({this.boxLevel = 1, DateTime? nextReview})
+  FlashcardProgress({this.box = 1, DateTime? nextReview})
     : nextReview = nextReview ?? DateTime.now();
 
+  /// Whether this card has been studied at least once.
+  bool get hasStarted => box > 1 || nextReview.isAfter(DateTime.now());
+
+  /// Whether this card is due for review.
+  bool isDue() => DateTime.now().isAfter(nextReview);
+
+  /// Promote the card to the next Leitner box.
   void promote() {
-    if (boxLevel < 5) boxLevel++;
-    nextReview = DateTime.now().add(_intervalForBox(boxLevel));
+    if (box < 5) box++;
+    _updateNextReview();
   }
 
   void reset() {
-    boxLevel = 1;
-    nextReview = DateTime.now().add(_intervalForBox(boxLevel));
+    box = 1;
+    _updateNextReview();
   }
 
-  bool isDue() {
-    return nextReview.isBefore(DateTime.now());
-  }
+  /// Internal helper to schedule the next review date.
+  void _updateNextReview() {
+    // Simple Leitner intervals (example):
+    // Box 1 → 1 day, Box 2 → 2 days, Box 3 → 4 days, Box 4 → 7 days, Box 5 → 15 days
+    final intervals = {
+      1: const Duration(days: 1),
+      2: const Duration(days: 2),
+      3: const Duration(days: 4),
+      4: const Duration(days: 7),
+      5: const Duration(days: 15),
+    };
 
-  static Duration _intervalForBox(int level) {
-    switch (level) {
-      case 1:
-        return const Duration(hours: 5);
-      case 2:
-        return const Duration(days: 1);
-      case 3:
-        return const Duration(days: 3);
-      case 4:
-        return const Duration(days: 7);
-      case 5:
-        return const Duration(days: 30);
-      default:
-        return const Duration(days: 1);
-    }
-  }
-
-  Map<String, dynamic> toJson() {
-    return {'boxLevel': boxLevel, 'nextReview': nextReview.toIso8601String()};
-  }
-
-  factory FlashcardProgress.fromJson(Map<String, dynamic> json) {
-    return FlashcardProgress(
-      boxLevel: json['boxLevel'],
-      nextReview: DateTime.parse(json['nextReview']),
-    );
+    nextReview = DateTime.now().add(intervals[box]!);
   }
 }

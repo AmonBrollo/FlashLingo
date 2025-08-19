@@ -17,7 +17,7 @@ class ReviewScreen extends StatelessWidget {
   Map<int, List<Flashcard>> _groupByLevel(List<Flashcard> all) {
     final Map<int, List<Flashcard>> grouped = {};
     for (final card in all) {
-      grouped.putIfAbsent(card.level, () => []).add(card);
+      grouped.putIfAbsent(card.boxLevel, () => []).add(card);
     }
     return grouped;
   }
@@ -25,6 +25,7 @@ class ReviewScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final grouped = _groupByLevel(cards);
+    debugPrint("Grouped: ${grouped.map((k, v) => MapEntry(k, v.length))}");
 
     final levels = grouped.keys.toList()..sort();
 

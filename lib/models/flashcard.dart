@@ -1,15 +1,24 @@
 class Flashcard {
   final Map<String, String> translations;
   final String? imagePath;
-  int level;
+  int boxLevel;
+  DateTime nextReview;
 
-  Flashcard({required this.translations, this.imagePath, this.level = 1});
+  Flashcard({
+    required this.translations,
+    this.imagePath,
+    this.boxLevel = 1,
+    DateTime? nextReview,
+  }) : nextReview = nextReview ?? DateTime.now();
 
   factory Flashcard.fromJson(Map<String, dynamic> json) {
     return Flashcard(
       translations: Map<String, String>.from(json['translations']),
       imagePath: json['imagePath'],
-      level: json['level'] ?? 1,
+      boxLevel: json['boxLevel'] ?? 1,
+      nextReview: json['nextReview'] != null
+          ? DateTime.parse(json['nextReview'])
+          : DateTime.now(),
     );
   }
 
@@ -17,7 +26,8 @@ class Flashcard {
     return {
       'translations': translations,
       'imagePath': imagePath,
-      'level': level,
+      'boxLevel': boxLevel,
+      'nextReview': nextReview.toIso8601String(),
     };
   }
 
