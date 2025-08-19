@@ -3,21 +3,31 @@ import '../models/flashcard.dart';
 import '../utils/ui_strings.dart';
 
 class ReviewScreen extends StatelessWidget {
-  final List<Flashcard> remembered;
-  final List<Flashcard> forgotten;
+  final List<Flashcard> cards;
   final String baseLanguage;
   final String targetLanguage;
 
   const ReviewScreen({
     super.key,
-    required this.remembered,
-    required this.forgotten,
+    required this.cards,
     required this.baseLanguage,
     required this.targetLanguage,
   });
 
+  Map<int, List<Flashcard>> _groupByLevel(List<Flashcard> all) {
+    final Map<int, List<Flashcard>> grouped = {};
+    for (final card in all) {
+      grouped.putIfAbsent(card.level, () => []).add(card);
+    }
+    return grouped;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final grouped = _groupByLevel(cards);
+
+    final levels = grouped.keys.toList()..sort();
+
     return Scaffold(
       appBar: AppBar(
         title: Text(UiStrings.reviewTitle(baseLanguage)),
@@ -25,74 +35,36 @@ class ReviewScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Row(
-          children: [
-            // ✅ Remembered column
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "✅",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.green,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: remembered.length,
-                      itemBuilder: (context, index) {
-                        final card = remembered[index];
-                        return Card(
-                          child: ListTile(
-                            title: Text(card.getTranslation(baseLanguage)),
-                            subtitle: Text(card.getTranslation(targetLanguage)),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
+        child: ListView.builder(
+          itemCount: levels.length,
+          itemBuilder: (context, index) {
+            final level = levels[index];
+            final levelCards = grouped[level]!;
 
-            const SizedBox(width: 16),
-
-            // ❌ Forgotten column
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "❌",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.red,
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Level $level",
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.brown,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                ...levelCards.map(
+                  (card) => Card(
+                    child: ListTile(
+                      title: Text(card.getTranslation(baseLanguage)),
+                      subtitle: Text(card.getTranslation(targetLanguage)),
                     ),
                   ),
-                  const SizedBox(height: 10),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: forgotten.length,
-                      itemBuilder: (context, index) {
-                        final card = forgotten[index];
-                        return Card(
-                          child: ListTile(
-                            title: Text(card.getTranslation(baseLanguage)),
-                            subtitle: Text(card.getTranslation(targetLanguage)),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
+                ),
+                const SizedBox(height: 16),
+              ],
+            );
+          },
         ),
       ),
     );

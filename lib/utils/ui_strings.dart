@@ -10,7 +10,7 @@ class UiStrings {
   }
 
   static String reviewTitle(String lang) {
-    return lang == "portuguese" ? "Revisar Cartas" : "Review Flashcards";
+    return lang == "portuguese" ? "📊 Revisar Progresso" : "📊 Review Progress";
   }
 
   static String addFlashcardTitle(String lang) {

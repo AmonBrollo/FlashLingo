@@ -62,7 +62,6 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
   void initState() {
     super.initState();
     flashcards = widget.flashcards;
-    loadFlashcards();
   }
 
   void _nextCard() async {
@@ -79,23 +78,15 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
 
     await limiter.markStudied();
 
-    setState(() {
-      final dueFlashcards = repetitionService.dueCards(flashcards);
-
-      if (dueFlashcards.isNotEmpty) {
-        final next = dueFlashcards.firstWhere(
-          (card) => flashcards.indexOf(card) != currentIndex,
-          orElse: () => dueFlashcards.first,
-        );
-        currentIndex = flashcards.indexOf(next);
-      } else if (currentIndex < flashcards.length - 1) {
+    if (currentIndex < flashcards.length - 1) {
+      setState(() {
         currentIndex++;
-      } else {
-        finishedDeck = true;
-      }
-      isFlipped = false;
-      _dragDx = 0.0;
-    });
+        isFlipped = false;
+        _dragDx = 0.0;
+      });
+    } else {
+      setState(() => finishedDeck = true);
+    }
   }
 
   Future<void> changeCurrentImage() async {
@@ -134,8 +125,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
                 context,
                 MaterialPageRoute(
                   builder: (_) => ReviewScreen(
-                    remembered: remembered,
-                    forgotten: forgotten,
+                    cards: flashcards,
                     baseLanguage: widget.baseLanguage,
                     targetLanguage: widget.targetLanguage,
                   ),
