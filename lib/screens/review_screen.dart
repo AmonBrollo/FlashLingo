@@ -54,13 +54,38 @@ class ReviewScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 8),
-                ...levelCards.map(
-                  (card) => Card(
-                    child: ListTile(
-                      title: Text(card.getTranslation(baseLanguage)),
-                      subtitle: Text(card.getTranslation(targetLanguage)),
-                    ),
+
+                GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 8,
+                    mainAxisSpacing: 8,
+                    childAspectRatio: 2,
                   ),
+                  itemCount: levelCards.length,
+                  itemBuilder: (context, i) {
+                    final card = levelCards[i];
+                    return Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              card.getTranslation(baseLanguage),
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(card.getTranslation(targetLanguage)),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
                 ),
                 const SizedBox(height: 16),
               ],
