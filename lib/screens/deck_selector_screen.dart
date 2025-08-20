@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'flashcard_screen.dart';
+import 'review_screen.dart';
 import '../models/flashcard_deck.dart';
 import '../utils/ui_strings.dart';
+import '../services/review_state.dart';
 
 class DeckSelectorScreen extends StatelessWidget {
   final List<FlashcardDeck> decks;
@@ -21,6 +24,25 @@ class DeckSelectorScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(UiStrings.selectDeck(baseLanguage)),
         backgroundColor: Colors.brown,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.list),
+            tooltip: 'Review results',
+            onPressed: () {
+              final remembered = context.read<ReviewState>().remembered;
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => ReviewScreen(
+                    cards: remembered,
+                    baseLanguage: baseLanguage,
+                    targetLanguage: targetLanguage,
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(12.0),

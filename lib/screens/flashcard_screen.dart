@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:image_picker/image_picker.dart';
@@ -6,6 +7,7 @@ import 'review_screen.dart';
 import 'add_flashcard_screen.dart';
 import '../models/flashcard.dart';
 import '../services/repetition_service.dart';
+import '../services/review_state.dart';
 import '../utils/ui_strings.dart';
 import '../utils/usage_limiter.dart';
 import '../widgets/limit_reached_card.dart';
@@ -35,11 +37,8 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
   int currentIndex = 0;
   double _dragDx = 0.0;
   List<Flashcard> flashcards = [];
-  List<Flashcard> remembered = [];
-  List<Flashcard> forgotten = [];
 
   final UsageLimiter limiter = UsageLimiter();
-
   final RepetitionService repetitionService = RepetitionService();
 
   Future<void> loadFlashcards() async {
@@ -79,7 +78,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
     await limiter.markStudied();
 
     setState(() {
-      final swipedCards = [...remembered, ...forgotten];
+      final swipedCards = context.read<ReviewState>().remembered;
 
       final dueFlashcards = repetitionService
           .dueCards(flashcards)
@@ -136,12 +135,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
             icon: const Icon(Icons.list),
             tooltip: 'Review results',
             onPressed: () {
-              debugPrint(
-                "Pressed review button! rmembered.length = ${remembered.length}",
-              );
-              debugPrint(
-                "Remembered: ${remembered.length}, Forgotten: ${forgotten.length}",
-              );
+              final remembered = context.read<ReviewState>().remembered;
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -190,10 +184,10 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
           onPanEnd: (details) {
             if (!limitReached && !finishedDeck) {
               if (_dragDx > 100) {
-                remembered.add(flashcards[currentIndex]);
+                context.read<ReviewState>().addCard(flashcards[currentIndex]);
                 _nextCard();
               } else if (_dragDx < -100) {
-                forgotten.add(flashcards[currentIndex]);
+                /// to do: add a ReviewState.addForgotten
                 _nextCard();
               }
               setState(() {
@@ -244,19 +238,13 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
         onRemembered: () {
           final currentCard = flashcards[currentIndex];
           repetitionService.markRemembered(currentCard);
-
-          remembered.add(
-            Flashcard(
-              translations: Map<String, String>.from(currentCard.translations),
-              boxLevel: currentCard.boxLevel,
-              imagePath: currentCard.imagePath,
-            ),
-          );
+          context.read<ReviewState>().addCard(currentCard);
           _nextCard();
         },
         onForgotten: () {
           repetitionService.markForgotten(flashcards[currentIndex]);
-          forgotten.add(flashcards[currentIndex]);
+
+          /// to do: add a ReviewState.addForgotten
           _nextCard();
         },
       );
