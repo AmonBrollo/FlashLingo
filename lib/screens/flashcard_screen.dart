@@ -229,6 +229,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
     } else {
       return FlashcardView(
         flashcard: flashcards[currentIndex],
+        progress: repetitionService.getProgress(flashcards[currentIndex]),
         isFlipped: isFlipped,
         baseLanguage: widget.baseLanguage,
         targetLanguage: widget.targetLanguage,

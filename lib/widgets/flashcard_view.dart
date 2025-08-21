@@ -1,10 +1,12 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import '../models/flashcard.dart';
+import '../models/flashcard_progress.dart';
 import '../utils/ui_strings.dart';
 
 class FlashcardView extends StatelessWidget {
   final Flashcard flashcard;
+  final FlashcardProgress progress;
   final bool isFlipped;
   final String baseLanguage;
   final String targetLanguage;
@@ -17,6 +19,7 @@ class FlashcardView extends StatelessWidget {
   const FlashcardView({
     super.key,
     required this.flashcard,
+    required this.progress,
     required this.isFlipped,
     required this.baseLanguage,
     required this.targetLanguage,
@@ -31,6 +34,10 @@ class FlashcardView extends StatelessWidget {
   Widget build(BuildContext context) {
     final cardWidth = MediaQuery.of(context).size.width * 0.8;
     final cardHeight = MediaQuery.of(context).size.height * 0.5;
+
+    final statusText = progress.hasStarted
+        ? "Review - Level ${progress.box}"
+        : "New";
 
     return Stack(
       alignment: Alignment.center,
@@ -75,6 +82,31 @@ class FlashcardView extends StatelessWidget {
             ),
             child: Stack(
               children: [
+                Positioned(
+                  top: 8,
+                  left: 8,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: progress.hasStarted
+                          ? Colors.orange[200]
+                          : Colors.green[200],
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      statusText,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+
+                // main card content
                 Center(
                   child: isFlipped
                       ? Text(
