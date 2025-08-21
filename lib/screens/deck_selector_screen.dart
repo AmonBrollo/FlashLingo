@@ -64,29 +64,43 @@ class DeckSelectorScreen extends StatelessWidget {
               builder: (context, reviewState, child) {
                 final revealedCount = reviewState.getRevealedCount(deckTopic);
                 final totalCount = deck.cards.length;
+                final isComplete =
+                    totalCount > 0 && revealedCount >= totalCount;
 
                 return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => FlashcardScreen(
-                          baseLanguage: baseLanguage,
-                          targetLanguage: targetLanguage,
-                          flashcards: deck.cards,
-                          deckTopic: deckTopic,
-                        ),
-                      ),
-                    );
-                  },
+                  onTap: isComplete
+                      ? null
+                      : () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => FlashcardScreen(
+                                baseLanguage: baseLanguage,
+                                targetLanguage: targetLanguage,
+                                flashcards: deck.cards,
+                                deckTopic: deckTopic,
+                              ),
+                            ),
+                          );
+                        },
                   child: Card(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),
-                    elevation: 4,
-                    color: Colors.brown[50],
+                    elevation: isComplete ? 2 : 4,
+                    color: isComplete ? Colors.green[100] : Colors.brown[50],
                     child: Stack(
                       children: [
+                        if (isComplete)
+                          const Positioned(
+                            bottom: 8,
+                            left: 8,
+                            child: Icon(
+                              Icons.check_circle,
+                              size: 20,
+                              color: Colors.green,
+                            ),
+                          ),
                         Padding(
                           padding: const EdgeInsets.all(12.0),
                           child: Center(
