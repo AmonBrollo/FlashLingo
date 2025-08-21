@@ -78,26 +78,35 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
     await limiter.markStudied();
 
     setState(() {
-      final swipedCards = context.read<ReviewState>().remembered;
+      final reviewState = context.read<ReviewState>();
 
-      final dueFlashcards = repetitionService
-          .dueCards(flashcards)
-          .where((card) => !swipedCards.contains(card))
+      final swipedThisSession = <Flashcard>{
+        ...reviewState.remembered,
+        ...reviewState.forgotten,
+      };
+
+      final remainingCards = flashcards
+          .where((card) => !swipedThisSession.contains(card))
           .toList();
 
-      if (dueFlashcards.isNotEmpty) {
-        currentIndex = flashcards.indexOf(dueFlashcards.first);
-      } else {
-        final newCards = repetitionService
-            .dueCards(flashcards)
-            .where((card) => !swipedCards.contains(card))
-            .toList();
-        if (newCards.isNotEmpty) {
-          currentIndex = flashcards.indexOf(newCards.first);
+      if (remainingCards.isNotEmpty) {
+        final dueCards = repetitionService.dueCards(remainingCards);
+
+        if (dueCards.isNotEmpty) {
+          currentIndex = flashcards.indexOf(remainingCards.first);
         } else {
-          finishedDeck = true;
+          final newCards = repetitionService.newCards(remainingCards);
+
+          if (newCards.isNotEmpty) {
+            currentIndex = flashcards.indexOf(newCards.first);
+          } else {
+            currentIndex = flashcards.indexOf(remainingCards.first);
+          }
         }
+      } else {
+        finishedDeck = true;
       }
+
       isFlipped = false;
       _dragDx = 0.0;
     });
@@ -187,7 +196,9 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
                 context.read<ReviewState>().addCard(flashcards[currentIndex]);
                 _nextCard();
               } else if (_dragDx < -100) {
-                /// to do: add a ReviewState.addForgotten
+                context.read<ReviewState>().addForgottenCard(
+                  flashcards[currentIndex],
+                );
                 _nextCard();
               }
               setState(() {
@@ -244,8 +255,6 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
         },
         onForgotten: () {
           repetitionService.markForgotten(flashcards[currentIndex]);
-
-          /// to do: add a ReviewState.addForgotten
           _nextCard();
         },
       );
