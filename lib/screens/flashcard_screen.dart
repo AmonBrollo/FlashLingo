@@ -63,6 +63,16 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
   void initState() {
     super.initState();
     flashcards = widget.flashcards;
+    _checkInitialLimit();
+  }
+
+  Future<void> _checkInitialLimit() async {
+    final allowed = await limiter.canStudy();
+    if (!allowed) {
+      setState(() {
+        limitReached = true;
+      });
+    }
   }
 
   void _nextCard() async {
