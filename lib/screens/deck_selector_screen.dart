@@ -51,44 +51,75 @@ class DeckSelectorScreen extends StatelessWidget {
             crossAxisCount: 2,
             crossAxisSpacing: 12,
             mainAxisSpacing: 12,
-            childAspectRatio: 1.2,
+            childAspectRatio: 1.0,
           ),
           itemCount: decks.length,
           itemBuilder: (context, index) {
             final deck = decks[index];
-            return GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => FlashcardScreen(
-                      baseLanguage: baseLanguage,
-                      targetLanguage: targetLanguage,
-                      flashcards: deck.cards,
+            final deckTopic = baseLanguage == "portuguese"
+                ? deck.topicPortuguese
+                : deck.topicEnglish;
+
+            return Consumer<ReviewState>(
+              builder: (context, reviewState, child) {
+                final revealedCount = reviewState.getRevealedCount(deckTopic);
+                final totalCount = deck.cards.length;
+
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => FlashcardScreen(
+                          baseLanguage: baseLanguage,
+                          targetLanguage: targetLanguage,
+                          flashcards: deck.cards,
+                          deckTopic: deckTopic,
+                        ),
+                      ),
+                    );
+                  },
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    elevation: 4,
+                    color: Colors.brown[50],
+                    child: Stack(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Center(
+                            child: Text(
+                              deckTopic,
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.brown,
+                              ),
+                              textAlign: TextAlign.center,
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 8,
+                          right: 8,
+                          child: Text(
+                            '$revealedCount/$totalCount',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.brown[600],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 );
               },
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                elevation: 4,
-                color: Colors.brown[50],
-                child: Center(
-                  child: Text(
-                    baseLanguage == "portuguese"
-                        ? deck.topicPortuguese
-                        : deck.topicEnglish,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.brown,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
             );
           },
         ),

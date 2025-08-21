@@ -17,12 +17,14 @@ import '../widgets/flashcard_view.dart';
 class FlashcardScreen extends StatefulWidget {
   final String baseLanguage;
   final String targetLanguage;
+  final String deckTopic;
   final List<Flashcard> flashcards;
 
   const FlashcardScreen({
     super.key,
     required this.baseLanguage,
     required this.targetLanguage,
+    required this.deckTopic,
     required this.flashcards,
   });
 
@@ -128,6 +130,17 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
     }
   }
 
+  void _markCardRevealed() {
+    if (!isFlipped) {
+      final reviewState = context.read<ReviewState>();
+      final currentCard = flashcards[currentIndex];
+
+      if (!reviewState.isCardRevealed(widget.deckTopic, currentCard)) {
+        reviewState.markCardRevealed(widget.deckTopic, currentCard);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (flashcards.isEmpty) {
@@ -137,7 +150,36 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
     return Scaffold(
       backgroundColor: Colors.brown[50],
       appBar: AppBar(
-        title: const Text('Flashlango'),
+        title: Row(
+          children: [
+            const Text('Flashlango'),
+            const Spacer(),
+            Consumer<ReviewState>(
+              builder: (context, reviewState, child) {
+                final revealed = reviewState.getRevealedCount(widget.deckTopic);
+                final total = flashcards.length;
+                return Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.brown[100],
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    '$revealed/$total',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.brown,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
         backgroundColor: Colors.brown,
         actions: [
           IconButton(
@@ -208,6 +250,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
           },
           onTap: () {
             if (!limitReached && !finishedDeck) {
+              _markCardRevealed();
               setState(() {
                 isFlipped = !isFlipped;
               });
@@ -245,7 +288,10 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
         baseLanguage: widget.baseLanguage,
         targetLanguage: widget.targetLanguage,
         dragDx: _dragDx,
-        onFlip: () => setState(() => isFlipped = !isFlipped),
+        onFlip: () {
+          _markCardRevealed();
+          setState(() => isFlipped = !isFlipped);
+        },
         onAddImage: changeCurrentImage,
         onRemembered: () {
           final currentCard = flashcards[currentIndex];

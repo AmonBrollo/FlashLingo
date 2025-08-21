@@ -5,6 +5,8 @@ class ReviewState extends ChangeNotifier {
   final List<Flashcard> _remembered = [];
   final List<Flashcard> _forgotten = [];
 
+  final Map<String, Set<Flashcard>> _deckRevealedCards = {};
+
   List<Flashcard> get remembered => List.unmodifiable(_remembered);
   List<Flashcard> get forgotten => List.unmodifiable(_forgotten);
 
@@ -22,9 +24,29 @@ class ReviewState extends ChangeNotifier {
     }
   }
 
+  void markCardRevealed(String deckTopic, Flashcard card) {
+    _deckRevealedCards.putIfAbsent(deckTopic, () => <Flashcard>{});
+    _deckRevealedCards[deckTopic]!.add(card);
+    notifyListeners();
+  }
+
+  int getRevealedCount(String deckTopic) {
+    return _deckRevealedCards[deckTopic]?.length ?? 0;
+  }
+
+  bool isCardRevealed(String deckTopic, Flashcard card) {
+    return _deckRevealedCards[deckTopic]?.contains(card) ?? false;
+  }
+
+  void clearDeck(String deckTopic) {
+    _deckRevealedCards.remove(deckTopic);
+    notifyListeners();
+  }
+
   void clear() {
     _remembered.clear();
     _forgotten.clear();
+    _deckRevealedCards.clear();
     notifyListeners();
   }
 }
