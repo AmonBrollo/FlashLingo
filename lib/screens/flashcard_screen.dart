@@ -63,6 +63,9 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
   void initState() {
     super.initState();
     flashcards = widget.flashcards;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<ReviewState>().setCurrentDeck(widget.deckTopic);
+    });
     _checkInitialLimit();
   }
 
@@ -137,17 +140,6 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
           imagePath: pickedFile.path,
         );
       });
-    }
-  }
-
-  void _markCardRevealed() {
-    if (!isFlipped) {
-      final reviewState = context.read<ReviewState>();
-      final currentCard = flashcards[currentIndex];
-
-      if (!reviewState.isCardRevealed(widget.deckTopic, currentCard)) {
-        reviewState.markCardRevealed(widget.deckTopic, currentCard);
-      }
     }
   }
 
@@ -260,7 +252,6 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
           },
           onTap: () {
             if (!limitReached && !finishedDeck) {
-              _markCardRevealed();
               setState(() {
                 isFlipped = !isFlipped;
               });
@@ -299,7 +290,6 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
         targetLanguage: widget.targetLanguage,
         dragDx: _dragDx,
         onFlip: () {
-          _markCardRevealed();
           setState(() => isFlipped = !isFlipped);
         },
         onAddImage: changeCurrentImage,

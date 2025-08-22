@@ -7,12 +7,21 @@ class ReviewState extends ChangeNotifier {
 
   final Map<String, Set<Flashcard>> _deckRevealedCards = {};
 
+  String? _currentDeckTopic;
+
   List<Flashcard> get remembered => List.unmodifiable(_remembered);
   List<Flashcard> get forgotten => List.unmodifiable(_forgotten);
+
+  void setCurrentDeck(String deckTopic) {
+    _currentDeckTopic = deckTopic;
+  }
 
   void addCard(Flashcard card) {
     if (!_remembered.contains(card)) {
       _remembered.add(card);
+      if (_currentDeckTopic != null) {
+        markCardRevealed(_currentDeckTopic!, card);
+      }
       notifyListeners();
     }
   }
@@ -20,14 +29,21 @@ class ReviewState extends ChangeNotifier {
   void addForgottenCard(Flashcard card) {
     if (!_forgotten.contains(card)) {
       _forgotten.add(card);
+      if (_currentDeckTopic != null) {
+        markCardRevealed(_currentDeckTopic!, card);
+      }
       notifyListeners();
     }
   }
 
   void markCardRevealed(String deckTopic, Flashcard card) {
     _deckRevealedCards.putIfAbsent(deckTopic, () => <Flashcard>{});
+    final wasAlreadyRevealed = _deckRevealedCards[deckTopic]!.contains(card);
     _deckRevealedCards[deckTopic]!.add(card);
-    notifyListeners();
+
+    if (!wasAlreadyRevealed) {
+      notifyListeners();
+    }
   }
 
   int getRevealedCount(String deckTopic) {
@@ -47,6 +63,7 @@ class ReviewState extends ChangeNotifier {
     _remembered.clear();
     _forgotten.clear();
     _deckRevealedCards.clear();
+    _currentDeckTopic = null;
     notifyListeners();
   }
 }
