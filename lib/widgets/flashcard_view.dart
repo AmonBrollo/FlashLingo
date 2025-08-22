@@ -36,8 +36,8 @@ class FlashcardView extends StatelessWidget {
     final cardHeight = MediaQuery.of(context).size.height * 0.5;
 
     final statusText = progress.hasStarted
-        ? "Review - Level ${progress.box}"
-        : "New";
+        ? UiStrings.reviewStatusLevel(baseLanguage, progress.box)
+        : UiStrings.newCardStatus(baseLanguage);
 
     return Stack(
       alignment: Alignment.center,

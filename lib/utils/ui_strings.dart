@@ -62,4 +62,14 @@ class UiStrings {
         ? "Volte em ${hours}h ${minutes}m"
         : "Come back in ${hours}h ${minutes}m";
   }
+
+  static String reviewStatusLevel(String lang, int level) {
+    return lang == "portuguese"
+        ? "Revisão - Nível $level"
+        : "Review - Level $level";
+  }
+
+  static String newCardStatus(String lang) {
+    return lang == "portuguese" ? "Novo" : "New";
+  }
 }
