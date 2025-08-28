@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'flashcard_screen.dart';
 import 'review_screen.dart';
-import 'login_screen.dart';
+import 'profile_screen.dart';
 import '../models/flashcard_deck.dart';
 import '../services/review_state.dart';
 import '../utils/topic_names.dart';
@@ -53,10 +53,10 @@ class DeckSelectorScreen extends StatelessWidget {
           ),
         );
         break;
-      case 'login':
+      case 'profile':
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (_) => const LoginScreen()),
+          MaterialPageRoute(builder: (_) => const ProfileScreen()),
         );
         break;
     }
@@ -79,7 +79,7 @@ class DeckSelectorScreen extends StatelessWidget {
                 value: 'review',
                 child: Text('Review Results'),
               ),
-              const PopupMenuItem(value: 'login', child: Text('Login')),
+              const PopupMenuItem(value: 'profile', child: Text('Profile')),
             ],
           ),
         ],
