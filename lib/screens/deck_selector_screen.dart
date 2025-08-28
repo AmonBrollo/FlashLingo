@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'flashcard_screen.dart';
 import 'review_screen.dart';
+import 'login_screen.dart';
 import '../models/flashcard_deck.dart';
 import '../services/review_state.dart';
 import '../utils/topic_names.dart';
@@ -33,6 +34,34 @@ class DeckSelectorScreen extends StatelessWidget {
     );
   }
 
+  void _onMenuSelected(
+    BuildContext context,
+    String value,
+    ReviewState reviewState,
+  ) {
+    switch (value) {
+      case 'review':
+        final remembered = reviewState.remembered;
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => ReviewScreen(
+              cards: remembered,
+              baseLanguage: baseLanguage,
+              targetLanguage: targetLanguage,
+            ),
+          ),
+        );
+        break;
+      case 'login':
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const LoginScreen()),
+        );
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final reviewState = context.read<ReviewState>();
@@ -42,22 +71,16 @@ class DeckSelectorScreen extends StatelessWidget {
         title: Text(UiStrings.selectDeck(baseLanguage)),
         backgroundColor: Colors.brown,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.list),
-            tooltip: 'Review results',
-            onPressed: () {
-              final remembered = reviewState.remembered;
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => ReviewScreen(
-                    cards: remembered,
-                    baseLanguage: baseLanguage,
-                    targetLanguage: targetLanguage,
-                  ),
-                ),
-              );
-            },
+          PopupMenuButton<String>(
+            icon: const Icon(Icons.more_horiz),
+            onSelected: (value) => _onMenuSelected(context, value, reviewState),
+            itemBuilder: (context) => [
+              const PopupMenuItem(
+                value: 'review',
+                child: Text('Review Results'),
+              ),
+              const PopupMenuItem(value: 'login', child: Text('Login')),
+            ],
           ),
         ],
       ),

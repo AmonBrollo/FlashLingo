@@ -13,6 +13,7 @@ import '../widgets/finished_deck_card.dart';
 import '../widgets/limit_reached_card.dart';
 import 'add_flashcard_screen.dart';
 import 'review_screen.dart';
+import 'app_router.dart';
 
 class FlashcardScreen extends StatefulWidget {
   final String baseLanguage;
@@ -99,6 +100,30 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
     });
   }
 
+  void _onMenuSelected(String value) async {
+    switch (value) {
+      case 'review':
+        final remembered = context.read<ReviewState>().remembered;
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => ReviewScreen(
+              cards: remembered,
+              baseLanguage: widget.baseLanguage,
+              targetLanguage: widget.targetLanguage,
+            ),
+          ),
+        );
+        break;
+      case 'login':
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const AppRouter()),
+        );
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_flashcards.isEmpty) {
@@ -146,22 +171,13 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
         ),
         backgroundColor: Colors.brown,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.list),
-            tooltip: 'Review results',
-            onPressed: () {
-              final remembered = context.read<ReviewState>().remembered;
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => ReviewScreen(
-                    cards: remembered,
-                    baseLanguage: widget.baseLanguage,
-                    targetLanguage: widget.targetLanguage,
-                  ),
-                ),
-              );
-            },
+          PopupMenuButton<String>(
+            icon: const Icon(Icons.more_horiz),
+            onSelected: _onMenuSelected,
+            itemBuilder: (context) => [
+              const PopupMenuItem(value: 'review', child: Text('Review')),
+              const PopupMenuItem(value: 'login', child: Text('Login')),
+            ],
           ),
         ],
       ),
