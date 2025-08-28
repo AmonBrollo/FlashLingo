@@ -38,6 +38,30 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  Future<void> _resetPassword() async {
+    final email = _emailController.text.trim();
+
+    if (email.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Please enter your email first")),
+      );
+      return;
+    }
+
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Password reset email sent")),
+      );
+    } on FirebaseAuthException catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.message ?? "Error sending reset email")),
+      );
+    }
+  }
+
   Future<void> _skipLogin() async {
     try {
       await FirebaseAuth.instance.signInAnonymously();
@@ -134,6 +158,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                 const SizedBox(height: 12),
 
+                // Reset Password
+                TextButton(
+                  onPressed: _resetPassword,
+                  child: const Text("Forgot password?"),
+                ),
                 // Register link
                 TextButton(
                   onPressed: () {
