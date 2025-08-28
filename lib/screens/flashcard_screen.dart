@@ -1,30 +1,30 @@
-import 'dart:convert';
-import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
+import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
-import 'review_screen.dart';
-import 'add_flashcard_screen.dart';
+
 import '../models/flashcard.dart';
 import '../services/repetition_service.dart';
 import '../services/review_state.dart';
 import '../utils/ui_strings.dart';
+import '../utils/topic_names.dart';
 import '../utils/usage_limiter.dart';
-import '../widgets/limit_reached_card.dart';
-import '../widgets/finished_deck_card.dart';
 import '../widgets/flashcard_view.dart';
+import '../widgets/finished_deck_card.dart';
+import '../widgets/limit_reached_card.dart';
+import 'add_flashcard_screen.dart';
+import 'review_screen.dart';
 
 class FlashcardScreen extends StatefulWidget {
   final String baseLanguage;
   final String targetLanguage;
-  final String deckTopic;
+  final String topicKey; // changed from deckTopic
   final List<Flashcard> flashcards;
 
   const FlashcardScreen({
     super.key,
     required this.baseLanguage,
     required this.targetLanguage,
-    required this.deckTopic,
+    required this.topicKey,
     required this.flashcards,
   });
 
@@ -33,121 +33,83 @@ class FlashcardScreen extends StatefulWidget {
 }
 
 class _FlashcardScreenState extends State<FlashcardScreen> {
-  bool isFlipped = false;
-  bool finishedDeck = false;
-  bool limitReached = false;
-  int currentIndex = 0;
-  double _dragDx = 0.0;
-  List<Flashcard> flashcards = [];
+  late final List<Flashcard> _flashcards;
+  int _currentIndex = 0;
+  bool _isFlipped = false;
+  bool _limitReached = false;
 
-  final UsageLimiter limiter = UsageLimiter();
-  final RepetitionService repetitionService = RepetitionService();
-
-  Future<void> loadFlashcards() async {
-    final String jsonString = await rootBundle.loadString(
-      'assets/data/flashcards.json',
-    );
-
-    final List<dynamic> jsonData = json.decode(jsonString);
-
-    setState(() {
-      flashcards = jsonData.map((item) => Flashcard.fromJson(item)).toList();
-
-      for (final card in flashcards) {
-        repetitionService.getProgress(card);
-      }
-    });
-  }
+  final RepetitionService _repetitionService = RepetitionService();
+  final UsageLimiter _limiter = UsageLimiter();
 
   @override
   void initState() {
     super.initState();
-    flashcards = widget.flashcards;
+    _flashcards = widget.flashcards;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<ReviewState>().setCurrentDeck(widget.deckTopic);
+      final displayName = TopicNames.getName(
+        widget.topicKey,
+        widget.baseLanguage,
+      );
+      context.read<ReviewState>().setCurrentDeck(displayName);
+      _checkLimit();
     });
-    _checkInitialLimit();
   }
 
-  Future<void> _checkInitialLimit() async {
-    final allowed = await limiter.canStudy();
-    if (!allowed) {
-      setState(() {
-        limitReached = true;
-      });
-    }
+  Future<void> _checkLimit() async {
+    final allowed = await _limiter.canStudy();
+    if (!allowed) setState(() => _limitReached = true);
   }
 
-  void _nextCard() async {
-    final allowed = await limiter.canStudy();
-
+  void _nextCard({bool remembered = true}) async {
+    final reviewState = context.read<ReviewState>();
+    final allowed = await _limiter.canStudy();
     if (!allowed) {
-      setState(() {
-        limitReached = true;
-        isFlipped = false;
-        _dragDx = 0.0;
-      });
+      setState(() => _limitReached = true);
       return;
     }
 
-    await limiter.markStudied();
+    await _limiter.markStudied();
+    final currentCard = _flashcards[_currentIndex];
+
+    if (remembered) {
+      _repetitionService.markRemembered(currentCard);
+      reviewState.addCard(currentCard);
+    } else {
+      _repetitionService.markForgotten(currentCard);
+    }
 
     setState(() {
-      final reviewState = context.read<ReviewState>();
-
-      final swipedThisSession = <Flashcard>{
-        ...reviewState.remembered,
-        ...reviewState.forgotten,
-      };
-
-      final remainingCards = flashcards
-          .where((card) => !swipedThisSession.contains(card))
-          .toList();
-
-      if (remainingCards.isNotEmpty) {
-        final dueCards = repetitionService.dueCards(remainingCards);
-
-        if (dueCards.isNotEmpty) {
-          currentIndex = flashcards.indexOf(remainingCards.first);
-        } else {
-          final newCards = repetitionService.newCards(remainingCards);
-
-          if (newCards.isNotEmpty) {
-            currentIndex = flashcards.indexOf(newCards.first);
-          } else {
-            currentIndex = flashcards.indexOf(remainingCards.first);
-          }
-        }
-      } else {
-        finishedDeck = true;
-      }
-
-      isFlipped = false;
-      _dragDx = 0.0;
+      _isFlipped = false;
+      if (_currentIndex < _flashcards.length - 1) _currentIndex++;
     });
   }
 
-  Future<void> changeCurrentImage() async {
+  Future<void> _changeCurrentImage() async {
     final pickedFile = await ImagePicker().pickImage(
       source: ImageSource.gallery,
     );
+    if (pickedFile == null) return;
 
-    if (pickedFile != null) {
-      setState(() {
-        final current = flashcards[currentIndex];
-        flashcards[currentIndex] = Flashcard(
-          translations: Map<String, String>.from(current.translations),
-          imagePath: pickedFile.path,
-        );
-      });
-    }
+    setState(() {
+      final current = _flashcards[_currentIndex];
+      _flashcards[_currentIndex] = Flashcard(
+        translations: Map<String, String>.from(current.translations),
+        imagePath: pickedFile.path,
+      );
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    if (flashcards.isEmpty) {
+    if (_flashcards.isEmpty) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
+
+    final finishedDeck = _currentIndex >= _flashcards.length;
+    final displayName = TopicNames.getName(
+      widget.topicKey,
+      widget.baseLanguage,
+    );
 
     return Scaffold(
       backgroundColor: Colors.brown[50],
@@ -158,8 +120,8 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
             const Spacer(),
             Consumer<ReviewState>(
               builder: (context, reviewState, child) {
-                final revealed = reviewState.getRevealedCount(widget.deckTopic);
-                final total = flashcards.length;
+                final revealed = reviewState.getRevealedCount(displayName);
+                final total = _flashcards.length;
                 return Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 8,
@@ -204,73 +166,37 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.brown,
         onPressed: () async {
           await Navigator.push(
             context,
             MaterialPageRoute(
               builder: (_) => AddFlashcardScreen(
-                onAdd: (newCard) {
-                  setState(() {
-                    flashcards.add(newCard);
-                    currentIndex = flashcards.length - 1;
-                    isFlipped = false;
-                  });
-                },
                 baseLanguage: widget.baseLanguage,
                 targetLanguage: widget.targetLanguage,
+                onAdd: (newCard) {
+                  setState(() {
+                    _flashcards.add(newCard);
+                    _currentIndex = _flashcards.length - 1;
+                    _isFlipped = false;
+                  });
+                },
               ),
             ),
           );
         },
-        backgroundColor: Colors.brown,
         child: const Icon(Icons.add),
       ),
-      body: Center(
-        child: GestureDetector(
-          onPanUpdate: (details) {
-            if (!limitReached && !finishedDeck) {
-              setState(() {
-                _dragDx += details.delta.dx;
-              });
-            }
-          },
-          onPanEnd: (details) {
-            if (!limitReached && !finishedDeck) {
-              if (_dragDx > 100) {
-                context.read<ReviewState>().addCard(flashcards[currentIndex]);
-                _nextCard();
-              } else if (_dragDx < -100) {
-                context.read<ReviewState>().addForgottenCard(
-                  flashcards[currentIndex],
-                );
-                _nextCard();
-              }
-              setState(() {
-                _dragDx = 0.0;
-              });
-            }
-          },
-          onTap: () {
-            if (!limitReached && !finishedDeck) {
-              setState(() {
-                isFlipped = !isFlipped;
-              });
-            }
-          },
-          child: _buildCardContent(),
-        ),
-      ),
+      body: Center(child: _buildCardContent(finishedDeck)),
     );
   }
 
-  Widget _buildCardContent() {
-    if (limitReached) {
+  Widget _buildCardContent(bool finishedDeck) {
+    if (_limitReached) {
       return FutureBuilder<Duration>(
-        future: limiter.timeUntilReset(),
+        future: _limiter.timeUntilReset(),
         builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return const CircularProgressIndicator();
-          }
+          if (!snapshot.hasData) return const CircularProgressIndicator();
           return LimitReachedCard(
             timeRemaining: snapshot.data!,
             baseLanguage: widget.baseLanguage,
@@ -282,27 +208,18 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
         message: UiStrings.finishedDeckText(widget.baseLanguage),
       );
     } else {
+      final currentCard = _flashcards[_currentIndex];
       return FlashcardView(
-        flashcard: flashcards[currentIndex],
-        progress: repetitionService.getProgress(flashcards[currentIndex]),
-        isFlipped: isFlipped,
+        flashcard: currentCard,
+        progress: _repetitionService.getProgress(currentCard),
+        isFlipped: _isFlipped,
         baseLanguage: widget.baseLanguage,
         targetLanguage: widget.targetLanguage,
-        dragDx: _dragDx,
-        onFlip: () {
-          setState(() => isFlipped = !isFlipped);
-        },
-        onAddImage: changeCurrentImage,
-        onRemembered: () {
-          final currentCard = flashcards[currentIndex];
-          repetitionService.markRemembered(currentCard);
-          context.read<ReviewState>().addCard(currentCard);
-          _nextCard();
-        },
-        onForgotten: () {
-          repetitionService.markForgotten(flashcards[currentIndex]);
-          _nextCard();
-        },
+        dragDx: 0.0,
+        onFlip: () => setState(() => _isFlipped = !_isFlipped),
+        onAddImage: _changeCurrentImage,
+        onRemembered: () => _nextCard(remembered: true),
+        onForgotten: () => _nextCard(remembered: false),
       );
     }
   }

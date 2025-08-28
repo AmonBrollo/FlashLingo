@@ -1,4 +1,5 @@
 class TopicNames {
+  // Map of topics → language → display name
   static final Map<String, Map<String, String>> names = {
     "adjectives": {"english": "Adjectives", "portuguese": "Adjetivos"},
     "animals": {"english": "Animals", "portuguese": "Animais"},
@@ -26,7 +27,15 @@ class TopicNames {
     "transportation": {"english": "Transportation", "portuguese": "Transporte"},
     "verbs": {"english": "Verbs", "portuguese": "Verbos"},
   };
-}
 
-// adjectives, animals, art, beverages, body, clothing, colors, days, directions, electronics, food, home, jobs, locations, materials, math,
-// miscellaneous, months, nature, numbers,people, prenouns, seasons, society, time, transportation.
+  // Optional: list of all topic keys
+  static List<String> get allTopics => names.keys.toList();
+
+  /// Returns the topic display name in the given language.
+  /// Falls back to English if the requested language is missing.
+  static String getName(String topicKey, String language) {
+    final topicMap = names[topicKey];
+    if (topicMap == null) return topicKey; // fallback if topicKey unknown
+    return topicMap[language] ?? topicMap['english'] ?? topicKey;
+  }
+}

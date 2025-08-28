@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../screens/target_language_selector_screen.dart';
+import 'target_language_selector_screen.dart';
 import '../widgets/language_option_button.dart';
 
 class BaseLanguageSelectorScreen extends StatelessWidget {
@@ -38,7 +38,6 @@ class BaseLanguageSelectorScreen extends StatelessWidget {
             emoji: "🇬🇧",
             onTap: () => _selectBaseLanguage(context, "english"),
           ),
-          // Add more base languages here
         ],
       ),
     );

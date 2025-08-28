@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'screens/auth_gate.dart';
-import '/services/review_state.dart';
+import 'services/review_state.dart';
 import 'firebase_options.dart';
+import 'screens/auth_gate.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,9 +25,9 @@ class FlashLango extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'FlashLango',
-      home: const AuthGate(),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.brown, fontFamily: 'Roboto'),
+      home: const AuthGate(),
     );
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'login_screen.dart';
-import 'base_language_selector_screen.dart';
+import 'app_router.dart';
 
 class AuthGate extends StatelessWidget {
   const AuthGate({super.key});
@@ -14,9 +14,13 @@ class AuthGate extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         }
+
+        // If user is logged in → go to AppRouter
         if (snapshot.hasData) {
-          return const BaseLanguageSelectorScreen();
+          return const AppRouter();
         }
+
+        // If user is not logged in → show LoginScreen
         return const LoginScreen();
       },
     );

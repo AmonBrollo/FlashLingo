@@ -1,38 +1,34 @@
 import 'package:flutter/material.dart';
 import 'deck_selector_screen.dart';
 import '../services/deck_loader.dart';
-import '../utils/ui_strings.dart';
 import '../widgets/language_option_button.dart';
+import '../utils/ui_strings.dart';
 
-class TargetLanguageSelectorScreen extends StatefulWidget {
+class TargetLanguageSelectorScreen extends StatelessWidget {
   final String baseLanguage;
   const TargetLanguageSelectorScreen({super.key, required this.baseLanguage});
 
-  @override
-  State<TargetLanguageSelectorScreen> createState() =>
-      _TargetLanguageSelectorScreenState();
-}
-
-class _TargetLanguageSelectorScreenState
-    extends State<TargetLanguageSelectorScreen> {
-  void _selectTargetLanguage(String targetLanguage) async {
+  void _selectTargetLanguage(
+    BuildContext context,
+    String targetLanguage,
+  ) async {
     try {
       final decks = await DeckLoader.loadDecks();
 
-      if (!mounted) return;
+      if (!context.mounted) return;
 
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (_) => DeckSelectorScreen(
-            baseLanguage: widget.baseLanguage,
+            baseLanguage: baseLanguage,
             targetLanguage: targetLanguage,
             decks: decks,
           ),
         ),
       );
     } catch (e) {
-      if (!mounted) return;
+      if (!context.mounted) return;
 
       ScaffoldMessenger.of(
         context,
@@ -45,7 +41,7 @@ class _TargetLanguageSelectorScreenState
     return Scaffold(
       backgroundColor: Colors.brown[50],
       appBar: AppBar(
-        title: Text(UiStrings.selectTargetLanguage(widget.baseLanguage)),
+        title: Text(UiStrings.selectTargetLanguage(baseLanguage)),
         backgroundColor: Colors.brown,
       ),
       body: Center(
@@ -56,7 +52,7 @@ class _TargetLanguageSelectorScreenState
               text: "Magyar",
               color: Colors.red.shade700,
               emoji: "🇭🇺",
-              onTap: () => _selectTargetLanguage("hungarian"),
+              onTap: () => _selectTargetLanguage(context, "hungarian"),
             ),
             // Add more target languages here
           ],
