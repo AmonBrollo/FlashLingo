@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../models/flashcard.dart';
 import '../services/repetition_service.dart';
@@ -13,7 +14,8 @@ import '../widgets/finished_deck_card.dart';
 import '../widgets/limit_reached_card.dart';
 import 'add_flashcard_screen.dart';
 import 'review_screen.dart';
-import 'app_router.dart';
+import 'profile_screen.dart';
+import 'login_screen.dart';
 
 class FlashcardScreen extends StatefulWidget {
   final String baseLanguage;
@@ -118,7 +120,13 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
       case 'login':
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (_) => const AppRouter()),
+          MaterialPageRoute(builder: (_) => const LoginScreen()),
+        );
+        break;
+      case 'profile':
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const ProfileScreen()),
         );
         break;
     }
@@ -135,6 +143,9 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
       widget.topicKey,
       widget.baseLanguage,
     );
+
+    final user = FirebaseAuth.instance.currentUser;
+    final isAnonymous = user?.isAnonymous ?? true;
 
     return Scaffold(
       backgroundColor: Colors.brown[50],
@@ -176,7 +187,10 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
             onSelected: _onMenuSelected,
             itemBuilder: (context) => [
               const PopupMenuItem(value: 'review', child: Text('Review')),
-              const PopupMenuItem(value: 'login', child: Text('Login')),
+              if (isAnonymous)
+                const PopupMenuItem(value: 'login', child: Text('Login'))
+              else
+                const PopupMenuItem(value: 'profile', child: Text('Profile')),
             ],
           ),
         ],

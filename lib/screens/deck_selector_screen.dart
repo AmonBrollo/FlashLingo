@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'flashcard_screen.dart';
-import 'review_screen.dart';
-import 'profile_screen.dart';
 import '../models/flashcard_deck.dart';
 import '../services/review_state.dart';
 import '../utils/topic_names.dart';
@@ -27,39 +25,11 @@ class DeckSelectorScreen extends StatelessWidget {
         builder: (_) => FlashcardScreen(
           baseLanguage: baseLanguage,
           targetLanguage: targetLanguage,
-          topicKey: deck.topicKey, // keep deckKey for internal tracking
+          topicKey: deck.topicKey,
           flashcards: deck.cards,
         ),
       ),
     );
-  }
-
-  void _onMenuSelected(
-    BuildContext context,
-    String value,
-    ReviewState reviewState,
-  ) {
-    switch (value) {
-      case 'review':
-        final remembered = reviewState.remembered;
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => ReviewScreen(
-              cards: remembered,
-              baseLanguage: baseLanguage,
-              targetLanguage: targetLanguage,
-            ),
-          ),
-        );
-        break;
-      case 'profile':
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => const ProfileScreen()),
-        );
-        break;
-    }
   }
 
   @override
@@ -70,19 +40,6 @@ class DeckSelectorScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(UiStrings.selectDeck(baseLanguage)),
         backgroundColor: Colors.brown,
-        actions: [
-          PopupMenuButton<String>(
-            icon: const Icon(Icons.more_horiz),
-            onSelected: (value) => _onMenuSelected(context, value, reviewState),
-            itemBuilder: (context) => [
-              const PopupMenuItem(
-                value: 'review',
-                child: Text('Review Results'),
-              ),
-              const PopupMenuItem(value: 'profile', child: Text('Profile')),
-            ],
-          ),
-        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(12.0),
