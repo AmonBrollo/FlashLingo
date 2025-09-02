@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../models/flashcard.dart';
@@ -20,7 +22,7 @@ import 'login_screen.dart';
 class FlashcardScreen extends StatefulWidget {
   final String baseLanguage;
   final String targetLanguage;
-  final String topicKey; // changed from deckTopic
+  final String topicKey;
   final List<Flashcard> flashcards;
 
   const FlashcardScreen({
@@ -36,13 +38,29 @@ class FlashcardScreen extends StatefulWidget {
 }
 
 class _FlashcardScreenState extends State<FlashcardScreen> {
-  late final List<Flashcard> _flashcards;
-  int _currentIndex = 0;
   bool _isFlipped = false;
+  bool _finishedDeck = false;
   bool _limitReached = false;
+  int _currentIndex = 0;
+  double _dragDx = 0.0;
+  late List<Flashcard> _flashcards;
 
-  final RepetitionService _repetitionService = RepetitionService();
   final UsageLimiter _limiter = UsageLimiter();
+  final RepetitionService _repetitionService = RepetitionService();
+
+  Future<void> loadFlashcardsFromAssets() async {
+    final String jsonString = await rootBundle.loadString(
+      'assets/data/flashcards.json',
+    );
+    final List<dynamic> jsonData = json.decode(jsonString);
+
+    setState(() {
+      _flashcards = jsonData.map((item) => Flashcard.fromJson(item)).toList();
+      for (final card in _flashcards) {
+        _repetitionService.getProgress(card);
+      }
+    });
+  }
 
   @override
   void initState() {
@@ -54,36 +72,65 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
         widget.baseLanguage,
       );
       context.read<ReviewState>().setCurrentDeck(displayName);
-      _checkLimit();
     });
+    _checkInitialLimit();
   }
 
-  Future<void> _checkLimit() async {
-    final allowed = await _limiter.canStudy();
-    if (!allowed) setState(() => _limitReached = true);
-  }
-
-  void _nextCard({bool remembered = true}) async {
-    final reviewState = context.read<ReviewState>();
+  Future<void> _checkInitialLimit() async {
     final allowed = await _limiter.canStudy();
     if (!allowed) {
-      setState(() => _limitReached = true);
+      setState(() {
+        _limitReached = true;
+      });
+    }
+  }
+
+  void _nextCard() async {
+    final allowed = await _limiter.canStudy();
+
+    if (!allowed) {
+      setState(() {
+        _limitReached = true;
+        _isFlipped = false;
+        _dragDx = 0.0;
+      });
       return;
     }
 
     await _limiter.markStudied();
-    final currentCard = _flashcards[_currentIndex];
-
-    if (remembered) {
-      _repetitionService.markRemembered(currentCard);
-      reviewState.addCard(currentCard);
-    } else {
-      _repetitionService.markForgotten(currentCard);
-    }
 
     setState(() {
+      final reviewState = context.read<ReviewState>();
+
+      final swipedThisSession = <Flashcard>{
+        ...reviewState.remembered,
+        ...reviewState.forgotten,
+      };
+
+      final remainingCards = _flashcards
+          .where((card) => !swipedThisSession.contains(card))
+          .toList();
+
+      if (remainingCards.isNotEmpty) {
+        final dueCards = _repetitionService.dueCards(remainingCards);
+
+        if (dueCards.isNotEmpty) {
+          _currentIndex = _flashcards.indexOf(remainingCards.first);
+        } else {
+          final newCards = _repetitionService.newCards(remainingCards);
+
+          if (newCards.isNotEmpty) {
+            _currentIndex = _flashcards.indexOf(newCards.first);
+          } else {
+            _currentIndex = _flashcards.indexOf(remainingCards.first);
+          }
+        }
+      } else {
+        _finishedDeck = true;
+      }
+
       _isFlipped = false;
-      if (_currentIndex < _flashcards.length - 1) _currentIndex++;
+      _dragDx = 0.0;
     });
   }
 
@@ -91,15 +138,16 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
     final pickedFile = await ImagePicker().pickImage(
       source: ImageSource.gallery,
     );
-    if (pickedFile == null) return;
 
-    setState(() {
-      final current = _flashcards[_currentIndex];
-      _flashcards[_currentIndex] = Flashcard(
-        translations: Map<String, String>.from(current.translations),
-        imagePath: pickedFile.path,
-      );
-    });
+    if (pickedFile != null) {
+      setState(() {
+        final current = _flashcards[_currentIndex];
+        _flashcards[_currentIndex] = Flashcard(
+          translations: Map<String, String>.from(current.translations),
+          imagePath: pickedFile.path,
+        );
+      });
+    }
   }
 
   void _onMenuSelected(String value) async {
@@ -138,7 +186,6 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
-    final finishedDeck = _currentIndex >= _flashcards.length;
     final displayName = TopicNames.getName(
       widget.topicKey,
       widget.baseLanguage,
@@ -196,14 +243,11 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.brown,
         onPressed: () async {
           await Navigator.push(
             context,
             MaterialPageRoute(
               builder: (_) => AddFlashcardScreen(
-                baseLanguage: widget.baseLanguage,
-                targetLanguage: widget.targetLanguage,
                 onAdd: (newCard) {
                   setState(() {
                     _flashcards.add(newCard);
@@ -211,45 +255,97 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
                     _isFlipped = false;
                   });
                 },
+                baseLanguage: widget.baseLanguage,
+                targetLanguage: widget.targetLanguage,
               ),
             ),
           );
         },
+        backgroundColor: Colors.brown,
         child: const Icon(Icons.add),
       ),
-      body: Center(child: _buildCardContent(finishedDeck)),
+      body: Center(
+        child: GestureDetector(
+          onPanUpdate: (details) {
+            if (!_limitReached && !_finishedDeck) {
+              setState(() {
+                _dragDx += details.delta.dx;
+              });
+            }
+          },
+          onPanEnd: (details) {
+            if (!_limitReached && !_finishedDeck) {
+              if (_dragDx > 100) {
+                final currentCard = _flashcards[_currentIndex];
+                _repetitionService.markRemembered(currentCard);
+                context.read<ReviewState>().addCard(currentCard);
+                _nextCard();
+              } else if (_dragDx < -100) {
+                final currentCard = _flashcards[_currentIndex];
+                _repetitionService.markForgotten(currentCard);
+                context.read<ReviewState>().addForgottenCard(currentCard);
+                _nextCard();
+              }
+              setState(() {
+                _dragDx = 0.0;
+              });
+            }
+          },
+          onTap: () {
+            if (!_limitReached && !_finishedDeck) {
+              setState(() {
+                _isFlipped = !_isFlipped;
+              });
+            }
+          },
+          child: _buildCardContent(displayName),
+        ),
+      ),
     );
   }
 
-  Widget _buildCardContent(bool finishedDeck) {
+  Widget _buildCardContent(String displayName) {
     if (_limitReached) {
       return FutureBuilder<Duration>(
         future: _limiter.timeUntilReset(),
         builder: (context, snapshot) {
-          if (!snapshot.hasData) return const CircularProgressIndicator();
+          if (!snapshot.hasData) {
+            return const CircularProgressIndicator();
+          }
           return LimitReachedCard(
             timeRemaining: snapshot.data!,
             baseLanguage: widget.baseLanguage,
           );
         },
       );
-    } else if (finishedDeck) {
+    } else if (_finishedDeck) {
       return FinishedDeckCard(
         message: UiStrings.finishedDeckText(widget.baseLanguage),
       );
     } else {
-      final currentCard = _flashcards[_currentIndex];
       return FlashcardView(
-        flashcard: currentCard,
-        progress: _repetitionService.getProgress(currentCard),
+        flashcard: _flashcards[_currentIndex],
+        progress: _repetitionService.getProgress(_flashcards[_currentIndex]),
         isFlipped: _isFlipped,
         baseLanguage: widget.baseLanguage,
         targetLanguage: widget.targetLanguage,
-        dragDx: 0.0,
-        onFlip: () => setState(() => _isFlipped = !_isFlipped),
+        dragDx: _dragDx,
+        onFlip: () {
+          setState(() => _isFlipped = !_isFlipped);
+        },
         onAddImage: _changeCurrentImage,
-        onRemembered: () => _nextCard(remembered: true),
-        onForgotten: () => _nextCard(remembered: false),
+        onRemembered: () {
+          final currentCard = _flashcards[_currentIndex];
+          _repetitionService.markRemembered(currentCard);
+          context.read<ReviewState>().addCard(currentCard);
+          _nextCard();
+        },
+        onForgotten: () {
+          final currentCard = _flashcards[_currentIndex];
+          _repetitionService.markForgotten(currentCard);
+          context.read<ReviewState>().addForgottenCard(currentCard);
+          _nextCard();
+        },
       );
     }
   }
