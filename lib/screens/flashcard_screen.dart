@@ -67,11 +67,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
     super.initState();
     _flashcards = widget.flashcards;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final displayName = TopicNames.getName(
-        widget.topicKey,
-        widget.baseLanguage,
-      );
-      context.read<ReviewState>().setCurrentDeck(displayName);
+      context.read<ReviewState>().setCurrentDeck(widget.topicKey);
     });
     _checkInitialLimit();
   }
@@ -203,7 +199,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
             const Spacer(),
             Consumer<ReviewState>(
               builder: (context, reviewState, child) {
-                final revealed = reviewState.getRevealedCount(displayName);
+                final revealed = reviewState.getRevealedCount(widget.topicKey);
                 final total = _flashcards.length;
                 return Container(
                   padding: const EdgeInsets.symmetric(

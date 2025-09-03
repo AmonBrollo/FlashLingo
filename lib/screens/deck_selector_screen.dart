@@ -34,7 +34,7 @@ class DeckSelectorScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final reviewState = context.read<ReviewState>();
+    final reviewState = context.watch<ReviewState>();
 
     return Scaffold(
       appBar: AppBar(
@@ -54,7 +54,7 @@ class DeckSelectorScreen extends StatelessWidget {
           itemBuilder: (context, index) {
             final deck = decks[index];
             final deckName = TopicNames.getName(deck.topicKey, baseLanguage);
-            final revealedCount = reviewState.getRevealedCount(deckName);
+            final revealedCount = reviewState.getRevealedCount(deck.topicKey);
             final totalCount = deck.cards.length;
             final isComplete = totalCount > 0 && revealedCount >= totalCount;
 
