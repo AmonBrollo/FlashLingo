@@ -19,7 +19,7 @@ class DeckSelectorScreen extends StatelessWidget {
   });
 
   void _openFlashcards(BuildContext context, FlashcardDeck deck) {
-    Navigator.pushReplacement(
+    Navigator.push(
       context,
       MaterialPageRoute(
         builder: (_) => FlashcardScreen(

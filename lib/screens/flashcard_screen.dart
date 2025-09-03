@@ -323,29 +323,60 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
         message: UiStrings.finishedDeckText(widget.baseLanguage),
       );
     } else {
-      return FlashcardView(
-        flashcard: _flashcards[_currentIndex],
-        progress: _repetitionService.getProgress(_flashcards[_currentIndex]),
-        isFlipped: _isFlipped,
-        baseLanguage: widget.baseLanguage,
-        targetLanguage: widget.targetLanguage,
-        dragDx: _dragDx,
-        onFlip: () {
-          setState(() => _isFlipped = !_isFlipped);
+      final currentCard = _flashcards[_currentIndex];
+      return GestureDetector(
+        onPanUpdate: (details) {
+          if (!_limitReached && !_finishedDeck) {
+            setState(() {
+              _dragDx += details.delta.dx;
+            });
+          }
         },
-        onAddImage: _changeCurrentImage,
-        onRemembered: () {
-          final currentCard = _flashcards[_currentIndex];
-          _repetitionService.markRemembered(currentCard);
-          context.read<ReviewState>().addCard(currentCard);
-          _nextCard();
+        onPanEnd: (details) {
+          if (!_limitReached && !_finishedDeck) {
+            if (_dragDx > 100) {
+              _repetitionService.markRemembered(currentCard);
+              context.read<ReviewState>().addCard(currentCard);
+              _nextCard();
+            } else if (_dragDx < -100) {
+              _repetitionService.markForgotten(currentCard);
+              context.read<ReviewState>().addForgottenCard(currentCard);
+              _nextCard();
+            }
+            setState(() {
+              _dragDx = 0.0;
+            });
+          }
         },
-        onForgotten: () {
-          final currentCard = _flashcards[_currentIndex];
-          _repetitionService.markForgotten(currentCard);
-          context.read<ReviewState>().addForgottenCard(currentCard);
-          _nextCard();
+        onTap: () {
+          if (!_limitReached && !_finishedDeck) {
+            setState(() {
+              _isFlipped = !_isFlipped;
+            });
+          }
         },
+        child: FlashcardView(
+          flashcard: currentCard,
+          progress: _repetitionService.getProgress(currentCard),
+          isFlipped: _isFlipped,
+          baseLanguage: widget.baseLanguage,
+          targetLanguage: widget.targetLanguage,
+          dragDx: _dragDx,
+          onFlip: () {
+            setState(() => _isFlipped = !_isFlipped);
+          },
+          onAddImage: _changeCurrentImage,
+          onRemembered: () {
+            _repetitionService.markRemembered(currentCard);
+            context.read<ReviewState>().addCard(currentCard);
+            _nextCard();
+          },
+          onForgotten: () {
+            _repetitionService.markForgotten(currentCard);
+            context.read<ReviewState>().addForgottenCard(currentCard);
+            _nextCard();
+          },
+        ),
       );
     }
   }
