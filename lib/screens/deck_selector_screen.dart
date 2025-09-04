@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'flashcard_screen.dart';
 import '../models/flashcard_deck.dart';
+import '../models/flashcard.dart';
 import '../services/review_state.dart';
 import '../utils/topic_names.dart';
 import '../utils/ui_strings.dart';
@@ -32,6 +33,25 @@ class DeckSelectorScreen extends StatelessWidget {
     );
   }
 
+  void _openForgottenCards(
+    BuildContext context,
+    List<Flashcard> forgottenCards,
+  ) {
+    if (forgottenCards.isEmpty) return;
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => FlashcardScreen(
+          baseLanguage: baseLanguage,
+          targetLanguage: targetLanguage,
+          topicKey: 'forgotten',
+          flashcards: forgottenCards,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final reviewState = context.watch<ReviewState>();
@@ -50,8 +70,57 @@ class DeckSelectorScreen extends StatelessWidget {
             mainAxisSpacing: 12,
             childAspectRatio: 1.0,
           ),
-          itemCount: decks.length,
+          itemCount: decks.length + 1,
           itemBuilder: (context, index) {
+            if (index == 0) {
+              final List<Flashcard> forgottenCards = reviewState.forgotten;
+
+              return GestureDetector(
+                onTap: forgottenCards.isEmpty
+                    ? null
+                    : () => _openForgottenCards(context, forgottenCards),
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  elevation: forgottenCards.isEmpty ? 1 : 4,
+                  color: Colors.red[50],
+                  child: Stack(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Center(
+                          child: Text(
+                            'Forgotten Cards',
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red,
+                            ),
+                            textAlign: TextAlign.center,
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 8,
+                        right: 8,
+                        child: Text(
+                          '${forgottenCards.length}',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.red[700],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
+
             final deck = decks[index];
             final deckName = TopicNames.getName(deck.topicKey, baseLanguage);
             final revealedCount = reviewState.getRevealedCount(deck.topicKey);

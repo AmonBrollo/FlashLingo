@@ -19,6 +19,7 @@ class ReviewState extends ChangeNotifier {
   void addCard(Flashcard card) {
     if (!_remembered.contains(card)) {
       _remembered.add(card);
+      _forgotten.remove(card);
       if (_currentDeckTopic != null) {
         markCardRevealed(_currentDeckTopic!, card);
       }
@@ -29,9 +30,16 @@ class ReviewState extends ChangeNotifier {
   void addForgottenCard(Flashcard card) {
     if (!_forgotten.contains(card)) {
       _forgotten.add(card);
+      _remembered.remove(card);
       if (_currentDeckTopic != null) {
         markCardRevealed(_currentDeckTopic!, card);
       }
+      notifyListeners();
+    }
+  }
+
+  void removeForgottenCard(Flashcard card) {
+    if (_forgotten.remove(card)) {
       notifyListeners();
     }
   }
