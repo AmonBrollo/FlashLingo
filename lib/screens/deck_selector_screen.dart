@@ -121,7 +121,7 @@ class DeckSelectorScreen extends StatelessWidget {
               );
             }
 
-            final deck = decks[index];
+            final deck = decks[index - 1];
             final deckName = TopicNames.getName(deck.topicKey, baseLanguage);
             final revealedCount = reviewState.getRevealedCount(deck.topicKey);
             final totalCount = deck.cards.length;
