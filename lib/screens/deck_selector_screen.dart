@@ -4,6 +4,7 @@ import 'flashcard_screen.dart';
 import '../models/flashcard_deck.dart';
 import '../models/flashcard.dart';
 import '../services/review_state.dart';
+import '../services/firebase_user_preferences.dart';
 import '../utils/topic_names.dart';
 import '../utils/ui_strings.dart';
 
@@ -19,7 +20,16 @@ class DeckSelectorScreen extends StatelessWidget {
     required this.targetLanguage,
   });
 
-  void _openFlashcards(BuildContext context, FlashcardDeck deck) {
+  void _openFlashcards(BuildContext context, FlashcardDeck deck) async {
+    // Save user preferences when they select a deck
+    await FirebaseUserPreferences.savePreferences(
+      baseLanguage: baseLanguage,
+      targetLanguage: targetLanguage,
+      deckKey: deck.topicKey,
+    );
+
+    if (!context.mounted) return;
+
     Navigator.push(
       context,
       MaterialPageRoute(
