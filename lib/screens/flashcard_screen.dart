@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../models/flashcard.dart';
 import '../services/repetition_service.dart';
 import '../services/review_state.dart';
+import '../services/deck_loader.dart';
 import '../utils/ui_strings.dart';
 import '../utils/topic_names.dart';
 import '../utils/usage_limiter.dart';
@@ -18,6 +19,7 @@ import 'add_flashcard_screen.dart';
 import 'review_screen.dart';
 import 'profile_screen.dart';
 import 'login_screen.dart';
+import 'deck_selector_screen.dart';
 
 class FlashcardScreen extends StatefulWidget {
   final String baseLanguage;
@@ -139,6 +141,34 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
     }
   }
 
+  Future<void> _goToDeckSelector() async {
+    try {
+      final decks = await DeckLoader.loadDecks();
+
+      if (!mounted) return;
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => DeckSelectorScreen(
+            baseLanguage: widget.baseLanguage,
+            targetLanguage: widget.targetLanguage,
+            decks: decks,
+          ),
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error loading decks: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
   void _onMenuSelected(String value) async {
     switch (value) {
       case 'review':
@@ -165,6 +195,9 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
           context,
           MaterialPageRoute(builder: (_) => const ProfileScreen()),
         );
+        break;
+      case 'select_deck':
+        await _goToDeckSelector();
         break;
     }
   }
@@ -204,6 +237,10 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
     return Scaffold(
       backgroundColor: Colors.brown[50],
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: _goToDeckSelector,
+        ),
         title: Row(
           children: [
             const Text('Flashlango'),
@@ -240,11 +277,48 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
             icon: const Icon(Icons.more_horiz),
             onSelected: _onMenuSelected,
             itemBuilder: (context) => [
-              const PopupMenuItem(value: 'review', child: Text('Review')),
+              const PopupMenuItem(
+                value: 'select_deck',
+                child: Row(
+                  children: [
+                    Icon(Icons.view_module, size: 20),
+                    SizedBox(width: 8),
+                    Text('Select Deck'),
+                  ],
+                ),
+              ),
+              const PopupMenuItem(
+                value: 'review',
+                child: Row(
+                  children: [
+                    Icon(Icons.rate_review, size: 20),
+                    SizedBox(width: 8),
+                    Text('Review'),
+                  ],
+                ),
+              ),
               if (isAnonymous)
-                const PopupMenuItem(value: 'login', child: Text('Login'))
+                const PopupMenuItem(
+                  value: 'login',
+                  child: Row(
+                    children: [
+                      Icon(Icons.login, size: 20),
+                      SizedBox(width: 8),
+                      Text('Login'),
+                    ],
+                  ),
+                )
               else
-                const PopupMenuItem(value: 'profile', child: Text('Profile')),
+                const PopupMenuItem(
+                  value: 'profile',
+                  child: Row(
+                    children: [
+                      Icon(Icons.person, size: 20),
+                      SizedBox(width: 8),
+                      Text('Profile'),
+                    ],
+                  ),
+                ),
             ],
           ),
         ],
