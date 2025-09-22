@@ -36,4 +36,29 @@ class FlashcardProgress {
 
     nextReview = DateTime.now().add(intervals[box]!);
   }
+
+  /// Convert to JSON for storage
+  Map<String, dynamic> toJson() {
+    return {'box': box, 'nextReview': nextReview.millisecondsSinceEpoch};
+  }
+
+  /// Create from JSON
+  factory FlashcardProgress.fromJson(Map<String, dynamic> json) {
+    return FlashcardProgress(
+      box: json['box'] ?? 1,
+      nextReview: json['nextReview'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(json['nextReview'])
+          : null,
+    );
+  }
+
+  /// Create a copy of this progress
+  FlashcardProgress copy() {
+    return FlashcardProgress(box: box, nextReview: nextReview);
+  }
+
+  @override
+  String toString() {
+    return 'FlashcardProgress(box: $box, nextReview: $nextReview)';
+  }
 }

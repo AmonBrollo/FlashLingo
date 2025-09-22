@@ -46,6 +46,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
   int _currentIndex = 0;
   double _dragDx = 0.0;
   late List<Flashcard> _flashcards;
+  bool _isInitializing = true;
 
   final UsageLimiter _limiter = UsageLimiter();
   final RepetitionService _repetitionService = RepetitionService();
@@ -56,10 +57,51 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
   void initState() {
     super.initState();
     _flashcards = widget.flashcards;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<ReviewState>().setCurrentDeck(widget.topicKey);
-    });
-    _checkInitialLimit();
+    _initializeScreen();
+  }
+
+  Future<void> _initializeScreen() async {
+    try {
+      // Initialize the repetition service and preload progress
+      await _repetitionService.initialize();
+      await _repetitionService.preloadProgress(_flashcards);
+
+      // Set current deck in review state
+      if (mounted) {
+        context.read<ReviewState>().setCurrentDeck(widget.topicKey);
+      }
+
+      // Check usage limits
+      await _checkInitialLimit();
+
+      // Find the best starting card (prioritize due cards, then new cards)
+      _selectOptimalStartingCard();
+    } catch (e) {
+      print('Error initializing flashcard screen: $e');
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isInitializing = false;
+        });
+      }
+    }
+  }
+
+  void _selectOptimalStartingCard() {
+    final dueCards = _repetitionService.dueCards(_flashcards);
+    if (dueCards.isNotEmpty) {
+      _currentIndex = _flashcards.indexOf(dueCards.first);
+      return;
+    }
+
+    final newCards = _repetitionService.newCards(_flashcards);
+    if (newCards.isNotEmpty) {
+      _currentIndex = _flashcards.indexOf(newCards.first);
+      return;
+    }
+
+    // If no due or new cards, start with the first card
+    _currentIndex = 0;
   }
 
   Future<void> _checkInitialLimit() async {
@@ -79,6 +121,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
 
     setState(() {
       _flashcards = jsonData.map((item) => Flashcard.fromJson(item)).toList();
+      // Initialize progress for all cards
       for (final card in _flashcards) {
         _repetitionService.getProgress(card);
       }
@@ -222,6 +265,25 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Show loading indicator during initialization
+    if (_isInitializing) {
+      return Scaffold(
+        backgroundColor: Colors.brown[50],
+        body: const Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.brown),
+              ),
+              SizedBox(height: 16),
+              Text('Loading progress...'),
+            ],
+          ),
+        ),
+      );
+    }
+
     if (_flashcards.isEmpty) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
@@ -277,7 +339,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
             icon: const Icon(Icons.more_horiz),
             onSelected: _onMenuSelected,
             itemBuilder: (context) => [
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: 'select_deck',
                 child: Row(
                   children: [
@@ -287,7 +349,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
                   ],
                 ),
               ),
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: 'review',
                 child: Row(
                   children: [
@@ -298,7 +360,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
                 ),
               ),
               if (isAnonymous)
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: 'login',
                   child: Row(
                     children: [
@@ -309,7 +371,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
                   ),
                 )
               else
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: 'profile',
                   child: Row(
                     children: [
