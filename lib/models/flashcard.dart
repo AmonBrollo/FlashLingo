@@ -1,24 +1,19 @@
 class Flashcard {
   final Map<String, String> translations;
   final String? imagePath;
-  int boxLevel;
-  DateTime nextReview;
+  final bool hasLocalImage;
 
-  Flashcard({
+  const Flashcard({
     required this.translations,
     this.imagePath,
-    this.boxLevel = 1,
-    DateTime? nextReview,
-  }) : nextReview = nextReview ?? DateTime.now();
+    this.hasLocalImage = false,
+  });
 
   factory Flashcard.fromJson(Map<String, dynamic> json) {
     return Flashcard(
-      translations: Map<String, String>.from(json['translations']),
+      translations: Map<String, String>.from(json['translations'] ?? {}),
       imagePath: json['imagePath'],
-      boxLevel: json['boxLevel'] ?? 1,
-      nextReview: json['nextReview'] != null
-          ? DateTime.parse(json['nextReview'])
-          : DateTime.now(),
+      hasLocalImage: json['hasLocalImage'] ?? false,
     );
   }
 
@@ -26,32 +21,91 @@ class Flashcard {
     return {
       'translations': translations,
       'imagePath': imagePath,
-      'boxLevel': boxLevel,
-      'nextReview': nextReview.toIso8601String(),
+      'hasLocalImage': hasLocalImage,
     };
   }
 
-  String getTranslation(String languageCode) {
-    const aliases = {
-      'en': 'english',
-      'english': 'english',
-      'pt': 'portuguese',
-      'portuguese': 'portuguese',
-      'hu': 'hungarian',
-      'hungarian': 'hungarian',
-    };
+  /// Get the translation for a specific language
+  String getTranslation(String languageKey) {
+    return translations[languageKey] ?? '';
+  }
 
-    final normalized =
-        aliases[languageCode.toLowerCase()] ?? languageCode.toLowerCase();
+  /// Create a copy with updated image information
+  Flashcard copyWithImage({String? imagePath, bool? hasLocalImage}) {
+    return Flashcard(
+      translations: Map<String, String>.from(translations),
+      imagePath: imagePath ?? this.imagePath,
+      hasLocalImage: hasLocalImage ?? this.hasLocalImage,
+    );
+  }
 
-    if (translations.containsKey(normalized)) {
-      return translations[normalized]!;
+  /// Create a copy with updated translations
+  Flashcard copyWithTranslations(Map<String, String> newTranslations) {
+    return Flashcard(
+      translations: newTranslations,
+      imagePath: imagePath,
+      hasLocalImage: hasLocalImage,
+    );
+  }
+
+  /// Create a copy without image
+  Flashcard copyWithoutImage() {
+    return Flashcard(
+      translations: Map<String, String>.from(translations),
+      imagePath: null,
+      hasLocalImage: false,
+    );
+  }
+
+  /// Check if the card has translations for both languages
+  bool hasTranslation(String languageKey) {
+    return translations.containsKey(languageKey) &&
+        translations[languageKey]!.isNotEmpty;
+  }
+
+  /// Get all available language keys
+  List<String> get availableLanguages {
+    return translations.keys
+        .where((key) => translations[key]!.isNotEmpty)
+        .toList();
+  }
+
+  /// Get a unique identifier for this card
+  String get id {
+    return translations['id'] ?? translations.values.first;
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! Flashcard) return false;
+
+    // Compare based on translations content, not image path
+    if (translations.length != other.translations.length) return false;
+
+    for (final entry in translations.entries) {
+      if (other.translations[entry.key] != entry.value) return false;
     }
 
-    if (translations.containsKey('english')) {
-      return translations['english']!;
+    return true;
+  }
+
+  @override
+  int get hashCode {
+    // Hash based on translations content only
+    int hash = 0;
+    final sortedEntries = translations.entries.toList()
+      ..sort((a, b) => a.key.compareTo(b.key));
+
+    for (final entry in sortedEntries) {
+      hash ^= entry.key.hashCode ^ entry.value.hashCode;
     }
 
-    (throw ArgumentError('Unsuported language: $languageCode'));
+    return hash;
+  }
+
+  @override
+  String toString() {
+    return 'Flashcard(translations: $translations, imagePath: $imagePath, hasLocalImage: $hasLocalImage)';
   }
 }

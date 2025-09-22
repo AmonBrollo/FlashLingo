@@ -9,6 +9,7 @@ import '../models/flashcard.dart';
 import '../services/repetition_service.dart';
 import '../services/review_state.dart';
 import '../services/deck_loader.dart';
+import '../services/local_image_service.dart';
 import '../utils/ui_strings.dart';
 import '../utils/topic_names.dart';
 import '../utils/usage_limiter.dart';
@@ -56,7 +57,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
   @override
   void initState() {
     super.initState();
-    _flashcards = widget.flashcards;
+    _flashcards = List.from(widget.flashcards); // Make a mutable copy
     _initializeScreen();
   }
 
@@ -65,6 +66,9 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
       // Initialize the repetition service and preload progress
       await _repetitionService.initialize();
       await _repetitionService.preloadProgress(_flashcards);
+
+      // Load local images for all flashcards
+      await _loadLocalImages();
 
       // Set current deck in review state
       if (mounted) {
@@ -84,6 +88,31 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
           _isInitializing = false;
         });
       }
+    }
+  }
+
+  Future<void> _loadLocalImages() async {
+    try {
+      final updatedFlashcards = <Flashcard>[];
+
+      for (final card in _flashcards) {
+        final imagePath = await LocalImageService.getCardImagePath(card);
+        if (imagePath != null) {
+          updatedFlashcards.add(
+            card.copyWithImage(imagePath: imagePath, hasLocalImage: true),
+          );
+        } else {
+          updatedFlashcards.add(card);
+        }
+      }
+
+      if (mounted) {
+        setState(() {
+          _flashcards = updatedFlashcards;
+        });
+      }
+    } catch (e) {
+      print('Error loading local images: $e');
     }
   }
 
@@ -126,6 +155,9 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
         _repetitionService.getProgress(card);
       }
     });
+
+    // Load local images after updating flashcards
+    await _loadLocalImages();
   }
 
   void _nextCard() async {
@@ -169,18 +201,152 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
   }
 
   Future<void> _changeCurrentImage() async {
-    final pickedFile = await ImagePicker().pickImage(
-      source: ImageSource.gallery,
+    final currentCard = _flashcards[_currentIndex];
+
+    try {
+      // Show image source options
+      final ImageSource? source = await _showImageSourceDialog();
+      if (source == null) return;
+
+      final pickedFile = await ImagePicker().pickImage(source: source);
+      if (pickedFile == null) return;
+
+      // Show loading dialog
+      if (mounted) {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) =>
+              const Center(child: CircularProgressIndicator()),
+        );
+      }
+
+      // Delete old image if it exists
+      if (currentCard.hasLocalImage) {
+        await LocalImageService.deleteCardImage(currentCard);
+      }
+
+      // Save the new image locally
+      final savedImagePath = await LocalImageService.saveCardImage(
+        currentCard,
+        pickedFile.path,
+      );
+
+      // Dismiss loading dialog
+      if (mounted) {
+        Navigator.of(context).pop();
+      }
+
+      if (savedImagePath != null) {
+        // Update the flashcard with the new image
+        final updatedCard = currentCard.copyWithImage(
+          imagePath: savedImagePath,
+          hasLocalImage: true,
+        );
+
+        setState(() {
+          _flashcards[_currentIndex] = updatedCard;
+        });
+
+        // Show success message
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Image saved successfully'),
+              backgroundColor: Colors.green,
+            ),
+          );
+        }
+      } else {
+        // Show error message
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Failed to save image'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      // Dismiss loading dialog if it's showing
+      if (mounted && Navigator.canPop(context)) {
+        Navigator.of(context).pop();
+      }
+
+      print('Error changing image: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
+        );
+      }
+    }
+  }
+
+  Future<ImageSource?> _showImageSourceDialog() async {
+    return await showDialog<ImageSource>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Select Image Source'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.camera_alt),
+              title: const Text('Camera'),
+              onTap: () => Navigator.pop(context, ImageSource.camera),
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo_library),
+              title: const Text('Gallery'),
+              onTap: () => Navigator.pop(context, ImageSource.gallery),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _removeCurrentImage() async {
+    final currentCard = _flashcards[_currentIndex];
+
+    if (!currentCard.hasLocalImage) return;
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Remove Image'),
+        content: const Text('Are you sure you want to remove this image?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            child: const Text('Remove'),
+          ),
+        ],
+      ),
     );
 
-    if (pickedFile != null) {
+    if (confirmed == true) {
+      await LocalImageService.deleteCardImage(currentCard);
+
+      final updatedCard = currentCard.copyWithoutImage();
       setState(() {
-        final current = _flashcards[_currentIndex];
-        _flashcards[_currentIndex] = Flashcard(
-          translations: Map<String, String>.from(current.translations),
-          imagePath: pickedFile.path,
-        );
+        _flashcards[_currentIndex] = updatedCard;
       });
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Image removed'),
+            backgroundColor: Colors.orange,
+          ),
+        );
+      }
     }
   }
 
@@ -465,6 +631,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
         dragDx: _dragDx,
         onFlip: () => setState(() => _isFlipped = !_isFlipped),
         onAddImage: _changeCurrentImage,
+        onRemoveImage: _removeCurrentImage,
         onRemembered: () => _handleSwipe(currentCard, true),
         onForgotten: () => _handleSwipe(currentCard, false),
       );
