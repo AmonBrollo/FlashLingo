@@ -128,6 +128,111 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  Future<void> _resetAllData() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Reset All Data'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'This will permanently delete ALL your data:',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            const Text('• Learning progress and statistics'),
+            const Text('• Language and deck preferences'),
+            const Text('• All flashcard images'),
+            const Text('• Account preferences'),
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.red[50],
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.red[200]!),
+              ),
+              child: const Text(
+                '⚠️ THIS CANNOT BE UNDONE',
+                style: TextStyle(
+                  color: Colors.red,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            const SizedBox(height: 8),
+            if (_storageStats != null)
+              Text(
+                'This will free up ${_storageStats!['totalSizeMB']} MB of storage space.',
+                style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+              ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: TextButton.styleFrom(
+              foregroundColor: Colors.white,
+              backgroundColor: Colors.red,
+            ),
+            child: const Text('DELETE ALL DATA'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed == true) {
+      setState(() => _isLoading = true);
+
+      try {
+        // Clear all local data (progress, preferences)
+        await AppInitializationService.clearLocalData();
+
+        // Clear all images
+        await LocalImageService.clearAllImages();
+
+        // Refresh storage stats
+        await _loadStorageStats();
+
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('All data has been reset'),
+              backgroundColor: Colors.green,
+              duration: Duration(seconds: 3),
+            ),
+          );
+
+          // Navigate back to language selection after a brief delay
+          Future.delayed(const Duration(seconds: 2), () {
+            if (mounted) {
+              Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+            }
+          });
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Error resetting all data: $e'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      } finally {
+        if (mounted) {
+          setState(() => _isLoading = false);
+        }
+      }
+    }
+  }
+
   Future<void> _clearImages() async {
     final confirmed = await showDialog<bool>(
       context: context,
@@ -376,6 +481,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                   const SizedBox(height: 12),
+
+                  // Reset All Data - Most destructive action
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      onPressed: _resetAllData,
+                      icon: const Icon(Icons.warning),
+                      label: const Text('Reset All Data'),
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.red[700],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
 
                   // Login/Logout
                   SizedBox(
