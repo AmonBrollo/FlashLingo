@@ -8,6 +8,7 @@ import '../services/firebase_user_preferences.dart';
 import '../services/repetition_service.dart';
 import '../utils/topic_names.dart';
 import '../utils/ui_strings.dart';
+import 'profile_screen.dart';
 
 class DeckSelectorScreen extends StatefulWidget {
   final List<FlashcardDeck> decks;
@@ -88,6 +89,17 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
         ),
       ),
     );
+  }
+
+  void _onMenuSelected(String value) async {
+    switch (value) {
+      case 'profile':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const ProfileScreen()),
+        );
+        break;
+    }
   }
 
   void _openForgottenCards(
@@ -197,6 +209,24 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
       appBar: AppBar(
         title: Text(UiStrings.selectDeck(widget.baseLanguage)),
         backgroundColor: Colors.brown,
+        actions: [
+          PopupMenuButton<String>(
+            icon: const Icon(Icons.more_horiz),
+            onSelected: _onMenuSelected,
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: 'profile',
+                child: Row(
+                  children: [
+                    Icon(Icons.person, size: 20),
+                    SizedBox(width: 8),
+                    Text('Profile'),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(12.0),
