@@ -89,9 +89,17 @@
     },
     {
         "translations": {
-            "english": "speak/say",
-            "portuguese": "Falar/Dizer",
-            "hungarian": "Beszélni/Mondani"
+            "english": "speak",
+            "portuguese": "Falar",
+            "hungarian": "Beszélni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "say",
+            "portuguese": "Dizer",
+            "hungarian": "Mondani"
         },
         "imagePath": null
     },
