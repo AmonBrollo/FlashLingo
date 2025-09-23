@@ -433,12 +433,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                   const SizedBox(height: 24),
                   const Text(
-                    'Actions',
+                    'Data Management',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 12),
 
-                  // Image Management Actions
+                  // Image Management Actions (available to all users)
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton.icon(
@@ -467,7 +467,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   const SizedBox(height: 12),
 
-                  // Progress Reset
+                  // Progress Reset (available to all users)
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton.icon(
@@ -482,7 +482,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   const SizedBox(height: 12),
 
-                  // Reset All Data - Most destructive action
+                  // Reset All Data - Most destructive action (available to all users)
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton.icon(
@@ -495,7 +495,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 24),
+
+                  const Text(
+                    'Account Actions',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 12),
 
                   // Login/Logout
                   SizedBox(

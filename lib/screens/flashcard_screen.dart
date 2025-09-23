@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 import '../models/flashcard.dart';
 import '../services/repetition_service.dart';
@@ -19,7 +18,6 @@ import '../widgets/limit_reached_card.dart';
 import 'add_flashcard_screen.dart';
 import 'review_screen.dart';
 import 'profile_screen.dart';
-import 'login_screen.dart';
 import 'deck_selector_screen.dart';
 
 class FlashcardScreen extends StatefulWidget {
@@ -393,12 +391,6 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
           ),
         );
         break;
-      case 'login':
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => const LoginScreen()),
-        );
-        break;
       case 'profile':
         Navigator.pushReplacement(
           context,
@@ -458,9 +450,6 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
       widget.topicKey,
       widget.baseLanguage,
     );
-
-    final user = FirebaseAuth.instance.currentUser;
-    final isAnonymous = user?.isAnonymous ?? true;
 
     return Scaffold(
       backgroundColor: Colors.brown[50],
@@ -525,28 +514,16 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
                   ],
                 ),
               ),
-              if (isAnonymous)
-                PopupMenuItem(
-                  value: 'login',
-                  child: Row(
-                    children: [
-                      Icon(Icons.login, size: 20),
-                      SizedBox(width: 8),
-                      Text('Login'),
-                    ],
-                  ),
-                )
-              else
-                PopupMenuItem(
-                  value: 'profile',
-                  child: Row(
-                    children: [
-                      Icon(Icons.person, size: 20),
-                      SizedBox(width: 8),
-                      Text('Profile'),
-                    ],
-                  ),
+              PopupMenuItem(
+                value: 'profile',
+                child: Row(
+                  children: [
+                    Icon(Icons.person, size: 20),
+                    SizedBox(width: 8),
+                    Text('Profile'),
+                  ],
                 ),
+              ),
             ],
           ),
         ],
