@@ -1,0 +1,98 @@
+[
+    {
+        "translations": {
+            "english": "clock",
+            "portuguese": "relógio",
+            "hungarian": "óra"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "lamp",
+            "portuguese": "lâmpada",
+            "hungarian": "lámpa"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "fan",
+            "portuguese": "ventilador",
+            "hungarian": "ventilátor"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "cell phone",
+            "portuguese": "celular",
+            "hungarian": "mobiltelefon"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "network",
+            "portuguese": "rede",
+            "hungarian": "hálózat"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "computer",
+            "portuguese": "computador",
+            "hungarian": "számítógép"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "program (computer)",
+            "portuguese": "programa",
+            "hungarian": "program"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "laptop",
+            "portuguese": "laptop",
+            "hungarian": "laptop"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "screen",
+            "portuguese": "tela",
+            "hungarian": "képernyő"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "camera",
+            "portuguese": "câmera",
+            "hungarian": "kamera"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "television",
+            "portuguese": "televisão",
+            "hungarian": "televízió"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "radio",
+            "portuguese": "rádio",
+            "hungarian": "rádió"
+        },
+        "imagePath": null
+    }
+]

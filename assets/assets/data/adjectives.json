@@ -1,0 +1,514 @@
+[
+    {
+        "translations": {
+            "english": "long",
+            "portuguese": "Comprido",
+            "hungarian": "Hosszú"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "short (vs long)",
+            "portuguese": "Curto",
+            "hungarian": "Rövid"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "tall",
+            "portuguese": "Alto",
+            "hungarian": "Magas"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "short (vs tall)",
+            "portuguese": "Baixo",
+            "hungarian": "Alacsony"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "wide",
+            "portuguese": "Largo",
+            "hungarian": "Széles"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "narrow",
+            "portuguese": "Estreito",
+            "hungarian": "Keskeny"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "big/large",
+            "portuguese": "Grande",
+            "hungarian": "Nagy"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "small/little",
+            "portuguese": "Pequeno",
+            "hungarian": "Kicsi"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "slow",
+            "portuguese": "Lento",
+            "hungarian": "Lassú"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "fast",
+            "portuguese": "Rápido",
+            "hungarian": "Gyors"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "hot",
+            "portuguese": "Quente",
+            "hungarian": "Forró"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "cold",
+            "portuguese": "Frio",
+            "hungarian": "Hideg"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "warm",
+            "portuguese": "Morno",
+            "hungarian": "Meleg"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "cool",
+            "portuguese": "Fresco",
+            "hungarian": "Hűvös"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "new",
+            "portuguese": "Novo",
+            "hungarian": "Új"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "old (new)",
+            "portuguese": "Velho",
+            "hungarian": "Régi"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "young",
+            "portuguese": "Jovem",
+            "hungarian": "Fiatal"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "old (young)",
+            "portuguese": "Velho",
+            "hungarian": "Idős"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "good",
+            "portuguese": "Bom",
+            "hungarian": "Jó"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "bad",
+            "portuguese": "Mau",
+            "hungarian": "Rossz"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "wet",
+            "portuguese": "Molhado",
+            "hungarian": "Nedves"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "dry",
+            "portuguese": "Seco",
+            "hungarian": "Száraz"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "sick",
+            "portuguese": "Doente",
+            "hungarian": "Beteg"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "healthy",
+            "portuguese": "Saudável",
+            "hungarian": "Egészséges"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "loud",
+            "portuguese": "Alto (som)",
+            "hungarian": "Hangos"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "quiet",
+            "portuguese": "Silencioso",
+            "hungarian": "Csendes"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "happy",
+            "portuguese": "Feliz",
+            "hungarian": "Boldog"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "sad",
+            "portuguese": "Triste",
+            "hungarian": "Szomorú"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "beautiful",
+            "portuguese": "Bonito",
+            "hungarian": "Szép"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "ugly",
+            "portuguese": "Feio",
+            "hungarian": "Csúnya"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "deaf",
+            "portuguese": "Surdo",
+            "hungarian": "Süket"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "blind",
+            "portuguese": "Cego",
+            "hungarian": "Vakul"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "nice",
+            "portuguese": "Simpático",
+            "hungarian": "Kedves"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "mean",
+            "portuguese": "Mau",
+            "hungarian": "Gonosz"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "rich",
+            "portuguese": "Rico",
+            "hungarian": "Gazdag"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "poor",
+            "portuguese": "Pobre",
+            "hungarian": "Szegény"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "thick",
+            "portuguese": "Grosso",
+            "hungarian": "Vastag"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "thin",
+            "portuguese": "Fino",
+            "hungarian": "Vékony"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "expensive",
+            "portuguese": "Caro",
+            "hungarian": "Drága"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "cheap",
+            "portuguese": "Barato",
+            "hungarian": "Olcsó"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "flat",
+            "portuguese": "Plano",
+            "hungarian": "Lapos"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "curved",
+            "portuguese": "Curvo",
+            "hungarian": "Görbe"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "male",
+            "portuguese": "Masculino",
+            "hungarian": "Férfi"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "female",
+            "portuguese": "Feminino",
+            "hungarian": "Nő"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "tight",
+            "portuguese": "Apertado",
+            "hungarian": "Szoros"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "loose",
+            "portuguese": "Largo",
+            "hungarian": "Laza"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "high",
+            "portuguese": "Alto",
+            "hungarian": "Magas"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "low",
+            "portuguese": "Baixo",
+            "hungarian": "Alacsony"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "soft",
+            "portuguese": "Macio",
+            "hungarian": "Puha"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "hard",
+            "portuguese": "Duro",
+            "hungarian": "Kemény"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "deep",
+            "portuguese": "Fundo",
+            "hungarian": "Mély"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "shallow",
+            "portuguese": "Raso",
+            "hungarian": "Sekély"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "clean",
+            "portuguese": "Limpo",
+            "hungarian": "Tiszta"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "dirty",
+            "portuguese": "Sujo",
+            "hungarian": "Piszkos"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "strong",
+            "portuguese": "Forte",
+            "hungarian": "Erős"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "weak",
+            "portuguese": "Fraco",
+            "hungarian": "Gyenge"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "dead",
+            "portuguese": "Morto",
+            "hungarian": "Halott"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "alive",
+            "portuguese": "Vivo",
+            "hungarian": "Élő"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "heavy",
+            "portuguese": "Pesado",
+            "hungarian": "Nehéz"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "light (heavy)",
+            "portuguese": "Leve",
+            "hungarian": "Könnyű"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "dark",
+            "portuguese": "Escuro",
+            "hungarian": "Sötét"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "light (dark)",
+            "portuguese": "Claro",
+            "hungarian": "Világos"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "nuclear",
+            "portuguese": "Nuclear",
+            "hungarian": "Nukleáris"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "famous",
+            "portuguese": "Famoso",
+            "hungarian": "Híres"
+        },
+        "imagePath": null
+    }
+]

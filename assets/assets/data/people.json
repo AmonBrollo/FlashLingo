@@ -1,0 +1,242 @@
+[
+    {
+        "translations": {
+            "english": "son",
+            "portuguese": "filho",
+            "hungarian": "fiú"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "daughter",
+            "portuguese": "filha",
+            "hungarian": "lány"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "mother",
+            "portuguese": "mãe",
+            "hungarian": "anya"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "father",
+            "portuguese": "pai",
+            "hungarian": "apa"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "parent",
+            "portuguese": "pai/mãe",
+            "hungarian": "szülő"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "baby",
+            "portuguese": "bebê",
+            "hungarian": "baba"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "man",
+            "portuguese": "homem",
+            "hungarian": "férfi"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "woman",
+            "portuguese": "mulher",
+            "hungarian": "nő"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "brother",
+            "portuguese": "irmão",
+            "hungarian": "testvér"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "sister",
+            "portuguese": "irmã",
+            "hungarian": "nővér"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "family",
+            "portuguese": "família",
+            "hungarian": "család"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "grandfather",
+            "portuguese": "avô",
+            "hungarian": "nagyapa"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "grandmother",
+            "portuguese": "avó",
+            "hungarian": "nagyanya"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "husband",
+            "portuguese": "marido",
+            "hungarian": "férj"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "wife",
+            "portuguese": "esposa",
+            "hungarian": "feleség"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "king",
+            "portuguese": "rei",
+            "hungarian": "király"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "queen",
+            "portuguese": "rainha",
+            "hungarian": "királynő"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "president",
+            "portuguese": "presidente",
+            "hungarian": "elnök"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "neighbor",
+            "portuguese": "vizinho",
+            "hungarian": "szomszéd"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "boy",
+            "portuguese": "menino",
+            "hungarian": "fiú"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "girl",
+            "portuguese": "menina",
+            "hungarian": "lány"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "child",
+            "portuguese": "criança",
+            "hungarian": "gyerek"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "adult",
+            "portuguese": "adulto",
+            "hungarian": "felnőtt"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "human",
+            "portuguese": "humano",
+            "hungarian": "ember"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "friend",
+            "portuguese": "amigo",
+            "hungarian": "barát"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "victim",
+            "portuguese": "vítima",
+            "hungarian": "áldozat"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "player",
+            "portuguese": "jogador",
+            "hungarian": "játékos"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "fan",
+            "portuguese": "fã",
+            "hungarian": "rajongó"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "crowd",
+            "portuguese": "multidão",
+            "hungarian": "tömeg"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "person",
+            "portuguese": "pessoa",
+            "hungarian": "személy"
+        },
+        "imagePath": null
+    }
+]

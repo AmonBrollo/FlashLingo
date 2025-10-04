@@ -1,0 +1,98 @@
+[
+    {
+        "translations": {
+            "english": "glass",
+            "portuguese": "vidro",
+            "hungarian": "üveg"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "metal",
+            "portuguese": "metal",
+            "hungarian": "fém"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "plastic",
+            "portuguese": "plástico",
+            "hungarian": "műanyag"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "wood",
+            "portuguese": "madeira",
+            "hungarian": "fa"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "stone",
+            "portuguese": "pedra",
+            "hungarian": "kő"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "diamond",
+            "portuguese": "diamante",
+            "hungarian": "gyémánt"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "clay",
+            "portuguese": "argila",
+            "hungarian": "agyag"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "dust",
+            "portuguese": "poeira",
+            "hungarian": "por"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "gold",
+            "portuguese": "ouro",
+            "hungarian": "arany"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "copper",
+            "portuguese": "cobre",
+            "hungarian": "réz"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "silver",
+            "portuguese": "prata",
+            "hungarian": "ezüst"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "material",
+            "portuguese": "material",
+            "hungarian": "anyag"
+        },
+        "imagePath": null
+    }
+]

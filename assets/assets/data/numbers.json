@@ -1,0 +1,482 @@
+[
+    {
+        "translations": {
+            "english": "1",
+            "portuguese": "Um",
+            "hungarian": "Egy"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "2",
+            "portuguese": "Dois",
+            "hungarian": "Kettő"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "3",
+            "portuguese": "Três",
+            "hungarian": "Három"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "4",
+            "portuguese": "Quatro",
+            "hungarian": "Négy"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "5",
+            "portuguese": "Cinco",
+            "hungarian": "Öt"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "6",
+            "portuguese": "Seis",
+            "hungarian": "Hat"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "7",
+            "portuguese": "Sete",
+            "hungarian": "Hét"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "8",
+            "portuguese": "Oito",
+            "hungarian": "Nyolc"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "9",
+            "portuguese": "Nove",
+            "hungarian": "Kilenc"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "10",
+            "portuguese": "Dez",
+            "hungarian": "Tíz"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "11",
+            "portuguese": "Onze",
+            "hungarian": "Tizenegy"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "12",
+            "portuguese": "Doze",
+            "hungarian": "Tizenkettő"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "13",
+            "portuguese": "Treze",
+            "hungarian": "Tizenhárom"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "14",
+            "portuguese": "Catorze",
+            "hungarian": "Tizennégy"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "15",
+            "portuguese": "Quinze",
+            "hungarian": "Tizenöt"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "16",
+            "portuguese": "Dezesseis",
+            "hungarian": "Tizenhat"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "17",
+            "portuguese": "Dezessete",
+            "hungarian": "Tizenhét"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "18",
+            "portuguese": "Dezoito",
+            "hungarian": "Tizennyolc"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "19",
+            "portuguese": "Dezenove",
+            "hungarian": "Tizenkilenc"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "20",
+            "portuguese": "Vinte",
+            "hungarian": "Húsz"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "21",
+            "portuguese": "Vinte e um",
+            "hungarian": "Huszonegy"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "22",
+            "portuguese": "Vinte e dois",
+            "hungarian": "Huszonkettő"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "30",
+            "portuguese": "Trinta",
+            "hungarian": "Harminc"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "31",
+            "portuguese": "Trinta e um",
+            "hungarian": "Harmincegy"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "32",
+            "portuguese": "Trinta e dois",
+            "hungarian": "Harminckettő"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "40",
+            "portuguese": "Quarenta",
+            "hungarian": "Negyven"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "41",
+            "portuguese": "Quarenta e um",
+            "hungarian": "Negyvenegy"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "42",
+            "portuguese": "Quarenta e dois",
+            "hungarian": "Negyvenkettő"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "50",
+            "portuguese": "Cinquenta",
+            "hungarian": "Ötven"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "51",
+            "portuguese": "Cinquenta e um",
+            "hungarian": "Ötvenegy"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "52",
+            "portuguese": "Cinquenta e dois",
+            "hungarian": "Ötvenkettő"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "60",
+            "portuguese": "Sessenta",
+            "hungarian": "Hatvan"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "61",
+            "portuguese": "Sessenta e um",
+            "hungarian": "Hatvanegy"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "62",
+            "portuguese": "Sessenta e dois",
+            "hungarian": "Hatvankettő"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "70",
+            "portuguese": "Setenta",
+            "hungarian": "Hetven"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "71",
+            "portuguese": "Setenta e um",
+            "hungarian": "Hetvenegy"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "72",
+            "portuguese": "Setenta e dois",
+            "hungarian": "Hetvenkettő"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "80",
+            "portuguese": "Oitenta",
+            "hungarian": "Nyolcvan"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "81",
+            "portuguese": "Oitenta e um",
+            "hungarian": "Nyolcvanegy"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "82",
+            "portuguese": "Oitenta e dois",
+            "hungarian": "Nyolcvankettő"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "90",
+            "portuguese": "Noventa",
+            "hungarian": "Kilencven"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "91",
+            "portuguese": "Noventa e um",
+            "hungarian": "Kilencvenegy"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "92",
+            "portuguese": "Noventa e dois",
+            "hungarian": "Kilencvenkettő"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "100",
+            "portuguese": "Cem",
+            "hungarian": "Száz"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "101",
+            "portuguese": "Cento e um",
+            "hungarian": "Százegy"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "102",
+            "portuguese": "Cento e dois",
+            "hungarian": "Százkettő"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "110",
+            "portuguese": "Cento e dez",
+            "hungarian": "Száztíz"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "111",
+            "portuguese": "Cento e onze",
+            "hungarian": "Száztizenegy"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "1000",
+            "portuguese": "Mil",
+            "hungarian": "Ezer"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "1001",
+            "portuguese": "Mil e um",
+            "hungarian": "Ezeregy"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "10000",
+            "portuguese": "Dez mil",
+            "hungarian": "Tízezer"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "100000",
+            "portuguese": "Cem mil",
+            "hungarian": "Százezer"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "million",
+            "portuguese": "Milhão",
+            "hungarian": "Millió"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "billion",
+            "portuguese": "Bilhão",
+            "hungarian": "Milliárd"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "1st",
+            "portuguese": "Primeiro",
+            "hungarian": "Első"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "2nd",
+            "portuguese": "Segundo",
+            "hungarian": "Második"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "3rd",
+            "portuguese": "Terceiro",
+            "hungarian": "Harmadik"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "4th",
+            "portuguese": "Quarto",
+            "hungarian": "Negyedik"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "5th",
+            "portuguese": "Quinto",
+            "hungarian": "Ötödik"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "number",
+            "portuguese": "Número",
+            "hungarian": "Szám"
+        },
+        "imagePath": null
+    }
+]

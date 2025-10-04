@@ -1,0 +1,97 @@
+[
+    {
+        "translations": {
+            "english": "January",
+            "portuguese": "Janeiro",
+            "hungarian": "Január"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "February",
+            "portuguese": "Fevereiro",
+            "hungarian": "Február"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "March",
+            "portuguese": "Março",
+            "hungarian": "Március"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "April",
+            "portuguese": "Abril",
+            "hungarian": "Április"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "May",
+            "portuguese": "Maio",
+            "hungarian": "Május"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "June",
+            "portuguese": "Junho",
+            "hungarian": "Június"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "July",
+            "portuguese": "Julho",
+            "hungarian": "Július"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "August",
+            "portuguese": "Agosto",
+            "hungarian": "Augusztus"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "September",
+            "portuguese": "Setembro",
+            "hungarian": "Szeptember"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "October",
+            "portuguese": "Outubro",
+            "hungarian": "Október"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "November",
+            "portuguese": "Novembro",
+            "hungarian": "November"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "December",
+            "portuguese": "Dezembro",
+            "hungarian": "December"
+        }
+    }
+]

@@ -1,0 +1,138 @@
+[
+    {
+        "translations": {
+            "english": "year",
+            "portuguese": "Ano",
+            "hungarian": "Év"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "month",
+            "portuguese": "Mês",
+            "hungarian": "Hónap"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "week",
+            "portuguese": "Semana",
+            "hungarian": "Hét"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "day",
+            "portuguese": "Dia",
+            "hungarian": "Nap"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "hour",
+            "portuguese": "Hora",
+            "hungarian": "Óra"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "minute",
+            "portuguese": "Minuto",
+            "hungarian": "Perc"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "second",
+            "portuguese": "Segundo",
+            "hungarian": "Másodperc"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "morning",
+            "portuguese": "Manhã",
+            "hungarian": "Reggel"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "afternoon",
+            "portuguese": "Tarde",
+            "hungarian": "Délután"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "evening",
+            "portuguese": "Noite (início)",
+            "hungarian": "Este"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "night",
+            "portuguese": "Noite",
+            "hungarian": "Éjszaka"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "time",
+            "portuguese": "Tempo",
+            "hungarian": "Idő"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "summer",
+            "portuguese": "verão",
+            "hungarian": "nyár"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "spring",
+            "portuguese": "primavera",
+            "hungarian": "tavasz"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "winter",
+            "portuguese": "inverno",
+            "hungarian": "tél"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "fall",
+            "portuguese": "outono",
+            "hungarian": "ősz"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "season",
+            "portuguese": "estação",
+            "hungarian": "évszak"
+        },
+        "imagePath": null
+    }
+]

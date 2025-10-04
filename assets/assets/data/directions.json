@@ -1,0 +1,138 @@
+[
+    {
+        "translations": {
+            "english": "top",
+            "portuguese": "topo",
+            "hungarian": "teteje"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "bottom",
+            "portuguese": "fundo",
+            "hungarian": "alja"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "side",
+            "portuguese": "lado",
+            "hungarian": "oldal"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "front",
+            "portuguese": "frente",
+            "hungarian": "eleje"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "back",
+            "portuguese": "costas",
+            "hungarian": "hátulja"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "outside",
+            "portuguese": "fora",
+            "hungarian": "kívül"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "inside",
+            "portuguese": "dentro",
+            "hungarian": "belül"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "up",
+            "portuguese": "cima",
+            "hungarian": "fel"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "down",
+            "portuguese": "baixo",
+            "hungarian": "le"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "left",
+            "portuguese": "esquerda",
+            "hungarian": "bal"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "right",
+            "portuguese": "direita",
+            "hungarian": "jobb"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "straight",
+            "portuguese": "reto",
+            "hungarian": "egyenes"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "north",
+            "portuguese": "norte",
+            "hungarian": "észak"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "south",
+            "portuguese": "sul",
+            "hungarian": "dél"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "east",
+            "portuguese": "leste",
+            "hungarian": "kelet"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "west",
+            "portuguese": "oeste",
+            "hungarian": "nyugat"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "direction",
+            "portuguese": "direção",
+            "hungarian": "irány"
+        },
+        "imagePath": null
+    }
+]

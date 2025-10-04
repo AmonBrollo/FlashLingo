@@ -1,0 +1,58 @@
+[
+    {
+        "translations": {
+            "english": "Monday",
+            "portuguese": "Segunda-feira",
+            "hungarian": "Hétfő"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "Tuesday",
+            "portuguese": "Terça-feira",
+            "hungarian": "Kedd"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "Wednesday",
+            "portuguese": "Quarta-feira",
+            "hungarian": "Szerda"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "Thursday",
+            "portuguese": "Quinta-feira",
+            "hungarian": "Csütörtök"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "Friday",
+            "portuguese": "Sexta-feira",
+            "hungarian": "Péntek"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "Saturday",
+            "portuguese": "Sábado",
+            "hungarian": "Szombat"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "Sunday",
+            "portuguese": "Domingo",
+            "hungarian": "Vasárnap"
+        },
+        "imagePath": null
+    }
+]

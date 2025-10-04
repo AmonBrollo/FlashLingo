@@ -1,0 +1,66 @@
+[
+    {
+        "translations": {
+            "english": "I",
+            "portuguese": "Eu",
+            "hungarian": "Én"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "you (singular)",
+            "portuguese": "Tu",
+            "hungarian": "Te"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "he",
+            "portuguese": "Ele",
+            "hungarian": "Ő"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "she",
+            "portuguese": "Ela",
+            "hungarian": "Ő"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "it",
+            "portuguese": "Isso/Aquilo",
+            "hungarian": "Ez/Az"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "we",
+            "portuguese": "Nós",
+            "hungarian": "Mi"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "you (plural)",
+            "portuguese": "Vocês",
+            "hungarian": "Ti"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "they",
+            "portuguese": "Eles",
+            "hungarian": "Ők"
+        },
+        "imagePath": null
+    }
+]

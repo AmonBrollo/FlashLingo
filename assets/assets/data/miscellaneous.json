@@ -1,0 +1,138 @@
+[
+    {
+        "translations": {
+            "english": "map",
+            "portuguese": "mapa",
+            "hungarian": "térkép"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "dot",
+            "portuguese": "ponto",
+            "hungarian": "pont"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "consonant",
+            "portuguese": "consoante",
+            "hungarian": "mássalhangzó"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "vowel",
+            "portuguese": "vogal",
+            "hungarian": "magánhangzó"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "light",
+            "portuguese": "luz",
+            "hungarian": "fény"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "sound",
+            "portuguese": "som",
+            "hungarian": "hang"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "yes",
+            "portuguese": "sim",
+            "hungarian": "igen"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "no",
+            "portuguese": "não",
+            "hungarian": "nem"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "piece",
+            "portuguese": "pedaço",
+            "hungarian": "darab"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "pain",
+            "portuguese": "dor",
+            "hungarian": "fájdalom"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "injury",
+            "portuguese": "ferimento",
+            "hungarian": "sérülés"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "hole",
+            "portuguese": "buraco",
+            "hungarian": "lyuk"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "image",
+            "portuguese": "imagem",
+            "hungarian": "kép"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "pattern",
+            "portuguese": "padrão",
+            "hungarian": "minta"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "noun",
+            "portuguese": "substantivo",
+            "hungarian": "főnév"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "verb",
+            "portuguese": "verbo",
+            "hungarian": "ige"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "adjective",
+            "portuguese": "adjetivo",
+            "hungarian": "melléknév"
+        },
+        "imagePath": null
+    }
+]

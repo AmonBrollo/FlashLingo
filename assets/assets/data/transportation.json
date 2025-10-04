@@ -1,0 +1,106 @@
+[
+    {
+        "translations": {
+            "english": "train",
+            "portuguese": "trem",
+            "hungarian": "vonat"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "plane",
+            "portuguese": "avião",
+            "hungarian": "repülőgép"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "car",
+            "portuguese": "carro",
+            "hungarian": "autó"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "truck",
+            "portuguese": "caminhão",
+            "hungarian": "kamion"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "bicycle",
+            "portuguese": "bicicleta",
+            "hungarian": "kerékpár"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "bus",
+            "portuguese": "ônibus",
+            "hungarian": "busz"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "boat",
+            "portuguese": "barco",
+            "hungarian": "hajó"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "ship",
+            "portuguese": "navio",
+            "hungarian": "hajó"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "tire",
+            "portuguese": "pneu",
+            "hungarian": "gumi"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "gasoline",
+            "portuguese": "gasolina",
+            "hungarian": "benzin"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "engine",
+            "portuguese": "motor",
+            "hungarian": "motor"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "ticket",
+            "portuguese": "bilhete",
+            "hungarian": "jegy"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "transportation",
+            "portuguese": "transporte",
+            "hungarian": "közlekedés"
+        },
+        "imagePath": null
+    }
+]

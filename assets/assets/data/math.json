@@ -1,0 +1,114 @@
+[
+    {
+        "translations": {
+            "english": "meter",
+            "portuguese": "metro",
+            "hungarian": "méter"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "centimeter",
+            "portuguese": "centímetro",
+            "hungarian": "centiméter"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "kilogram",
+            "portuguese": "quilograma",
+            "hungarian": "kilogramm"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "inch",
+            "portuguese": "polegada",
+            "hungarian": "hüvelyk"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "foot",
+            "portuguese": "pé",
+            "hungarian": "láb"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "pound",
+            "portuguese": "libra",
+            "hungarian": "font"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "half",
+            "portuguese": "metade",
+            "hungarian": "fél"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "circle",
+            "portuguese": "círculo",
+            "hungarian": "kör"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "square",
+            "portuguese": "quadrado",
+            "hungarian": "négyzet"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "temperature",
+            "portuguese": "temperatura",
+            "hungarian": "hőmérséklet"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "date",
+            "portuguese": "data",
+            "hungarian": "dátum"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "weight",
+            "portuguese": "peso",
+            "hungarian": "súly"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "edge",
+            "portuguese": "borda",
+            "hungarian": "él"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "corner",
+            "portuguese": "canto",
+            "hungarian": "sarok"
+        },
+        "imagePath": null
+    }
+]

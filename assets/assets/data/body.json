@@ -1,0 +1,250 @@
+[
+    {
+        "translations": {
+            "english": "head",
+            "portuguese": "cabeça",
+            "hungarian": "fej"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "neck",
+            "portuguese": "pescoço",
+            "hungarian": "nyak"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "face",
+            "portuguese": "rosto",
+            "hungarian": "arc"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "beard",
+            "portuguese": "barba",
+            "hungarian": "szakáll"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "hair",
+            "portuguese": "cabelo",
+            "hungarian": "haj"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "eye",
+            "portuguese": "olho",
+            "hungarian": "szem"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "mouth",
+            "portuguese": "boca",
+            "hungarian": "száj"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "lip",
+            "portuguese": "lábio",
+            "hungarian": "ajak"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "nose",
+            "portuguese": "nariz",
+            "hungarian": "orr"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "tooth",
+            "portuguese": "dente",
+            "hungarian": "fog"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "ear",
+            "portuguese": "orelha",
+            "hungarian": "fül"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "tear",
+            "portuguese": "lágrima",
+            "hungarian": "könny"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "tongue",
+            "portuguese": "língua",
+            "hungarian": "nyelv"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "back",
+            "portuguese": "costas",
+            "hungarian": "hát"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "toe",
+            "portuguese": "dedo do pé",
+            "hungarian": "lábujj"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "finger",
+            "portuguese": "dedo",
+            "hungarian": "ujj"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "foot",
+            "portuguese": "pé",
+            "hungarian": "láb"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "hand",
+            "portuguese": "mão",
+            "hungarian": "kéz"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "leg",
+            "portuguese": "perna",
+            "hungarian": "láb"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "arm",
+            "portuguese": "braço",
+            "hungarian": "kar"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "shoulder",
+            "portuguese": "ombro",
+            "hungarian": "váll"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "heart",
+            "portuguese": "coração",
+            "hungarian": "szív"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "blood",
+            "portuguese": "sangue",
+            "hungarian": "vér"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "brain",
+            "portuguese": "cérebro",
+            "hungarian": "agy"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "knee",
+            "portuguese": "joelho",
+            "hungarian": "térd"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "sweat",
+            "portuguese": "suor",
+            "hungarian": "verejték"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "disease",
+            "portuguese": "doença",
+            "hungarian": "betegség"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "bone",
+            "portuguese": "osso",
+            "hungarian": "csont"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "voice",
+            "portuguese": "voz",
+            "hungarian": "hang"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "skin",
+            "portuguese": "pele",
+            "hungarian": "bőr"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "body",
+            "portuguese": "corpo",
+            "hungarian": "test"
+        },
+        "imagePath": null
+    }
+]

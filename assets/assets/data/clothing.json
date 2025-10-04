@@ -1,0 +1,98 @@
+[
+    {
+        "translations": {
+            "english": "hat",
+            "portuguese": "chapéu",
+            "hungarian": "kalap"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "dress",
+            "portuguese": "vestido",
+            "hungarian": "ruha"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "suit",
+            "portuguese": "terno",
+            "hungarian": "öltöny"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "skirt",
+            "portuguese": "saia",
+            "hungarian": "szoknya"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "shirt",
+            "portuguese": "camisa",
+            "hungarian": "ing"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "T-shirt",
+            "portuguese": "camiseta",
+            "hungarian": "póló"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "pants",
+            "portuguese": "calça",
+            "hungarian": "nadrág"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "shoes",
+            "portuguese": "sapatos",
+            "hungarian": "cipő"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "pocket",
+            "portuguese": "bolso",
+            "hungarian": "zseb"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "coat",
+            "portuguese": "casaco",
+            "hungarian": "kabát"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "stain",
+            "portuguese": "mancha",
+            "hungarian": "folt"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "clothing",
+            "portuguese": "roupa",
+            "hungarian": "ruházat"
+        },
+        "imagePath": null
+    }
+]

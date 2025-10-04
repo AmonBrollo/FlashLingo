@@ -1,0 +1,82 @@
+[
+    {
+        "translations": {
+            "english": "dog",
+            "portuguese": "cachorro",
+            "hungarian": "kutya"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "cat",
+            "portuguese": "gato",
+            "hungarian": "macska"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "fish",
+            "portuguese": "peixe",
+            "hungarian": "hal"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "bird",
+            "portuguese": "pássaro",
+            "hungarian": "madár"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "cow",
+            "portuguese": "vaca",
+            "hungarian": "tehén"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "pig",
+            "portuguese": "porco",
+            "hungarian": "disznó"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "mouse",
+            "portuguese": "rato",
+            "hungarian": "egér"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "horse",
+            "portuguese": "cavalo",
+            "hungarian": "ló"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "wing",
+            "portuguese": "asa",
+            "hungarian": "szárny"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "animal",
+            "portuguese": "animal",
+            "hungarian": "állat"
+        },
+        "imagePath": null
+    }
+]
