@@ -9,6 +9,7 @@ import '../services/repetition_service.dart';
 import '../utils/topic_names.dart';
 import '../utils/ui_strings.dart';
 import 'profile_screen.dart';
+import 'review_screen.dart';
 
 class DeckSelectorScreen extends StatefulWidget {
   final List<FlashcardDeck> decks;
@@ -93,6 +94,19 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
 
   void _onMenuSelected(String value) async {
     switch (value) {
+      case 'review':
+        final remembered = context.read<ReviewState>().remembered;
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => ReviewScreen(
+              cards: remembered,
+              baseLanguage: widget.baseLanguage,
+              targetLanguage: widget.targetLanguage,
+            ),
+          ),
+        );
+        break;
       case 'profile':
         Navigator.push(
           context,
@@ -214,6 +228,16 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
             icon: const Icon(Icons.more_horiz),
             onSelected: _onMenuSelected,
             itemBuilder: (context) => [
+              PopupMenuItem(
+                value: 'review',
+                child: Row(
+                  children: [
+                    Icon(Icons.rate_review, size: 20),
+                    SizedBox(width: 8),
+                    Text('Review'),
+                  ],
+                ),
+              ),
               PopupMenuItem(
                 value: 'profile',
                 child: Row(
