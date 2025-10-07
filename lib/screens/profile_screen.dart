@@ -36,12 +36,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _logout(BuildContext context) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Logout'),
+        content: const Text('Are you sure you want to logout?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: TextButton.styleFrom(foregroundColor: Colors.brown),
+            child: const Text('Logout'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true) return;
+
     setState(() => _isLoading = true);
 
     try {
-      // Clear local data (but don't force clear - let it sync on next login)
-      // await AppInitializationService.clearLocalData(); // Commented out to maintain offline access
-
       // Sign out from Firebase
       await FirebaseAuth.instance.signOut();
 
@@ -191,13 +209,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       setState(() => _isLoading = true);
 
       try {
-        // Clear all local data (progress, preferences)
         await AppInitializationService.clearLocalData();
-
-        // Clear all images
         await LocalImageService.clearAllImages();
-
-        // Refresh storage stats
         await _loadStorageStats();
 
         if (mounted) {
@@ -209,7 +222,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           );
 
-          // Navigate back to language selection after a brief delay
           Future.delayed(const Duration(seconds: 2), () {
             if (mounted) {
               Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
@@ -273,7 +285,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
       try {
         await LocalImageService.clearAllImages();
-        await _loadStorageStats(); // Refresh stats
+        await _loadStorageStats();
 
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -305,7 +317,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     try {
       await LocalImageService.cleanupOrphanedImages();
-      await _loadStorageStats(); // Refresh stats
+      await _loadStorageStats();
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -343,50 +355,127 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
-          : Padding(
+          : SingleChildScrollView(
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Account Information Card
+                  // Account Information Card with Auth Button
                   Card(
+                    elevation: 4,
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            'Account Information',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          Row(
+                            children: [
+                              Icon(
+                                isAnonymous
+                                    ? Icons.person_outline
+                                    : Icons.person,
+                                size: 32,
+                                color: Colors.brown,
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      isAnonymous
+                                          ? 'Anonymous User'
+                                          : 'Logged In',
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    if (!isAnonymous && user?.email != null)
+                                      Text(
+                                        user!.email!,
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.grey[600],
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
-                          const SizedBox(height: 12),
-                          if (user != null) ...[
-                            if (user.email != null) ...[
-                              const Text(
-                                'Email:',
-                                style: TextStyle(fontWeight: FontWeight.w500),
+                          const SizedBox(height: 16),
+
+                          // Prominent Auth Button
+                          SizedBox(
+                            width: double.infinity,
+                            child: isAnonymous
+                                ? ElevatedButton.icon(
+                                    onPressed: () => _login(context),
+                                    icon: const Icon(Icons.login),
+                                    label: const Text(
+                                      'Sign In to Save Progress',
+                                    ),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.brown,
+                                      foregroundColor: Colors.white,
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 14,
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                    ),
+                                  )
+                                : OutlinedButton.icon(
+                                    onPressed: () => _logout(context),
+                                    icon: const Icon(Icons.logout),
+                                    label: const Text('Sign Out'),
+                                    style: OutlinedButton.styleFrom(
+                                      foregroundColor: Colors.brown,
+                                      side: const BorderSide(
+                                        color: Colors.brown,
+                                      ),
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 14,
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                    ),
+                                  ),
+                          ),
+
+                          // Info message for anonymous users
+                          if (isAnonymous) ...[
+                            const SizedBox(height: 12),
+                            Container(
+                              padding: const EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                color: Colors.blue[50],
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(color: Colors.blue[200]!),
                               ),
-                              Text(user.email!),
-                              const SizedBox(height: 8),
-                            ],
-                            if (user.displayName != null) ...[
-                              const Text(
-                                'Display Name:',
-                                style: TextStyle(fontWeight: FontWeight.w500),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.info_outline,
+                                    size: 20,
+                                    color: Colors.blue[700],
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: Text(
+                                      'Sign in to sync your progress across devices',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.blue[900],
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              Text(user.displayName!),
-                              const SizedBox(height: 8),
-                            ],
-                            const Text(
-                              'Account Status:',
-                              style: TextStyle(fontWeight: FontWeight.w500),
                             ),
-                            Text(user.isAnonymous ? 'Anonymous' : 'Registered'),
-                          ] else ...[
-                            const Text('No user information available'),
                           ],
                         ],
                       ),
@@ -438,7 +527,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   const SizedBox(height: 12),
 
-                  // Image Management Actions (available to all users)
+                  // Image Management Actions
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton.icon(
@@ -467,7 +556,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   const SizedBox(height: 12),
 
-                  // Progress Reset (available to all users)
+                  // Progress Reset
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton.icon(
@@ -482,7 +571,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   const SizedBox(height: 12),
 
-                  // Reset All Data - Most destructive action (available to all users)
+                  // Reset All Data
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton.icon(
@@ -495,39 +584,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 24),
 
-                  const Text(
-                    'Account Actions',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 12),
-
-                  // Login/Logout
-                  SizedBox(
-                    width: double.infinity,
-                    child: isAnonymous
-                        ? ElevatedButton.icon(
-                            onPressed: () => _login(context),
-                            icon: const Icon(Icons.login),
-                            label: const Text('Login'),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.brown,
-                              minimumSize: const Size(150, 48),
-                            ),
-                          )
-                        : ElevatedButton.icon(
-                            onPressed: () => _logout(context),
-                            icon: const Icon(Icons.logout),
-                            label: const Text('Logout'),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.brown,
-                              minimumSize: const Size(150, 48),
-                            ),
-                          ),
-                  ),
-
-                  const Spacer(),
+                  const SizedBox(height: 32),
                   const Center(
                     child: Text(
                       'FlashLango',
