@@ -6,6 +6,7 @@ import '../models/flashcard.dart';
 import '../services/review_state.dart';
 import '../services/firebase_user_preferences.dart';
 import '../services/repetition_service.dart';
+import '../services/loading_with_timeout.dart';
 import '../utils/topic_names.dart';
 import '../utils/ui_strings.dart';
 import 'profile_screen.dart';
@@ -30,6 +31,8 @@ class DeckSelectorScreen extends StatefulWidget {
 class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
   final RepetitionService _repetitionService = RepetitionService();
   bool _isLoading = true;
+  bool _hasError = false;
+  String? _errorMessage;
   Map<String, Map<String, int>> _deckStats = {};
 
   @override
@@ -39,18 +42,43 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
   }
 
   Future<void> _initializeProgressData() async {
+    setState(() {
+      _isLoading = true;
+      _hasError = false;
+      _errorMessage = null;
+    });
+
     try {
-      // Initialize repetition service and load all progress
-      await _repetitionService.initialize();
+      // Initialize repetition service with timeout
+      await LoadingWithTimeout.execute(
+        operation: () => _repetitionService.initialize(),
+        timeout: const Duration(seconds: 8),
+        operationName: 'Initialize repetition service',
+      );
 
-      // Calculate stats for each deck
+      // Calculate stats for each deck with individual timeouts
       final stats = <String, Map<String, int>>{};
-      for (final deck in widget.decks) {
-        // Preload progress for this deck's cards
-        await _repetitionService.preloadProgress(deck.cards);
 
-        // Calculate statistics
-        stats[deck.topicKey] = _repetitionService.getStudyStats(deck.cards);
+      for (final deck in widget.decks) {
+        try {
+          // Preload progress for this deck with timeout
+          await LoadingWithTimeout.execute(
+            operation: () => _repetitionService.preloadProgress(deck.cards),
+            timeout: const Duration(seconds: 5),
+            operationName: 'Preload ${deck.topicKey}',
+          );
+
+          // Calculate statistics (this is local, no timeout needed)
+          stats[deck.topicKey] = _repetitionService.getStudyStats(deck.cards);
+        } catch (e) {
+          print('Error loading deck ${deck.topicKey}: $e');
+          // Continue with next deck even if this one fails
+          stats[deck.topicKey] = {
+            'new': deck.cards.length,
+            'due': 0,
+            'review': 0,
+          };
+        }
       }
 
       if (mounted) {
@@ -61,9 +89,21 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
       }
     } catch (e) {
       print('Error loading deck progress: $e');
+
       if (mounted) {
         setState(() {
+          _hasError = true;
+          _errorMessage = e.toString();
           _isLoading = false;
+
+          // Set default stats for all decks so they're still accessible
+          for (final deck in widget.decks) {
+            _deckStats[deck.topicKey] = {
+              'new': deck.cards.length,
+              'due': 0,
+              'review': 0,
+            };
+          }
         });
       }
     }
@@ -198,27 +238,6 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
   Widget build(BuildContext context) {
     final reviewState = context.watch<ReviewState>();
 
-    if (_isLoading) {
-      return Scaffold(
-        appBar: AppBar(
-          title: Text(UiStrings.selectDeck(widget.baseLanguage)),
-          backgroundColor: Colors.brown,
-        ),
-        body: const Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.brown),
-              ),
-              SizedBox(height: 16),
-              Text('Loading progress...'),
-            ],
-          ),
-        ),
-      );
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: Text(UiStrings.selectDeck(widget.baseLanguage)),
@@ -252,158 +271,253 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 12,
-            mainAxisSpacing: 12,
-            childAspectRatio:
-                0.85, // Slightly taller to accommodate progress info
+      body: _buildBody(reviewState),
+    );
+  }
+
+  Widget _buildBody(ReviewState reviewState) {
+    // Show error state with retry option
+    if (_hasError) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(
+                Icons.warning_amber_rounded,
+                size: 64,
+                color: Colors.orange,
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                'Could not load progress',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Don\'t worry, your decks are still available!',
+                style: TextStyle(color: Colors.grey.shade600),
+                textAlign: TextAlign.center,
+              ),
+              if (_errorMessage != null) ...[
+                const SizedBox(height: 12),
+                Text(
+                  _errorMessage!.length > 50
+                      ? '${_errorMessage!.substring(0, 50)}...'
+                      : _errorMessage!,
+                  style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+              const SizedBox(height: 24),
+              ElevatedButton.icon(
+                onPressed: _initializeProgressData,
+                icon: const Icon(Icons.refresh),
+                label: const Text('Retry Loading Progress'),
+              ),
+              const SizedBox(height: 12),
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    _hasError = false;
+                    _isLoading = false;
+                  });
+                },
+                child: const Text('Continue Without Progress Data'),
+              ),
+            ],
           ),
-          itemCount: widget.decks.length + 1,
-          itemBuilder: (context, index) {
-            if (index == 0) {
-              final List<Flashcard> forgottenCards = reviewState.forgotten;
+        ),
+      );
+    }
 
-              return GestureDetector(
-                onTap: forgottenCards.isEmpty
-                    ? null
-                    : () => _openForgottenCards(context, forgottenCards),
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  elevation: forgottenCards.isEmpty ? 1 : 4,
-                  color: Colors.red[50],
-                  child: Stack(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Column(
-                          children: [
-                            Expanded(
-                              child: Center(
-                                child: Text(
-                                  'Forgotten Cards',
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.red,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ),
-                            if (forgottenCards.isNotEmpty)
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                  vertical: 4,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Colors.red[100],
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Text(
-                                  'Review ${forgottenCards.length} cards',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.red[700],
-                                  ),
-                                ),
-                              ),
-                          ],
+    // Show loading state with timeout indicator
+    if (_isLoading) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.brown),
+            ),
+            const SizedBox(height: 16),
+            const Text('Loading progress...'),
+            const SizedBox(height: 24),
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  _isLoading = false;
+                  // Set default stats if loading is taking too long
+                  for (final deck in widget.decks) {
+                    _deckStats[deck.topicKey] = {
+                      'new': deck.cards.length,
+                      'due': 0,
+                      'review': 0,
+                    };
+                  }
+                });
+              },
+              child: const Text('Skip and continue'),
+            ),
+          ],
+        ),
+      );
+    }
+
+    // Show normal deck grid
+    return Padding(
+      padding: const EdgeInsets.all(12.0),
+      child: GridView.builder(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 12,
+          mainAxisSpacing: 12,
+          childAspectRatio: 0.85,
+        ),
+        itemCount: widget.decks.length + 1,
+        itemBuilder: (context, index) {
+          if (index == 0) {
+            return _buildForgottenCardsCard(reviewState);
+          }
+
+          final deck = widget.decks[index - 1];
+          return _buildDeckCard(deck, reviewState);
+        },
+      ),
+    );
+  }
+
+  Widget _buildForgottenCardsCard(ReviewState reviewState) {
+    final List<Flashcard> forgottenCards = reviewState.forgotten;
+
+    return GestureDetector(
+      onTap: forgottenCards.isEmpty
+          ? null
+          : () => _openForgottenCards(context, forgottenCards),
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        elevation: forgottenCards.isEmpty ? 1 : 4,
+        color: Colors.red[50],
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Center(
+                      child: Text(
+                        'Forgotten Cards',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red,
                         ),
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      Positioned(
-                        top: 8,
-                        right: 8,
-                        child: Text(
-                          '${forgottenCards.length}',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.red[700],
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              );
-            }
-
-            final deck = widget.decks[index - 1];
-            final deckName = TopicNames.getName(
-              deck.topicKey,
-              widget.baseLanguage,
-            );
-            final revealedCount = reviewState.getRevealedCount(deck.topicKey);
-            final totalCount = deck.cards.length;
-            final stats = _deckStats[deck.topicKey] ?? {};
-            final studiedCount = (stats['due'] ?? 0) + (stats['review'] ?? 0);
-            final isComplete = totalCount > 0 && studiedCount >= totalCount;
-
-            return GestureDetector(
-              onTap: () => _openFlashcards(context, deck),
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                elevation: 4,
-                color: isComplete ? Colors.green[50] : Colors.brown[50],
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Header with completion status
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              deckName,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.brown,
-                              ),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          if (isComplete)
-                            const Icon(
-                              Icons.check_circle,
-                              size: 20,
-                              color: Colors.green,
-                            ),
-                        ],
+                  if (forgottenCards.isNotEmpty)
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
                       ),
-                      const Spacer(),
-                      // Progress information
-                      _buildProgressIndicator(stats, totalCount),
-                      const SizedBox(height: 8),
-                      // Total card count
-                      Text(
-                        '$revealedCount/$totalCount cards',
+                      decoration: BoxDecoration(
+                        color: Colors.red[100],
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        'Review ${forgottenCards.length} cards',
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
-                          color: Colors.brown[600],
+                          color: Colors.red[700],
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                ],
+              ),
+            ),
+            Positioned(
+              top: 8,
+              right: 8,
+              child: Text(
+                '${forgottenCards.length}',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.red[700],
                 ),
               ),
-            );
-          },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDeckCard(FlashcardDeck deck, ReviewState reviewState) {
+    final deckName = TopicNames.getName(deck.topicKey, widget.baseLanguage);
+    final revealedCount = reviewState.getRevealedCount(deck.topicKey);
+    final totalCount = deck.cards.length;
+    final stats =
+        _deckStats[deck.topicKey] ?? {'new': totalCount, 'due': 0, 'review': 0};
+    final studiedCount = (stats['due'] ?? 0) + (stats['review'] ?? 0);
+    final isComplete = totalCount > 0 && studiedCount >= totalCount;
+
+    return GestureDetector(
+      onTap: () => _openFlashcards(context, deck),
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        elevation: 4,
+        color: isComplete ? Colors.green[50] : Colors.brown[50],
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Header with completion status
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      deckName,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.brown,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  if (isComplete)
+                    const Icon(
+                      Icons.check_circle,
+                      size: 20,
+                      color: Colors.green,
+                    ),
+                ],
+              ),
+              const Spacer(),
+              // Progress information
+              _buildProgressIndicator(stats, totalCount),
+              const SizedBox(height: 8),
+              // Total card count
+              Text(
+                '$revealedCount/$totalCount cards',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.brown[600],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
