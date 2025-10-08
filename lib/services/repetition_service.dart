@@ -17,6 +17,9 @@ class RepetitionService {
         final allProgress = await FirebaseProgressService.loadAllProgress();
         _progressCache.addAll(allProgress);
         _cacheLoaded = true;
+        print(
+          'RepetitionService initialized with ${_progressCache.length} cards',
+        );
       } catch (e) {
         print('Error initializing RepetitionService: $e');
         _cacheLoaded = true; // Continue with empty cache
@@ -144,24 +147,28 @@ class RepetitionService {
     _cacheLoaded = false;
   }
 
-  /// Preload progress for multiple cards
+  /// Preload progress for multiple cards (optimized to avoid individual Firebase calls)
   Future<void> preloadProgress(List<Flashcard> cards) async {
+    // Ensure cache is loaded first
     if (!_cacheLoaded) {
       await initialize();
     }
 
-    // Load any missing progress
-    final futures = <Future>[];
+    // After initialization, all progress should be in cache
+    // Just populate cache for any cards that don't have progress yet
     for (final card in cards) {
       final key = _generateCardKey(card);
       if (!_progressCache.containsKey(key)) {
-        futures.add(loadProgress(card));
+        // Create default progress for new cards (no Firebase call needed)
+        _progressCache[key] = FlashcardProgress();
       }
     }
 
-    if (futures.isNotEmpty) {
-      await Future.wait(futures);
-    }
+    // Note: We don't make individual Firebase calls here anymore
+    // All Firebase data was loaded during initialize()
+    print(
+      'Preloaded progress for ${cards.length} cards (${_progressCache.length} total in cache)',
+    );
   }
 
   /// Get the next review date for a card
