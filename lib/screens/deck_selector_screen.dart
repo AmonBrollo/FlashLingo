@@ -6,7 +6,6 @@ import '../models/flashcard.dart';
 import '../services/review_state.dart';
 import '../services/firebase_user_preferences.dart';
 import '../services/repetition_service.dart';
-import '../services/loading_with_timeout.dart';
 import '../utils/topic_names.dart';
 import '../utils/ui_strings.dart';
 import 'profile_screen.dart';
@@ -48,31 +47,43 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
       _errorMessage = null;
     });
 
+    // Set default stats immediately so decks are accessible
+    final stats = <String, Map<String, int>>{};
+    for (final deck in widget.decks) {
+      stats[deck.topicKey] = {'new': deck.cards.length, 'due': 0, 'review': 0};
+    }
+
+    setState(() {
+      _deckStats = stats;
+      _isLoading = false;
+    });
+
+    // Load progress in background (non-blocking)
+    _loadProgressInBackground();
+  }
+
+  Future<void> _loadProgressInBackground() async {
     try {
-      // Initialize repetition service with timeout
-      await LoadingWithTimeout.execute(
-        operation: () => _repetitionService.initialize(),
-        timeout: const Duration(seconds: 8),
-        operationName: 'Initialize repetition service',
+      // Try to initialize with a short timeout
+      await _repetitionService.initialize().timeout(
+        const Duration(seconds: 5),
+        onTimeout: () {
+          print('Progress initialization timed out - continuing with defaults');
+        },
       );
 
-      // Calculate stats for each deck with individual timeouts
+      // Calculate stats for each deck
       final stats = <String, Map<String, int>>{};
 
       for (final deck in widget.decks) {
         try {
-          // Preload progress for this deck with timeout
-          await LoadingWithTimeout.execute(
-            operation: () => _repetitionService.preloadProgress(deck.cards),
-            timeout: const Duration(seconds: 5),
-            operationName: 'Preload ${deck.topicKey}',
-          );
+          // Preload progress (now just uses cache, very fast)
+          await _repetitionService.preloadProgress(deck.cards);
 
-          // Calculate statistics (this is local, no timeout needed)
+          // Calculate statistics
           stats[deck.topicKey] = _repetitionService.getStudyStats(deck.cards);
         } catch (e) {
           print('Error loading deck ${deck.topicKey}: $e');
-          // Continue with next deck even if this one fails
           stats[deck.topicKey] = {
             'new': deck.cards.length,
             'due': 0,
@@ -84,28 +95,11 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
       if (mounted) {
         setState(() {
           _deckStats = stats;
-          _isLoading = false;
         });
       }
     } catch (e) {
-      print('Error loading deck progress: $e');
-
-      if (mounted) {
-        setState(() {
-          _hasError = true;
-          _errorMessage = e.toString();
-          _isLoading = false;
-
-          // Set default stats for all decks so they're still accessible
-          for (final deck in widget.decks) {
-            _deckStats[deck.topicKey] = {
-              'new': deck.cards.length,
-              'due': 0,
-              'review': 0,
-            };
-          }
-        });
-      }
+      print('Background progress loading failed: $e');
+      // Continue with default stats already set
     }
   }
 

@@ -93,33 +93,54 @@ class FirebaseProgressService {
     allProgress.addAll(localProgress);
 
     final progressCollection = _getProgressCollection();
-    if (progressCollection != null) {
-      try {
-        final snapshot = await progressCollection.get().timeout(
-          const Duration(seconds: 8),
-        );
 
-        // Process all documents
-        final updates = <String, FlashcardProgress>{};
-        for (final doc in snapshot.docs) {
-          final data = doc.data() as Map<String, dynamic>;
-          final progress = FlashcardProgress(
-            box: data['box'] ?? 1,
-            nextReview: (data['nextReview'] as Timestamp?)?.toDate(),
-          );
-          updates[doc.id] = progress;
-        }
+    // If no authentication or anonymous, return local only
+    if (progressCollection == null) {
+      print(
+        'No Firebase auth - using local progress only (${allProgress.length} cards)',
+      );
+      return allProgress;
+    }
 
-        allProgress.addAll(updates);
+    try {
+      final snapshot = await progressCollection
+          .limit(1)
+          .get()
+          .timeout(const Duration(seconds: 3));
 
-        // Save to local storage in batch (non-blocking)
-        if (updates.isNotEmpty) {
-          _batchSaveProgressLocally(updates);
-        }
-      } catch (e) {
-        print('Error loading all progress from Firebase: $e');
-        // Continue with local progress
+      // If collection is empty, return immediately
+      if (snapshot.docs.isEmpty && localProgress.isEmpty) {
+        print('No progress data found - new user');
+        return allProgress;
       }
+
+      // Load full collection if there's data
+      final fullSnapshot = await progressCollection.get().timeout(
+        const Duration(seconds: 6),
+      );
+
+      // Process all documents
+      final updates = <String, FlashcardProgress>{};
+      for (final doc in fullSnapshot.docs) {
+        final data = doc.data() as Map<String, dynamic>;
+        final progress = FlashcardProgress(
+          box: data['box'] ?? 1,
+          nextReview: (data['nextReview'] as Timestamp?)?.toDate(),
+        );
+        updates[doc.id] = progress;
+      }
+
+      allProgress.addAll(updates);
+
+      // Save to local storage in batch (non-blocking)
+      if (updates.isNotEmpty) {
+        _batchSaveProgressLocally(updates);
+      }
+
+      print('Loaded ${allProgress.length} cards from Firebase');
+    } catch (e) {
+      print('Error loading all progress from Firebase: $e');
+      // Continue with local progress
     }
 
     return allProgress;

@@ -11,19 +11,31 @@ class RepetitionService {
 
   /// Initialize the service and load cached progress
   Future<void> initialize() async {
-    if (!_cacheLoaded) {
-      try {
-        _progressCache.clear();
-        final allProgress = await FirebaseProgressService.loadAllProgress();
-        _progressCache.addAll(allProgress);
-        _cacheLoaded = true;
-        print(
-          'RepetitionService initialized with ${_progressCache.length} cards',
-        );
-      } catch (e) {
-        print('Error initializing RepetitionService: $e');
-        _cacheLoaded = true; // Continue with empty cache
-      }
+    if (_cacheLoaded) {
+      return; // Already initialized
+    }
+
+    try {
+      _progressCache.clear();
+
+      // Load with a timeout to prevent hanging
+      final allProgress = await FirebaseProgressService.loadAllProgress()
+          .timeout(
+            const Duration(seconds: 5),
+            onTimeout: () {
+              print('Progress loading timed out - using empty cache');
+              return <String, FlashcardProgress>{};
+            },
+          );
+
+      _progressCache.addAll(allProgress);
+      _cacheLoaded = true;
+      print(
+        'RepetitionService initialized with ${_progressCache.length} cards',
+      );
+    } catch (e) {
+      print('Error initializing RepetitionService: $e');
+      _cacheLoaded = true; // Continue with empty cache
     }
   }
 
