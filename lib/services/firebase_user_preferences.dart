@@ -41,9 +41,14 @@ class FirebaseUserPreferences {
     final userDoc = _getUserDocument();
     if (userDoc != null) {
       try {
-        await userDoc.set({
-          'preferences': preferences,
-        }, SetOptions(merge: true));
+        await userDoc
+            .set({'preferences': preferences}, SetOptions(merge: true))
+            .timeout(
+              const Duration(seconds: 5),
+              onTimeout: () {
+                print('Firebase save timed out, but local save succeeded');
+              },
+            );
       } catch (e) {
         print('Error saving preferences to Firebase: $e');
         // Continue using local storage if Firebase fails
@@ -57,7 +62,8 @@ class FirebaseUserPreferences {
 
     if (userDoc != null) {
       try {
-        final doc = await userDoc.get();
+        final doc = await userDoc.get().timeout(const Duration(seconds: 8));
+
         if (doc.exists) {
           final data = doc.data() as Map<String, dynamic>?;
           final preferences = data?['preferences'] as Map<String, dynamic>?;
@@ -69,11 +75,15 @@ class FirebaseUserPreferences {
             final targetLanguage = preferences[_targetLanguageKey] as String?;
             final deckKey = preferences[_deckKey] as String?;
 
-            if (baseLanguage != null)
+            if (baseLanguage != null) {
               await prefs.setString(_baseLanguageKey, baseLanguage);
-            if (targetLanguage != null)
+            }
+            if (targetLanguage != null) {
               await prefs.setString(_targetLanguageKey, targetLanguage);
-            if (deckKey != null) await prefs.setString(_deckKey, deckKey);
+            }
+            if (deckKey != null) {
+              await prefs.setString(_deckKey, deckKey);
+            }
 
             return {
               'baseLanguage': baseLanguage,
@@ -89,6 +99,11 @@ class FirebaseUserPreferences {
     }
 
     // Fallback to local storage
+    return loadPreferencesLocal();
+  }
+
+  /// Load preferences from local storage only (no Firebase)
+  static Future<Map<String, String?>> loadPreferencesLocal() async {
     final prefs = await SharedPreferences.getInstance();
     return {
       'baseLanguage': prefs.getString(_baseLanguageKey),
@@ -130,7 +145,9 @@ class FirebaseUserPreferences {
     final userDoc = _getUserDocument();
     if (userDoc != null) {
       try {
-        await userDoc.update({'preferences': FieldValue.delete()});
+        await userDoc
+            .update({'preferences': FieldValue.delete()})
+            .timeout(const Duration(seconds: 5));
       } catch (e) {
         print('Error clearing preferences from Firebase: $e');
       }
