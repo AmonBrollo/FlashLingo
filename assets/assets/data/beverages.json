@@ -1,6 +1,22 @@
 [
     {
         "translations": {
+            "english": "water",
+            "portuguese": "água",
+            "hungarian": "víz"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "milk",
+            "portuguese": "leite",
+            "hungarian": "tej"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
             "english": "coffee",
             "portuguese": "café",
             "hungarian": "kávé"
@@ -36,22 +52,6 @@
             "english": "juice",
             "portuguese": "suco",
             "hungarian": "gyümölcslé"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "water",
-            "portuguese": "água",
-            "hungarian": "víz"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "milk",
-            "portuguese": "leite",
-            "hungarian": "tej"
         },
         "imagePath": null
     },
