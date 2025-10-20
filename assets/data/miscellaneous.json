@@ -1,33 +1,25 @@
 [
     {
         "translations": {
-            "english": "map",
-            "portuguese": "mapa",
-            "hungarian": "térkép"
+            "english": "yes",
+            "portuguese": "sim",
+            "hungarian": "igen"
         },
         "imagePath": null
     },
     {
         "translations": {
-            "english": "dot",
-            "portuguese": "ponto",
-            "hungarian": "pont"
+            "english": "no",
+            "portuguese": "não",
+            "hungarian": "nem"
         },
         "imagePath": null
     },
     {
         "translations": {
-            "english": "consonant",
-            "portuguese": "consoante",
-            "hungarian": "mássalhangzó"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "vowel",
-            "portuguese": "vogal",
-            "hungarian": "magánhangzó"
+            "english": "image",
+            "portuguese": "imagem",
+            "hungarian": "kép"
         },
         "imagePath": null
     },
@@ -49,17 +41,9 @@
     },
     {
         "translations": {
-            "english": "yes",
-            "portuguese": "sim",
-            "hungarian": "igen"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "no",
-            "portuguese": "não",
-            "hungarian": "nem"
+            "english": "dot",
+            "portuguese": "ponto",
+            "hungarian": "pont"
         },
         "imagePath": null
     },
@@ -97,17 +81,33 @@
     },
     {
         "translations": {
-            "english": "image",
-            "portuguese": "imagem",
-            "hungarian": "kép"
+            "english": "pattern",
+            "portuguese": "padrão",
+            "hungarian": "minta"
         },
         "imagePath": null
     },
     {
         "translations": {
-            "english": "pattern",
-            "portuguese": "padrão",
-            "hungarian": "minta"
+            "english": "map",
+            "portuguese": "mapa",
+            "hungarian": "térkép"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "consonant",
+            "portuguese": "consoante",
+            "hungarian": "mássalhangzó"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "vowel",
+            "portuguese": "vogal",
+            "hungarian": "magánhangzó"
         },
         "imagePath": null
     },
