@@ -14,6 +14,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   bool _isLoading = false;
+  bool _isResendingVerification = false;
   Map<String, dynamic>? _storageStats;
 
   @override
@@ -32,6 +33,97 @@ class _ProfileScreenState extends State<ProfileScreen> {
       }
     } catch (e) {
       print('Error loading storage stats: $e');
+    }
+  }
+
+  Future<void> _resendVerificationEmail() async {
+    setState(() => _isResendingVerification = true);
+
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null && !user.emailVerified) {
+        await user.sendEmailVerification();
+
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Verification email sent! Check your inbox.'),
+              backgroundColor: Colors.green,
+              duration: Duration(seconds: 4),
+            ),
+          );
+        }
+      }
+    } on FirebaseAuthException catch (e) {
+      if (mounted) {
+        String errorMessage = 'Failed to send verification email';
+
+        switch (e.code) {
+          case 'too-many-requests':
+            errorMessage = 'Too many requests. Please try again later.';
+            break;
+          default:
+            errorMessage = e.message ?? errorMessage;
+        }
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(errorMessage),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isResendingVerification = false);
+      }
+    }
+  }
+
+  Future<void> _checkEmailVerification() async {
+    setState(() => _isLoading = true);
+
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        await user.reload();
+        final updatedUser = FirebaseAuth.instance.currentUser;
+
+        if (mounted) {
+          setState(() {});
+
+          if (updatedUser?.emailVerified == true) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Email verified successfully! 🎉'),
+                backgroundColor: Colors.green,
+              ),
+            );
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text(
+                  'Email not verified yet. Please check your inbox.',
+                ),
+                backgroundColor: Colors.orange,
+              ),
+            );
+          }
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error checking verification: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
     }
   }
 
@@ -60,7 +152,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     setState(() => _isLoading = true);
 
     try {
-      // Sign out from Firebase
       await FirebaseAuth.instance.signOut();
 
       if (mounted) {
@@ -99,7 +190,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       builder: (context) => AlertDialog(
         title: const Text('Reset Progress'),
         content: const Text(
-          'Are you sure you want to reset all your learning progress? This action cannot be undone.',
+          'Are you sure you want to reset all your learning progress? '
+          'This action cannot be undone.',
         ),
         actions: [
           TextButton(
@@ -255,7 +347,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'Are you sure you want to delete all flashcard images? This action cannot be undone.',
+              'Are you sure you want to delete all flashcard images? '
+              'This action cannot be undone.',
             ),
             const SizedBox(height: 8),
             if (_storageStats != null) ...[
@@ -347,6 +440,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
     final isAnonymous = user?.isAnonymous ?? true;
+    final isEmailVerified = user?.emailVerified ?? false;
 
     return Scaffold(
       appBar: AppBar(
@@ -360,7 +454,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Account Information Card with Auth Button
+                  // Account Information Card
                   Card(
                     elevation: 4,
                     child: Padding(
@@ -404,9 +498,115 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                             ],
                           ),
+
+                          // Email Verification Status (for non-anonymous users)
+                          if (!isAnonymous) ...[
+                            const SizedBox(height: 16),
+                            const Divider(),
+                            const SizedBox(height: 12),
+                            Row(
+                              children: [
+                                Icon(
+                                  isEmailVerified
+                                      ? Icons.verified
+                                      : Icons.warning_amber,
+                                  color: isEmailVerified
+                                      ? Colors.green
+                                      : Colors.orange,
+                                  size: 20,
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    isEmailVerified
+                                        ? 'Email Verified'
+                                        : 'Email Not Verified',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: isEmailVerified
+                                          ? Colors.green[700]
+                                          : Colors.orange[900],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            if (!isEmailVerified) ...[
+                              const SizedBox(height: 12),
+                              Container(
+                                padding: const EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  color: Colors.orange[50],
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                    color: Colors.orange[200]!,
+                                  ),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Please verify your email address to secure your account.',
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        color: Colors.orange[900],
+                                      ),
+                                    ),
+                                    const SizedBox(height: 12),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: OutlinedButton.icon(
+                                            onPressed: _isResendingVerification
+                                                ? null
+                                                : _resendVerificationEmail,
+                                            icon: _isResendingVerification
+                                                ? const SizedBox(
+                                                    width: 16,
+                                                    height: 16,
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                      strokeWidth: 2,
+                                                    ),
+                                                  )
+                                                : const Icon(Icons.email,
+                                                    size: 18),
+                                            label: const Text('Resend Email'),
+                                            style: OutlinedButton.styleFrom(
+                                              foregroundColor:
+                                                  Colors.orange[900],
+                                              side: BorderSide(
+                                                color: Colors.orange[300]!,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Expanded(
+                                          child: ElevatedButton.icon(
+                                            onPressed:
+                                                _checkEmailVerification,
+                                            icon: const Icon(Icons.refresh,
+                                                size: 18),
+                                            label: const Text('I Verified'),
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor:
+                                                  Colors.orange[700],
+                                              foregroundColor: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ],
+
                           const SizedBox(height: 16),
 
-                          // Prominent Auth Button
+                          // Auth Button
                           SizedBox(
                             width: double.infinity,
                             child: isAnonymous
@@ -446,7 +646,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                           ),
 
-                          // Info message for anonymous users
+                          // Info for anonymous users
                           if (isAnonymous) ...[
                             const SizedBox(height: 12),
                             Container(

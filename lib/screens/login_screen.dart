@@ -28,9 +28,25 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
       if (!mounted) return;
-      Navigator.of(
-        context,
-      ).pushReplacement(MaterialPageRoute(builder: (_) => const AppRouter()));
+
+      // Check if email is verified
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null && !user.emailVerified) {
+        // Show info but allow them to continue
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              'Please verify your email. Check your inbox for the verification link.',
+            ),
+            backgroundColor: Colors.orange,
+            duration: Duration(seconds: 4),
+          ),
+        );
+      }
+
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => const AppRouter()),
+      );
     } on FirebaseAuthException catch (e) {
       String errorMessage = 'Login failed. Please try again.';
 
@@ -49,6 +65,9 @@ class _LoginScreenState extends State<LoginScreen> {
           break;
         case 'too-many-requests':
           errorMessage = 'Too many failed attempts. Please try again later.';
+          break;
+        case 'invalid-credential':
+          errorMessage = 'Invalid email or password.';
           break;
         default:
           errorMessage = e.message ?? errorMessage;
@@ -177,9 +196,9 @@ class _LoginScreenState extends State<LoginScreen> {
       await FirebaseAuth.instance.signInAnonymously();
 
       if (!mounted) return;
-      Navigator.of(
-        context,
-      ).pushReplacement(MaterialPageRoute(builder: (_) => const AppRouter()));
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => const AppRouter()),
+      );
     } on FirebaseAuthException catch (e) {
       _showError(e.message ?? 'Anonymous sign-in failed');
     } finally {
@@ -268,9 +287,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     if (value == null || value.isEmpty) {
                       return "Enter your email";
                     }
-                    if (!RegExp(
-                      r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
-                    ).hasMatch(value)) {
+                    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                        .hasMatch(value)) {
                       return "Enter a valid email";
                     }
                     return null;

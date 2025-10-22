@@ -8,6 +8,7 @@ import '../services/firebase_user_preferences.dart';
 import '../services/repetition_service.dart';
 import '../utils/topic_names.dart';
 import '../utils/ui_strings.dart';
+import '../widgets/email_verification_banner.dart';
 import 'profile_screen.dart';
 import 'review_screen.dart';
 
@@ -241,7 +242,7 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
             icon: const Icon(Icons.more_horiz),
             onSelected: _onMenuSelected,
             itemBuilder: (context) => [
-              PopupMenuItem(
+              const PopupMenuItem(
                 value: 'review',
                 child: Row(
                   children: [
@@ -251,7 +252,7 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
                   ],
                 ),
               ),
-              PopupMenuItem(
+              const PopupMenuItem(
                 value: 'profile',
                 child: Row(
                   children: [
@@ -265,7 +266,14 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
           ),
         ],
       ),
-      body: _buildBody(reviewState),
+      body: Column(
+        children: [
+          const EmailVerificationBanner(), // Email verification banner
+          Expanded(
+            child: _buildBody(reviewState), // Main content
+          ),
+        ],
+      ),
     );
   }
 
@@ -458,8 +466,11 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
     final deckName = TopicNames.getName(deck.topicKey, widget.baseLanguage);
     final revealedCount = reviewState.getRevealedCount(deck.topicKey);
     final totalCount = deck.cards.length;
-    final stats =
-        _deckStats[deck.topicKey] ?? {'new': totalCount, 'due': 0, 'review': 0};
+    final stats = _deckStats[deck.topicKey] ?? {
+      'new': totalCount,
+      'due': 0,
+      'review': 0,
+    };
     final studiedCount = (stats['due'] ?? 0) + (stats['review'] ?? 0);
     final isComplete = totalCount > 0 && studiedCount >= totalCount;
 
