@@ -2,16 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import '../services/firebase_user_preferences.dart';
-import '../services/repetition_service.dart';
 import '../services/deck_loader.dart';
 import '../services/loading_with_timeout.dart';
 import '../services/error_handler_service.dart';
 import '../services/app_state_service.dart';
-import '../models/flashcard_deck.dart';
 import 'login_screen.dart';
 import 'base_language_selector_screen.dart';
 import 'target_language_selector_screen.dart';
-import 'flashcard_screen.dart';
 import 'deck_selector_screen.dart';
 
 /// Enhanced AppRouter with navigation guards and state restoration
