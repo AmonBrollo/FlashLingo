@@ -626,7 +626,7 @@
     {
         "translations": {
             "english": "hang",
-            "portuguese": "PendurAR",
+            "portuguese": "Pendurar",
             "hungarian": "Akasztani"
         },
         "imagePath": null
@@ -651,7 +651,7 @@
         "translations": {
             "english": "beat",
             "portuguese": "Bater",
-            "hungarian": "Ver"
+            "hungarian": "Verni"
         },
         "imagePath": null
     },
