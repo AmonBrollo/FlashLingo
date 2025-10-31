@@ -5,16 +5,19 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../models/flashcard.dart';
+import '../models/tutorial_step.dart';
 import '../services/repetition_service.dart';
 import '../services/review_state.dart';
 import '../services/deck_loader.dart';
 import '../services/local_image_service.dart';
+import '../services/tutorial_service.dart';
 import '../utils/ui_strings.dart';
 import '../utils/topic_names.dart';
 import '../utils/usage_limiter.dart';
 import '../widgets/flashcard_view.dart';
 import '../widgets/finished_deck_card.dart';
 import '../widgets/limit_reached_card.dart';
+import '../widgets/tutorial_overlay.dart';
 import 'add_flashcard_screen.dart';
 import 'review_screen.dart';
 import 'profile_screen.dart';
@@ -25,6 +28,7 @@ class FlashcardScreen extends StatefulWidget {
   final String targetLanguage;
   final String topicKey;
   final List<Flashcard> flashcards;
+  final bool showTutorial;
 
   const FlashcardScreen({
     super.key,
@@ -32,6 +36,7 @@ class FlashcardScreen extends StatefulWidget {
     required this.targetLanguage,
     required this.topicKey,
     required this.flashcards,
+    this.showTutorial = false,
   });
 
   @override
@@ -46,38 +51,48 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
   double _dragDx = 0.0;
   late List<Flashcard> _flashcards;
   bool _isInitializing = true;
+  bool _showTutorial = false;
 
   final UsageLimiter _limiter = UsageLimiter();
   final RepetitionService _repetitionService = RepetitionService();
-
   final Set<Flashcard> _swipedThisSession = {};
+
+  // Tutorial keys
+  final GlobalKey _flashcardKey = GlobalKey();
+  final GlobalKey _fabKey = GlobalKey();
+  final GlobalKey _progressKey = GlobalKey();
 
   @override
   void initState() {
     super.initState();
-    _flashcards = List.from(widget.flashcards); // Make a mutable copy
+    _flashcards = List.from(widget.flashcards);
     _initializeScreen();
   }
 
   Future<void> _initializeScreen() async {
     try {
-      // Initialize the repetition service and preload progress
       await _repetitionService.initialize();
       await _repetitionService.preloadProgress(_flashcards);
-
-      // Load local images for all flashcards
       await _loadLocalImages();
 
-      // Set current deck in review state
       if (mounted) {
         context.read<ReviewState>().setCurrentDeck(widget.topicKey);
       }
 
-      // Check usage limits
       await _checkInitialLimit();
-
-      // Find the best starting card (prioritize due cards, then new cards)
       _selectOptimalStartingCard();
+
+      // Check if tutorial should be shown
+      if (widget.showTutorial) {
+        final shouldShow = await TutorialService.shouldShowTutorial();
+        if (shouldShow && mounted) {
+          Future.delayed(const Duration(milliseconds: 800), () {
+            if (mounted) {
+              setState(() => _showTutorial = true);
+            }
+          });
+        }
+      }
     } catch (e) {
       print('Error initializing flashcard screen: $e');
     } finally {
@@ -127,7 +142,6 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
       return;
     }
 
-    // If no due or new cards, start with the first card
     _currentIndex = 0;
   }
 
@@ -148,13 +162,11 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
 
     setState(() {
       _flashcards = jsonData.map((item) => Flashcard.fromJson(item)).toList();
-      // Initialize progress for all cards
       for (final card in _flashcards) {
         _repetitionService.getProgress(card);
       }
     });
 
-    // Load local images after updating flashcards
     await _loadLocalImages();
   }
 
@@ -202,14 +214,12 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
     final currentCard = _flashcards[_currentIndex];
 
     try {
-      // Show image source options
       final ImageSource? source = await _showImageSourceDialog();
       if (source == null) return;
 
       final pickedFile = await ImagePicker().pickImage(source: source);
       if (pickedFile == null) return;
 
-      // Show loading dialog
       if (mounted) {
         showDialog(
           context: context,
@@ -219,24 +229,20 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
         );
       }
 
-      // Delete old image if it exists
       if (currentCard.hasLocalImage) {
         await LocalImageService.deleteCardImage(currentCard);
       }
 
-      // Save the new image locally
       final savedImagePath = await LocalImageService.saveCardImage(
         currentCard,
         pickedFile.path,
       );
 
-      // Dismiss loading dialog
       if (mounted) {
         Navigator.of(context).pop();
       }
 
       if (savedImagePath != null) {
-        // Update the flashcard with the new image
         final updatedCard = currentCard.copyWithImage(
           imagePath: savedImagePath,
           hasLocalImage: true,
@@ -246,7 +252,6 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
           _flashcards[_currentIndex] = updatedCard;
         });
 
-        // Show success message
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
@@ -256,7 +261,6 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
           );
         }
       } else {
-        // Show error message
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
@@ -267,7 +271,6 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
         }
       }
     } catch (e) {
-      // Dismiss loading dialog if it's showing
       if (mounted && Navigator.canPop(context)) {
         Navigator.of(context).pop();
       }
@@ -421,9 +424,50 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
     _nextCard();
   }
 
+  List<TutorialStep> _getTutorialSteps() {
+    final allSteps = TutorialService.getStepsForScreen(
+      widget.baseLanguage,
+      TutorialConfig.screenFlashcard,
+    );
+
+    return allSteps.map((step) {
+      if (step.id == TutorialConfig.flashcardSwipe) {
+        return TutorialStep(
+          id: step.id,
+          title: step.title,
+          message: step.message,
+          targetKey: _flashcardKey,
+          messagePosition: step.messagePosition,
+          icon: step.icon,
+          screen: step.screen,
+        );
+      } else if (step.id == TutorialConfig.flashcardAdd) {
+        return TutorialStep(
+          id: step.id,
+          title: step.title,
+          message: step.message,
+          targetKey: _fabKey,
+          messagePosition: step.messagePosition,
+          icon: step.icon,
+          screen: step.screen,
+        );
+      } else if (step.id == TutorialConfig.flashcardProgress) {
+        return TutorialStep(
+          id: step.id,
+          title: step.title,
+          message: step.message,
+          targetKey: _progressKey,
+          messagePosition: step.messagePosition,
+          icon: step.icon,
+          screen: step.screen,
+        );
+      }
+      return step;
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
-    // Show loading indicator during initialization
     if (_isInitializing) {
       return Scaffold(
         backgroundColor: Colors.brown[50],
@@ -467,6 +511,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
                 final revealed = reviewState.getRevealedCount(widget.topicKey);
                 final total = _flashcards.length;
                 return Container(
+                  key: _progressKey, // Key for tutorial
                   padding: const EdgeInsets.symmetric(
                     horizontal: 8,
                     vertical: 4,
@@ -494,7 +539,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
             icon: const Icon(Icons.more_horiz),
             onSelected: _onMenuSelected,
             itemBuilder: (context) => [
-              PopupMenuItem(
+              const PopupMenuItem(
                 value: 'select_deck',
                 child: Row(
                   children: [
@@ -504,7 +549,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
                   ],
                 ),
               ),
-              PopupMenuItem(
+              const PopupMenuItem(
                 value: 'review',
                 child: Row(
                   children: [
@@ -514,7 +559,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
                   ],
                 ),
               ),
-              PopupMenuItem(
+              const PopupMenuItem(
                 value: 'profile',
                 child: Row(
                   children: [
@@ -529,6 +574,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        key: _fabKey, // Key for tutorial
         onPressed: () async {
           await Navigator.push(
             context,
@@ -550,31 +596,47 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
         backgroundColor: Colors.brown,
         child: const Icon(Icons.add),
       ),
-      body: Center(
-        child: GestureDetector(
-          onPanUpdate: (details) {
-            if (!_limitReached && !_finishedDeck) {
-              setState(() => _dragDx += details.delta.dx);
-            }
-          },
-          onPanEnd: (details) {
-            if (!_limitReached && !_finishedDeck) {
-              final currentCard = _flashcards[_currentIndex];
-              if (_dragDx > 100) {
-                _handleSwipe(currentCard, true);
-              } else if (_dragDx < -100) {
-                _handleSwipe(currentCard, false);
-              }
-              setState(() => _dragDx = 0.0);
-            }
-          },
-          onTap: () {
-            if (!_limitReached && !_finishedDeck) {
-              setState(() => _isFlipped = !_isFlipped);
-            }
-          },
-          child: _buildCardContent(displayName),
-        ),
+      body: Stack(
+        children: [
+          Center(
+            child: GestureDetector(
+              onPanUpdate: (details) {
+                if (!_limitReached && !_finishedDeck) {
+                  setState(() => _dragDx += details.delta.dx);
+                }
+              },
+              onPanEnd: (details) {
+                if (!_limitReached && !_finishedDeck) {
+                  final currentCard = _flashcards[_currentIndex];
+                  if (_dragDx > 100) {
+                    _handleSwipe(currentCard, true);
+                  } else if (_dragDx < -100) {
+                    _handleSwipe(currentCard, false);
+                  }
+                  setState(() => _dragDx = 0.0);
+                }
+              },
+              onTap: () {
+                if (!_limitReached && !_finishedDeck) {
+                  setState(() => _isFlipped = !_isFlipped);
+                }
+              },
+              child: _buildCardContent(displayName),
+            ),
+          ),
+          // Tutorial overlay
+          if (_showTutorial)
+            TutorialOverlay(
+              steps: _getTutorialSteps(),
+              language: widget.baseLanguage,
+              onComplete: () {
+                setState(() => _showTutorial = false);
+              },
+              onSkip: () {
+                setState(() => _showTutorial = false);
+              },
+            ),
+        ],
       ),
     );
   }
@@ -599,18 +661,21 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
       );
     } else {
       final currentCard = _flashcards[_currentIndex];
-      return FlashcardView(
-        flashcard: currentCard,
-        progress: _repetitionService.getProgress(currentCard),
-        isFlipped: _isFlipped,
-        baseLanguage: widget.baseLanguage,
-        targetLanguage: widget.targetLanguage,
-        dragDx: _dragDx,
-        onFlip: () => setState(() => _isFlipped = !_isFlipped),
-        onAddImage: _changeCurrentImage,
-        onRemoveImage: _removeCurrentImage,
-        onRemembered: () => _handleSwipe(currentCard, true),
-        onForgotten: () => _handleSwipe(currentCard, false),
+      return Container(
+        key: _flashcardKey, // Key for tutorial
+        child: FlashcardView(
+          flashcard: currentCard,
+          progress: _repetitionService.getProgress(currentCard),
+          isFlipped: _isFlipped,
+          baseLanguage: widget.baseLanguage,
+          targetLanguage: widget.targetLanguage,
+          dragDx: _dragDx,
+          onFlip: () => setState(() => _isFlipped = !_isFlipped),
+          onAddImage: _changeCurrentImage,
+          onRemoveImage: _removeCurrentImage,
+          onRemembered: () => _handleSwipe(currentCard, true),
+          onForgotten: () => _handleSwipe(currentCard, false),
+        ),
       );
     }
   }

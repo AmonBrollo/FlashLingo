@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'deck_selector_screen.dart';
 import '../services/deck_loader.dart';
+import '../services/tutorial_service.dart';
 import '../widgets/language_option_button.dart';
 import '../utils/ui_strings.dart';
 
@@ -17,6 +18,9 @@ class TargetLanguageSelectorScreen extends StatelessWidget {
 
       if (!context.mounted) return;
 
+      // Check if this is first time user (should show tutorial)
+      final shouldShowTutorial = await TutorialService.shouldShowTutorial();
+
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -24,6 +28,7 @@ class TargetLanguageSelectorScreen extends StatelessWidget {
             baseLanguage: baseLanguage,
             targetLanguage: targetLanguage,
             decks: decks,
+            showTutorial: shouldShowTutorial, // Pass tutorial flag
           ),
         ),
       );

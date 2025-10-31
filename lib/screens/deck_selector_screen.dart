@@ -3,12 +3,15 @@ import 'package:provider/provider.dart';
 import 'flashcard_screen.dart';
 import '../models/flashcard_deck.dart';
 import '../models/flashcard.dart';
+import '../models/tutorial_step.dart';
 import '../services/review_state.dart';
 import '../services/firebase_user_preferences.dart';
 import '../services/repetition_service.dart';
+import '../services/tutorial_service.dart';
 import '../utils/topic_names.dart';
 import '../utils/ui_strings.dart';
 import '../widgets/email_verification_banner.dart';
+import '../widgets/tutorial_overlay.dart';
 import 'profile_screen.dart';
 import 'review_screen.dart';
 
@@ -16,12 +19,14 @@ class DeckSelectorScreen extends StatefulWidget {
   final List<FlashcardDeck> decks;
   final String baseLanguage;
   final String targetLanguage;
+  final bool showTutorial;
 
   const DeckSelectorScreen({
     super.key,
     required this.decks,
     required this.baseLanguage,
     required this.targetLanguage,
+    this.showTutorial = false,
   });
 
   @override
@@ -34,11 +39,33 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
   bool _hasError = false;
   String? _errorMessage;
   Map<String, Map<String, int>> _deckStats = {};
+  bool _showTutorial = false;
+
+  // Tutorial keys for highlighting
+  final GlobalKey _firstDeckKey = GlobalKey();
+  final GlobalKey _firstDeckProgressKey = GlobalKey(); // Changed name for clarity
+  final GlobalKey _forgottenKey = GlobalKey();
 
   @override
   void initState() {
     super.initState();
     _initializeProgressData();
+    _checkTutorial();
+  }
+
+  Future<void> _checkTutorial() async {
+    // Check if tutorial should be shown
+    if (widget.showTutorial) {
+      final shouldShow = await TutorialService.shouldShowTutorial();
+      if (shouldShow && mounted) {
+        // Delay to let the UI render first
+        Future.delayed(const Duration(milliseconds: 500), () {
+          if (mounted) {
+            setState(() => _showTutorial = true);
+          }
+        });
+      }
+    }
   }
 
   Future<void> _initializeProgressData() async {
@@ -65,7 +92,6 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
 
   Future<void> _loadProgressInBackground() async {
     try {
-      // Try to initialize with a short timeout
       await _repetitionService.initialize().timeout(
         const Duration(seconds: 5),
         onTimeout: () {
@@ -73,15 +99,11 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
         },
       );
 
-      // Calculate stats for each deck
       final stats = <String, Map<String, int>>{};
 
       for (final deck in widget.decks) {
         try {
-          // Preload progress (now just uses cache, very fast)
           await _repetitionService.preloadProgress(deck.cards);
-
-          // Calculate statistics
           stats[deck.topicKey] = _repetitionService.getStudyStats(deck.cards);
         } catch (e) {
           print('Error loading deck ${deck.topicKey}: $e');
@@ -100,12 +122,10 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
       }
     } catch (e) {
       print('Background progress loading failed: $e');
-      // Continue with default stats already set
     }
   }
 
   void _openFlashcards(BuildContext context, FlashcardDeck deck) async {
-    // Save user preferences when they select a deck
     await FirebaseUserPreferences.savePreferences(
       baseLanguage: widget.baseLanguage,
       targetLanguage: widget.targetLanguage,
@@ -113,6 +133,9 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
     );
 
     if (!context.mounted) return;
+
+    // Check if tutorial should continue on flashcard screen
+    final shouldShowTutorial = await TutorialService.shouldShowTutorial();
 
     Navigator.push(
       context,
@@ -122,6 +145,7 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
           targetLanguage: widget.targetLanguage,
           topicKey: deck.topicKey,
           flashcards: deck.cards,
+          showTutorial: shouldShowTutorial,
         ),
       ),
     );
@@ -170,7 +194,7 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
     );
   }
 
-  Widget _buildProgressIndicator(Map<String, int> stats, int totalCount) {
+  Widget _buildProgressIndicator(Map<String, int> stats, int totalCount, {Key? key}) {
     final newCount = stats['new'] ?? totalCount;
     final dueCount = stats['due'] ?? 0;
     final reviewCount = stats['review'] ?? 0;
@@ -179,10 +203,10 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
     if (totalCount == 0) return const SizedBox.shrink();
 
     return Container(
+      key: key, // Accept optional key parameter
       margin: const EdgeInsets.only(top: 8),
       child: Column(
         children: [
-          // Progress bar
           ClipRRect(
             borderRadius: BorderRadius.circular(2),
             child: LinearProgressIndicator(
@@ -195,7 +219,6 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
             ),
           ),
           const SizedBox(height: 4),
-          // Stats row
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -227,6 +250,49 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
         ),
       ),
     );
+  }
+
+  List<TutorialStep> _getTutorialSteps() {
+    final allSteps = TutorialService.getStepsForScreen(
+      widget.baseLanguage,
+      TutorialConfig.screenDeckSelector,
+    );
+
+    // Assign keys to steps
+    return allSteps.map((step) {
+      if (step.id == TutorialConfig.deckSelectorDeckCard) {
+        return TutorialStep(
+          id: step.id,
+          title: step.title,
+          message: step.message,
+          targetKey: _firstDeckKey,
+          messagePosition: step.messagePosition,
+          icon: step.icon,
+          screen: step.screen,
+        );
+      } else if (step.id == TutorialConfig.deckSelectorProgress) {
+        return TutorialStep(
+          id: step.id,
+          title: step.title,
+          message: step.message,
+          targetKey: _firstDeckProgressKey, // Use unique key
+          messagePosition: step.messagePosition,
+          icon: step.icon,
+          screen: step.screen,
+        );
+      } else if (step.id == TutorialConfig.deckSelectorForgotten) {
+        return TutorialStep(
+          id: step.id,
+          title: step.title,
+          message: step.message,
+          targetKey: _forgottenKey,
+          messagePosition: step.messagePosition,
+          icon: step.icon,
+          screen: step.screen,
+        );
+      }
+      return step;
+    }).toList();
   }
 
   @override
@@ -266,19 +332,34 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
           ),
         ],
       ),
-      body: Column(
+      body: Stack(
         children: [
-          const EmailVerificationBanner(), // Email verification banner
-          Expanded(
-            child: _buildBody(reviewState), // Main content
+          Column(
+            children: [
+              const EmailVerificationBanner(),
+              Expanded(
+                child: _buildBody(reviewState),
+              ),
+            ],
           ),
+          // Tutorial overlay
+          if (_showTutorial)
+            TutorialOverlay(
+              steps: _getTutorialSteps(),
+              language: widget.baseLanguage,
+              onComplete: () {
+                setState(() => _showTutorial = false);
+              },
+              onSkip: () {
+                setState(() => _showTutorial = false);
+              },
+            ),
         ],
       ),
     );
   }
 
   Widget _buildBody(ReviewState reviewState) {
-    // Show error state with retry option
     if (_hasError) {
       return Center(
         child: Padding(
@@ -334,7 +415,6 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
       );
     }
 
-    // Show loading state with timeout indicator
     if (_isLoading) {
       return Center(
         child: Column(
@@ -350,7 +430,6 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
               onPressed: () {
                 setState(() {
                   _isLoading = false;
-                  // Set default stats if loading is taking too long
                   for (final deck in widget.decks) {
                     _deckStats[deck.topicKey] = {
                       'new': deck.cards.length,
@@ -367,7 +446,6 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
       );
     }
 
-    // Show normal deck grid
     return Padding(
       padding: const EdgeInsets.all(12.0),
       child: GridView.builder(
@@ -384,7 +462,10 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
           }
 
           final deck = widget.decks[index - 1];
-          return _buildDeckCard(deck, reviewState);
+          // Add key to first deck for tutorial, and add progress key to first deck's progress
+          final deckKey = index == 1 ? _firstDeckKey : null;
+          final progressKey = index == 1 ? _firstDeckProgressKey : null;
+          return _buildDeckCard(deck, reviewState, key: deckKey, progressKey: progressKey);
         },
       ),
     );
@@ -398,6 +479,7 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
           ? null
           : () => _openForgottenCards(context, forgottenCards),
       child: Card(
+        key: _forgottenKey, // Key for tutorial
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         elevation: forgottenCards.isEmpty ? 1 : 4,
         color: Colors.red[50],
@@ -462,7 +544,12 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
     );
   }
 
-  Widget _buildDeckCard(FlashcardDeck deck, ReviewState reviewState) {
+  Widget _buildDeckCard(
+    FlashcardDeck deck,
+    ReviewState reviewState, {
+    Key? key,
+    Key? progressKey, // Add parameter for progress key
+  }) {
     final deckName = TopicNames.getName(deck.topicKey, widget.baseLanguage);
     final revealedCount = reviewState.getRevealedCount(deck.topicKey);
     final totalCount = deck.cards.length;
@@ -477,6 +564,7 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
     return GestureDetector(
       onTap: () => _openFlashcards(context, deck),
       child: Card(
+        key: key, // Key for tutorial highlighting
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         elevation: 4,
         color: isComplete ? Colors.green[50] : Colors.brown[50],
@@ -485,7 +573,6 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header with completion status
               Row(
                 children: [
                   Expanded(
@@ -509,10 +596,8 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
                 ],
               ),
               const Spacer(),
-              // Progress information
               _buildProgressIndicator(stats, totalCount),
               const SizedBox(height: 8),
-              // Total card count
               Text(
                 '$revealedCount/$totalCount cards',
                 style: TextStyle(

@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../services/app_initialization_service.dart';
 import '../services/local_image_service.dart';
+import '../services/tutorial_service.dart';
+import '../services/firebase_user_preferences.dart';
+import '../services/deck_loader.dart';
 import 'app_router.dart';
 import 'login_screen.dart';
+import 'deck_selector_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -124,6 +128,77 @@ class _ProfileScreenState extends State<ProfileScreen> {
       if (mounted) {
         setState(() => _isLoading = false);
       }
+    }
+  }
+
+  Future<void> _replayTutorial() async {
+    try {
+      // Reset tutorial state
+      await TutorialService.resetTutorial();
+
+      if (!mounted) return;
+
+      // Show confirmation
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Row(
+            children: [
+              Icon(Icons.school, color: Colors.brown, size: 28),
+              SizedBox(width: 12),
+              Text('Tutorial'),
+            ],
+          ),
+          content: const Text(
+            'The tutorial will start from the deck selector screen.\n\n'
+            'You can skip it anytime by tapping the "Skip" button.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.pop(context, true),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.brown,
+              ),
+              child: const Text('Start Tutorial'),
+            ),
+          ],
+        ),
+      );
+
+      if (confirmed != true || !mounted) return;
+
+      // Load decks and navigate to deck selector with tutorial
+      final decks = await DeckLoader.loadDecks();
+      final prefs = await FirebaseUserPreferences.loadPreferences();
+
+      final baseLanguage = prefs['baseLanguage'] ?? 'english';
+      final targetLanguage = prefs['targetLanguage'] ?? 'hungarian';
+
+      if (!mounted) return;
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => DeckSelectorScreen(
+            baseLanguage: baseLanguage,
+            targetLanguage: targetLanguage,
+            decks: decks,
+            showTutorial: true, // Force show tutorial
+          ),
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error starting tutorial: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 
@@ -499,7 +574,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ],
                           ),
 
-                          // Email Verification Status (for non-anonymous users)
+                          // Email Verification Status
                           if (!isAnonymous) ...[
                             const SizedBox(height: 16),
                             const Divider(),
@@ -721,6 +796,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
 
                   const SizedBox(height: 24),
+                  const Divider(),
+                  const SizedBox(height: 8),
+
+                  // Tutorial Section
+                  ListTile(
+                    leading: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.brown.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Icon(Icons.school, color: Colors.brown),
+                    ),
+                    title: const Text(
+                      'View Tutorial',
+                      style: TextStyle(fontWeight: FontWeight.w500),
+                    ),
+                    subtitle: const Text('Learn how to use FlashLango'),
+                    trailing: const Icon(Icons.play_circle_outline),
+                    onTap: _replayTutorial,
+                  ),
+
+                  const SizedBox(height: 8),
+                  const Divider(),
+                  const SizedBox(height: 24),
+
                   const Text(
                     'Data Management',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
