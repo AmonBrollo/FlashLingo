@@ -223,54 +223,65 @@ class _TutorialOverlayState extends State<TutorialOverlay>
             children: [
               // Previous button
               if (!isFirstStep)
-                TextButton.icon(
-                  onPressed: _previousStep,
-                  icon: const Icon(Icons.arrow_back, size: 18),
-                  label: Text(isPortuguese ? 'Anterior' : 'Previous'),
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.grey.shade600,
+                Flexible(
+                  child: TextButton.icon(
+                    onPressed: _previousStep,
+                    icon: const Icon(Icons.arrow_back, size: 18),
+                    label: Text(isPortuguese ? 'Anterior' : 'Previous'),
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.grey.shade600,
+                    ),
                   ),
                 )
               else
                 const SizedBox(width: 80),
 
               // Step indicator
-              Text(
-                '${_currentStepIndex + 1}/${widget.steps.length}',
-                style: TextStyle(
-                  color: Colors.grey.shade600,
-                  fontWeight: FontWeight.w500,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Text(
+                  '${_currentStepIndex + 1}/${widget.steps.length}',
+                  style: TextStyle(
+                    color: Colors.grey.shade600,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 13,
+                  ),
                 ),
               ),
 
               // Next button
-              ElevatedButton(
-                onPressed: _nextStep,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.brown,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 24,
-                    vertical: 12,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      isLastStep
-                          ? (isPortuguese ? 'Concluir' : 'Finish')
-                          : (isPortuguese ? 'Próximo' : 'Next'),
+              Flexible(
+                child: ElevatedButton(
+                  onPressed: _nextStep,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.brown,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
                     ),
-                    const SizedBox(width: 4),
-                    Icon(
-                      isLastStep ? Icons.check : Icons.arrow_forward,
-                      size: 18,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                  ],
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Flexible(
+                        child: Text(
+                          isLastStep
+                              ? (isPortuguese ? 'Concluir' : 'Finish')
+                              : (isPortuguese ? 'Próximo' : 'Next'),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Icon(
+                        isLastStep ? Icons.check : Icons.arrow_forward,
+                        size: 18,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
