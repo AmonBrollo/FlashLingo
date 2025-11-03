@@ -1,62 +1,6 @@
 [
     {
         "translations": {
-            "english": "work",
-            "portuguese": "Trabalhar",
-            "hungarian": "Dolgozni"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "play",
-            "portuguese": "Jogar/Brincar",
-            "hungarian": "Játszani"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "walk",
-            "portuguese": "Andar",
-            "hungarian": "Sétálni"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "run",
-            "portuguese": "Correr",
-            "hungarian": "Futni"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "drive",
-            "portuguese": "Dirigir",
-            "hungarian": "Vezetni"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "fly",
-            "portuguese": "Voar",
-            "hungarian": "Repülni"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "swim",
-            "portuguese": "Nadar",
-            "hungarian": "Úszni"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
             "english": "go",
             "portuguese": "Ir",
             "hungarian": "Menni"
@@ -65,25 +9,17 @@
     },
     {
         "translations": {
-            "english": "stop",
-            "portuguese": "Parar",
-            "hungarian": "Megállni"
+            "english": "work",
+            "portuguese": "Trabalhar",
+            "hungarian": "Dolgozni"
         },
         "imagePath": null
     },
     {
         "translations": {
-            "english": "follow",
-            "portuguese": "Seguir",
-            "hungarian": "Követni"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "think",
-            "portuguese": "Pensar",
-            "hungarian": "Gondolni"
+            "english": "say",
+            "portuguese": "Dizer",
+            "hungarian": "Mondani"
         },
         "imagePath": null
     },
@@ -97,9 +33,25 @@
     },
     {
         "translations": {
-            "english": "say",
-            "portuguese": "Dizer",
-            "hungarian": "Mondani"
+            "english": "think",
+            "portuguese": "Pensar",
+            "hungarian": "Gondolni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "see",
+            "portuguese": "Ver",
+            "hungarian": "Látni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "hear",
+            "portuguese": "Ouvir",
+            "hungarian": "Hallani"
         },
         "imagePath": null
     },
@@ -121,185 +73,25 @@
     },
     {
         "translations": {
-            "english": "kill",
-            "portuguese": "Matar",
-            "hungarian": "Megölni"
+            "english": "sleep",
+            "portuguese": "Dormir",
+            "hungarian": "Aludni"
         },
         "imagePath": null
     },
     {
         "translations": {
-            "english": "die",
-            "portuguese": "Morrer",
-            "hungarian": "Meghalni"
+            "english": "wake up",
+            "portuguese": "Acordar",
+            "hungarian": "Felébredni"
         },
         "imagePath": null
     },
     {
         "translations": {
-            "english": "smile",
-            "portuguese": "Sorrir",
-            "hungarian": "Mosolyogni"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "laugh",
-            "portuguese": "Rir",
-            "hungarian": "Nevetni"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "cry",
-            "portuguese": "Chorar",
-            "hungarian": "Sí­rni"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "buy",
-            "portuguese": "Comprar",
-            "hungarian": "Venni"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "pay",
-            "portuguese": "Pagar",
-            "hungarian": "Fizetni"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "sell",
-            "portuguese": "Vender",
-            "hungarian": "Eladni"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "shoot",
-            "portuguese": "Atirar",
-            "hungarian": "Lőni"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "learn",
-            "portuguese": "Aprender",
-            "hungarian": "Tanulni"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "jump",
-            "portuguese": "Pular",
-            "hungarian": "Ugrani"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "smell",
-            "portuguese": "Cheirar",
-            "hungarian": "Szagolni"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "hear",
-            "portuguese": "Ouvir",
-            "hungarian": "Hallani"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "listen",
-            "portuguese": "Escutar",
-            "hungarian": "Figyelni"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "taste",
-            "portuguese": "Provar",
-            "hungarian": "Ízlelni"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "touch",
-            "portuguese": "Tocar",
-            "hungarian": "Megérinteni"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "see",
-            "portuguese": "Ver",
-            "hungarian": "Látni"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "watch",
-            "portuguese": "Assistir",
-            "hungarian": "Nézni"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "kiss",
-            "portuguese": "Beijar",
-            "hungarian": "Csókolni"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "burn",
-            "portuguese": "Queimar",
-            "hungarian": "Égni"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "melt",
-            "portuguese": "Derreter",
-            "hungarian": "Olvadni"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "dig",
-            "portuguese": "Cavar",
-            "hungarian": "Ásni"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "explode",
-            "portuguese": "Explodir",
-            "hungarian": "Robbanni"
+            "english": "stop",
+            "portuguese": "Parar",
+            "hungarian": "Megállni"
         },
         "imagePath": null
     },
@@ -321,145 +113,9 @@
     },
     {
         "translations": {
-            "english": "love",
-            "portuguese": "Amar",
-            "hungarian": "Szeretni"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "pass by",
-            "portuguese": "Passar",
-            "hungarian": "Elmenni"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "cut",
-            "portuguese": "Cortar",
-            "hungarian": "Vágni"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "fight",
-            "portuguese": "Lutar",
-            "hungarian": "Harcolni"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "lie down",
-            "portuguese": "Deitar",
-            "hungarian": "Feküdni"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "dance",
-            "portuguese": "Dançar",
-            "hungarian": "Táncolni"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "sleep",
-            "portuguese": "Dormir",
-            "hungarian": "Aludni"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "wake up",
-            "portuguese": "Acordar",
-            "hungarian": "Felébredni"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "sing",
-            "portuguese": "Cantar",
-            "hungarian": "Énekelni"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "count",
-            "portuguese": "Contar",
-            "hungarian": "Számolni"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "marry",
-            "portuguese": "Casar",
-            "hungarian": "Házasodni"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "pray",
-            "portuguese": "Rezar",
-            "hungarian": "Imádkozni"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "win",
-            "portuguese": "Vencer",
-            "hungarian": "Nyerni"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "lose",
-            "portuguese": "Perder",
-            "hungarian": "Veszíteni"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "mix/stir",
-            "portuguese": "Misturar",
-            "hungarian": "Keverni"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "bend",
-            "portuguese": "Dobrar",
-            "hungarian": "Hajlítani"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "wash",
-            "portuguese": "Lavar",
-            "hungarian": "Mosni"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "cook",
-            "portuguese": "Cozinhar",
-            "hungarian": "Főzni"
+            "english": "walk",
+            "portuguese": "Andar",
+            "hungarian": "Sétálni"
         },
         "imagePath": null
     },
@@ -489,25 +145,9 @@
     },
     {
         "translations": {
-            "english": "call",
-            "portuguese": "Chamar",
-            "hungarian": "Hívni"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "turn",
-            "portuguese": "Virar",
-            "hungarian": "Fordulni"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "build",
-            "portuguese": "Construir",
-            "hungarian": "Építeni"
+            "english": "learn",
+            "portuguese": "Aprender",
+            "hungarian": "Tanulni"
         },
         "imagePath": null
     },
@@ -521,41 +161,17 @@
     },
     {
         "translations": {
-            "english": "grow",
-            "portuguese": "Crescer",
-            "hungarian": "Nőni"
+            "english": "cook",
+            "portuguese": "Cozinhar",
+            "hungarian": "Főzni"
         },
         "imagePath": null
     },
     {
         "translations": {
-            "english": "draw",
-            "portuguese": "Desenhar",
-            "hungarian": "Rajzolni"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "feed",
-            "portuguese": "Alimentar",
-            "hungarian": "Etetni"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "catch",
-            "portuguese": "Pegar",
-            "hungarian": "Elkapni"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "throw",
-            "portuguese": "Atirar/Lançar",
-            "hungarian": "Dobni"
+            "english": "wash",
+            "portuguese": "Lavar",
+            "hungarian": "Mosni"
         },
         "imagePath": null
     },
@@ -569,6 +185,30 @@
     },
     {
         "translations": {
+            "english": "buy",
+            "portuguese": "Comprar",
+            "hungarian": "Venni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "sell",
+            "portuguese": "Vender",
+            "hungarian": "Eladni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "pay",
+            "portuguese": "Pagar",
+            "hungarian": "Fizetni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
             "english": "find",
             "portuguese": "Encontrar",
             "hungarian": "Találni"
@@ -577,9 +217,9 @@
     },
     {
         "translations": {
-            "english": "fall",
-            "portuguese": "Cair",
-            "hungarian": "Esni"
+            "english": "carry",
+            "portuguese": "Carregar",
+            "hungarian": "Hordani"
         },
         "imagePath": null
     },
@@ -601,22 +241,6 @@
     },
     {
         "translations": {
-            "english": "carry",
-            "portuguese": "Carregar",
-            "hungarian": "Hordani"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "break",
-            "portuguese": "Quebrar",
-            "hungarian": "Törni"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
             "english": "wear",
             "portuguese": "Vestir",
             "hungarian": "Viselni"
@@ -625,9 +249,129 @@
     },
     {
         "translations": {
-            "english": "hang",
-            "portuguese": "Pendurar",
-            "hungarian": "Akasztani"
+            "english": "build",
+            "portuguese": "Construir",
+            "hungarian": "Építeni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "love",
+            "portuguese": "Amar",
+            "hungarian": "Szeretni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "smile",
+            "portuguese": "Sorrir",
+            "hungarian": "Mosolyogni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "laugh",
+            "portuguese": "Rir",
+            "hungarian": "Nevetni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "cry",
+            "portuguese": "Chorar",
+            "hungarian": "Sí­rni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "kiss",
+            "portuguese": "Beijar",
+            "hungarian": "Csókolni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "pray",
+            "portuguese": "Rezar",
+            "hungarian": "Imádkozni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "marry",
+            "portuguese": "Casar",
+            "hungarian": "Házasodni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "run",
+            "portuguese": "Correr",
+            "hungarian": "Futni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "jump",
+            "portuguese": "Pular",
+            "hungarian": "Ugrani"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "throw",
+            "portuguese": "Atirar/Lançar",
+            "hungarian": "Dobni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "catch",
+            "portuguese": "Pegar",
+            "hungarian": "Elkapni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "fall",
+            "portuguese": "Cair",
+            "hungarian": "Esni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "lift",
+            "portuguese": "Levantar",
+            "hungarian": "Emelni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "bend",
+            "portuguese": "Dobrar",
+            "hungarian": "Hajlítani"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "turn",
+            "portuguese": "Virar",
+            "hungarian": "Fordulni"
         },
         "imagePath": null
     },
@@ -641,9 +385,153 @@
     },
     {
         "translations": {
-            "english": "sign",
-            "portuguese": "Assinar",
-            "hungarian": "Aláírni"
+            "english": "watch",
+            "portuguese": "Assistir",
+            "hungarian": "Nézni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "listen",
+            "portuguese": "Escutar",
+            "hungarian": "Figyelni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "draw",
+            "portuguese": "Desenhar",
+            "hungarian": "Rajzolni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "count",
+            "portuguese": "Contar",
+            "hungarian": "Számolni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "grow",
+            "portuguese": "Crescer",
+            "hungarian": "Nőni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "mix/stir",
+            "portuguese": "Misturar",
+            "hungarian": "Keverni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "smell",
+            "portuguese": "Cheirar",
+            "hungarian": "Szagolni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "taste",
+            "portuguese": "Provar",
+            "hungarian": "Ízlelni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "touch",
+            "portuguese": "Tocar",
+            "hungarian": "Megérinteni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "fight",
+            "portuguese": "Lutar",
+            "hungarian": "Harcolni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "kill",
+            "portuguese": "Matar",
+            "hungarian": "Megölni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "die",
+            "portuguese": "Morrer",
+            "hungarian": "Meghalni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "shoot",
+            "portuguese": "Atirar",
+            "hungarian": "Lőni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "burn",
+            "portuguese": "Queimar",
+            "hungarian": "Égni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "cut",
+            "portuguese": "Cortar",
+            "hungarian": "Vágni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "break",
+            "portuguese": "Quebrar",
+            "hungarian": "Törni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "dig",
+            "portuguese": "Cavar",
+            "hungarian": "Ásni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "melt",
+            "portuguese": "Derreter",
+            "hungarian": "Olvadni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "explode",
+            "portuguese": "Explodir",
+            "hungarian": "Robbanni"
         },
         "imagePath": null
     },
@@ -657,9 +545,121 @@
     },
     {
         "translations": {
-            "english": "lift",
-            "portuguese": "Levantar",
-            "hungarian": "Emelni"
+            "english": "pass by",
+            "portuguese": "Passar",
+            "hungarian": "Elmenni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "lie down",
+            "portuguese": "Deitar",
+            "hungarian": "Feküdni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "dance",
+            "portuguese": "Dançar",
+            "hungarian": "Táncolni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "sing",
+            "portuguese": "Cantar",
+            "hungarian": "Énekelni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "feed",
+            "portuguese": "Alimentar",
+            "hungarian": "Etetni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "sign",
+            "portuguese": "Assinar",
+            "hungarian": "Aláírni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "win",
+            "portuguese": "Vencer",
+            "hungarian": "Nyerni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "lose",
+            "portuguese": "Perder",
+            "hungarian": "Veszíteni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "follow",
+            "portuguese": "Seguir",
+            "hungarian": "Követni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "hang",
+            "portuguese": "Pendurar",
+            "hungarian": "Akasztani"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "drive",
+            "portuguese": "Dirigir",
+            "hungarian": "Vezetni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "fly",
+            "portuguese": "Voar",
+            "hungarian": "Repülni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "swim",
+            "portuguese": "Nadar",
+            "hungarian": "Úszni"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "play",
+            "portuguese": "Jogar/Brincar",
+            "hungarian": "Játszani"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "call",
+            "portuguese": "Chamar",
+            "hungarian": "Hívni"
         },
         "imagePath": null
     }

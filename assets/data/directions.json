@@ -1,6 +1,54 @@
 [
     {
         "translations": {
+            "english": "left",
+            "portuguese": "esquerda",
+            "hungarian": "bal"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "right",
+            "portuguese": "direita",
+            "hungarian": "jobb"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "up",
+            "portuguese": "cima",
+            "hungarian": "fel"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "down",
+            "portuguese": "baixo",
+            "hungarian": "le"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "front",
+            "portuguese": "frente",
+            "hungarian": "eleje"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "back",
+            "portuguese": "costas",
+            "hungarian": "hátulja"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
             "english": "top",
             "portuguese": "topo",
             "hungarian": "teteje"
@@ -25,17 +73,9 @@
     },
     {
         "translations": {
-            "english": "front",
-            "portuguese": "frente",
-            "hungarian": "eleje"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "back",
-            "portuguese": "costas",
-            "hungarian": "hátulja"
+            "english": "inside",
+            "portuguese": "dentro",
+            "hungarian": "belül"
         },
         "imagePath": null
     },
@@ -49,49 +89,17 @@
     },
     {
         "translations": {
-            "english": "inside",
-            "portuguese": "dentro",
-            "hungarian": "belül"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "up",
-            "portuguese": "cima",
-            "hungarian": "fel"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "down",
-            "portuguese": "baixo",
-            "hungarian": "le"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "left",
-            "portuguese": "esquerda",
-            "hungarian": "bal"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "right",
-            "portuguese": "direita",
-            "hungarian": "jobb"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
             "english": "straight",
             "portuguese": "reto",
             "hungarian": "egyenes"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "direction",
+            "portuguese": "direção",
+            "hungarian": "irány"
         },
         "imagePath": null
     },
@@ -124,14 +132,6 @@
             "english": "west",
             "portuguese": "oeste",
             "hungarian": "nyugat"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "direction",
-            "portuguese": "direção",
-            "hungarian": "irány"
         },
         "imagePath": null
     }
