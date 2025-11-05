@@ -1,75 +1,63 @@
+import '../l10n/app_localizations.dart';
+
+/// DEPRECATED: Use AppLocalizations instead
+/// This class is kept for backward compatibility during migration
+/// 
+/// Migration guide:
+/// OLD: UiStrings.selectDeck(baseLanguage)
+/// NEW: AppLocalizations.of(baseLanguage).selectDeck
 class UiStrings {
   static String selectTargetLanguage(String lang) {
-    return lang == "portuguese"
-        ? "Escolha o idioma de destino 🎯"
-        : "Choose Target Language 🎯";
+    return AppLocalizations.of(lang).selectTargetLanguage;
   }
 
   static String selectDeck(String lang) {
-    return lang == "portuguese" ? "Selecione um Deck" : "Select a Deck";
+    return AppLocalizations.of(lang).selectDeck;
   }
 
   static String reviewTitle(String lang) {
-    return lang == "portuguese" ? "📊 Revisar Progresso" : "📊 Review Progress";
+    return AppLocalizations.of(lang).reviewProgress;
   }
 
   static String addFlashcardTitle(String lang) {
-    return lang == "portuguese" ? "Adicionar Carta" : "Add Flashcard";
+    return AppLocalizations.of(lang).addFlashcardTitle;
   }
 
   static String addFlashcardButton(String lang) {
-    return lang == "portuguese" ? "Adicionar" : "Add Flashcard";
+    return AppLocalizations.of(lang).addFlashcard;
   }
 
   static String noImageText(String lang) {
-    return lang == "portuguese"
-        ? "Nenhuma imagem ainda.\nToque ✏️ para adicionar."
-        : "No image yet.\nTap ✏️ to add one.";
+    return AppLocalizations.of(lang).noImageYet;
   }
 
   static String finishedDeckText(String lang) {
-    return lang == "portuguese"
-        ? "🎉 Você passou por todas as cartas!"
-        : "🎉 You've gone through all the flashcards!";
+    return AppLocalizations.of(lang).finishedDeck;
   }
 
   static String baseWordLabel(String lang) {
-    switch (lang.toLowerCase()) {
-      case 'portuguese':
-        return 'Digite a palavra em Português';
-      case 'english':
-        return 'Enter English word';
-      default:
-        return 'Enter word';
-    }
+    return AppLocalizations.of(lang).getInputLabel(lang);
   }
 
   static String addHungarianWord(String lang) {
-    return lang == "portuguese"
-        ? "Digite a palavra em Húngaro"
-        : "Enter Hungarian word";
+    return AppLocalizations.of(lang).enterHungarianWord;
   }
 
   static String limitReachedMessage(String lang) {
-    return lang == "portuguese" ? "⏳ Limite atingido" : "⏳ Limit reached";
+    return AppLocalizations.of(lang).limitReached;
   }
 
   static String timeLeftMessage(String lang, Duration duration) {
     final hours = duration.inHours;
     final minutes = duration.inMinutes % 60;
-
-    return lang == "portuguese"
-        ? "Volte em ${hours}h ${minutes}m"
-        : "Come back in ${hours}h ${minutes}m";
+    return AppLocalizations.of(lang).comeBackIn(hours, minutes);
   }
 
   static String reviewStatusLevel(String lang, int level) {
-    return lang == "portuguese"
-        ? "Revisão - Nível $level"
-        : "Review - Level $level";
+    return AppLocalizations.of(lang).reviewLevel(level);
   }
 
   static String newCardStatus(String lang) {
-    return lang == "portuguese" ? "Novo" : "New";
+    return AppLocalizations.of(lang).newCard;
   }
 }
