@@ -1,6 +1,7 @@
 import '../models/flashcard.dart';
 import '../models/flashcard_progress.dart';
 import 'firebase_progress_service.dart';
+import 'sync_service.dart';
 
 /// Service responsible for handling spaced repetition logic (currently Leitner).
 /// Keeps track of flashcard progress and determines which cards are due.
@@ -84,6 +85,8 @@ class RepetitionService {
 
     try {
       await FirebaseProgressService.saveProgress(card, progress);
+      // Mark that data changed to trigger sync
+      SyncService().markDataChanged();
     } catch (e) {
       print('Error saving progress: $e');
     }
@@ -214,6 +217,8 @@ class RepetitionService {
 
     try {
       await FirebaseProgressService.deleteProgress(card);
+      // Mark that data changed to trigger sync
+      SyncService().markDataChanged();
     } catch (e) {
       print('Error deleting progress: $e');
     }

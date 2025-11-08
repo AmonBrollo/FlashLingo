@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:async';
 import '../services/app_initialization_service.dart';
 import '../services/local_image_service.dart';
 import '../services/tutorial_service.dart';
 import '../services/firebase_user_preferences.dart';
 import '../services/deck_loader.dart';
+import '../services/sync_service.dart';
 import 'app_router.dart';
 import 'login_screen.dart';
 import 'deck_selector_screen.dart';
@@ -19,12 +21,32 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   bool _isLoading = false;
   bool _isResendingVerification = false;
+  bool _isManualSyncing = false;
   Map<String, dynamic>? _storageStats;
+  StreamSubscription<SyncStatus>? _syncStatusSubscription;
+  SyncStatus _currentSyncStatus = SyncStatus.idle;
 
   @override
   void initState() {
     super.initState();
     _loadStorageStats();
+    _setupSyncStatusListener();
+  }
+
+  @override
+  void dispose() {
+    _syncStatusSubscription?.cancel();
+    super.dispose();
+  }
+
+  void _setupSyncStatusListener() {
+    _syncStatusSubscription = SyncService().syncStatus.listen((status) {
+      if (mounted) {
+        setState(() {
+          _currentSyncStatus = status;
+        });
+      }
+    });
   }
 
   Future<void> _loadStorageStats() async {
@@ -37,6 +59,125 @@ class _ProfileScreenState extends State<ProfileScreen> {
       }
     } catch (e) {
       print('Error loading storage stats: $e');
+    }
+  }
+
+  Future<void> _manualSync() async {
+    if (_isManualSyncing) return;
+
+    setState(() => _isManualSyncing = true);
+
+    try {
+      final result = await SyncService().syncNow();
+
+      if (mounted) {
+        if (result.success) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Row(
+                children: [
+                  Icon(Icons.check_circle, color: Colors.white),
+                  SizedBox(width: 8),
+                  Text('Sync completed successfully'),
+                ],
+              ),
+              backgroundColor: Colors.green,
+              duration: Duration(seconds: 2),
+            ),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Row(
+                children: [
+                  const Icon(Icons.error_outline, color: Colors.white),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(result.reason ?? 'Sync failed'),
+                  ),
+                ],
+              ),
+              backgroundColor: Colors.orange,
+              duration: const Duration(seconds: 3),
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Row(
+              children: [
+                const Icon(Icons.error, color: Colors.white),
+                const SizedBox(width: 8),
+                Expanded(child: Text('Sync error: $e')),
+              ],
+            ),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 3),
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isManualSyncing = false);
+      }
+    }
+  }
+
+  Widget _buildSyncStatusIcon() {
+    switch (_currentSyncStatus) {
+      case SyncStatus.syncing:
+        return const SizedBox(
+          width: 20,
+          height: 20,
+          child: CircularProgressIndicator(
+            strokeWidth: 2,
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+          ),
+        );
+      case SyncStatus.synced:
+        return const Icon(Icons.cloud_done, color: Colors.green, size: 20);
+      case SyncStatus.error:
+        return const Icon(Icons.cloud_off, color: Colors.red, size: 20);
+      case SyncStatus.idle:
+        if (SyncService().hasPendingChanges) {
+          return const Icon(Icons.cloud_upload, color: Colors.orange, size: 20);
+        }
+        return const Icon(Icons.cloud_queue, color: Colors.grey, size: 20);
+    }
+  }
+
+  String _getSyncStatusText() {
+    switch (_currentSyncStatus) {
+      case SyncStatus.syncing:
+        return 'Syncing...';
+      case SyncStatus.synced:
+        return SyncService().getSyncStatusText();
+      case SyncStatus.error:
+        return 'Sync error';
+      case SyncStatus.idle:
+        if (SyncService().hasPendingChanges) {
+          return 'Changes pending';
+        }
+        return SyncService().getSyncStatusText();
+    }
+  }
+
+  Color _getSyncStatusColor() {
+    switch (_currentSyncStatus) {
+      case SyncStatus.syncing:
+        return Colors.blue;
+      case SyncStatus.synced:
+        return Colors.green;
+      case SyncStatus.error:
+        return Colors.red;
+      case SyncStatus.idle:
+        if (SyncService().hasPendingChanges) {
+          return Colors.orange;
+        }
+        return Colors.grey;
     }
   }
 
@@ -756,6 +897,108 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                   ),
+
+                  const SizedBox(height: 16),
+
+                  // Sync Status Card (only show for logged-in users)
+                  if (!isAnonymous)
+                    Card(
+                      elevation: 2,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                _buildSyncStatusIcon(),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        'Sync Status',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        _getSyncStatusText(),
+                                        style: TextStyle(
+                                          fontSize: 13,
+                                          color: _getSyncStatusColor(),
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                ElevatedButton.icon(
+                                  onPressed: _isManualSyncing ||
+                                          _currentSyncStatus ==
+                                              SyncStatus.syncing
+                                      ? null
+                                      : _manualSync,
+                                  icon: _isManualSyncing
+                                      ? const SizedBox(
+                                          width: 16,
+                                          height: 16,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2,
+                                            valueColor:
+                                                AlwaysStoppedAnimation<Color>(
+                                                    Colors.white),
+                                          ),
+                                        )
+                                      : const Icon(Icons.sync, size: 18),
+                                  label: const Text('Sync Now'),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.blue,
+                                    foregroundColor: Colors.white,
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                      vertical: 10,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 12),
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: Colors.blue[50],
+                                borderRadius: BorderRadius.circular(6),
+                                border: Border.all(color: Colors.blue[100]!),
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.info_outline,
+                                    size: 16,
+                                    color: Colors.blue[700],
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: Text(
+                                      'Your progress syncs automatically across devices',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.blue[900],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
 
                   const SizedBox(height: 16),
 

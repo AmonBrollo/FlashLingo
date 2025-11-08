@@ -4,6 +4,7 @@ import 'firebase_user_preferences.dart';
 import 'firebase_progress_service.dart';
 import 'repetition_service.dart';
 import 'error_handler_service.dart';
+import 'sync_service.dart';
 
 /// Enhanced app initialization service with robust error handling
 class AppInitializationService {
@@ -38,23 +39,24 @@ class AppInitializationService {
       );
       await ErrorHandlerService.setCustomKey('network_status', isOnline ? 'online' : 'offline');
 
+      // Initialize sync service first
+      await SyncService().initialize();
+
       // Initialize Firebase Auth listener
       FirebaseAuth.instance.authStateChanges().listen(_handleAuthStateChange);
 
-      // If user is already logged in and not anonymous, sync data
+      // If user is already logged in, sync immediately
       final user = FirebaseAuth.instance.currentUser;
       if (user != null) {
         await ErrorHandlerService.setUserIdentifier(
           user.isAnonymous ? 'anonymous_${user.uid}' : user.uid,
         );
         
-        if (!user.isAnonymous && isOnline) {
+        if (isOnline) {
           await ErrorHandlerService.logMessage('Syncing data for authenticated user');
-          await _syncDataToFirebase();
-        } else if (!isOnline) {
-          await ErrorHandlerService.logMessage('Offline mode - skipping sync');
+          await SyncService().syncNow();
         } else {
-          await ErrorHandlerService.logMessage('Anonymous user - skipping sync');
+          await ErrorHandlerService.logMessage('Offline mode - sync deferred');
         }
       } else {
         await ErrorHandlerService.logMessage('No user logged in');
@@ -91,19 +93,18 @@ class AppInitializationService {
           user.isAnonymous ? 'anonymous_${user.uid}' : user.uid,
         );
         
-        if (!user.isAnonymous) {
-          // Check network before syncing
-          final connectivityResult = await Connectivity().checkConnectivity();
-          final isOnline = connectivityResult.any((result) => 
-            result != ConnectivityResult.none
-          );
-          
-          if (isOnline) {
-            await ErrorHandlerService.logMessage('User logged in - syncing data');
-            await _syncDataToFirebase();
-          } else {
-            await ErrorHandlerService.logMessage('User logged in - offline, sync deferred');
-          }
+        // Check network before syncing
+        final connectivityResult = await Connectivity().checkConnectivity();
+        final isOnline = connectivityResult.any((result) => 
+          result != ConnectivityResult.none
+        );
+        
+        if (isOnline) {
+          await ErrorHandlerService.logMessage('User logged in - syncing data');
+          await SyncService().syncNow();
+        } else {
+          await ErrorHandlerService.logMessage('User logged in - offline, sync deferred');
+          SyncService().markDataChanged(); // Queue for later sync
         }
       } else {
         await ErrorHandlerService.logAuthEvent(
@@ -119,55 +120,6 @@ class AppInitializationService {
         context: 'Auth State Change',
         fatal: false,
       );
-    }
-  }
-
-  /// Sync local data to Firebase with retry logic
-  static Future<void> _syncDataToFirebase() async {
-    int retryCount = 0;
-    const maxRetries = 2;
-
-    while (retryCount <= maxRetries) {
-      try {
-        await ErrorHandlerService.logSyncEvent('Starting data sync');
-
-        // Sync user preferences
-        await FirebaseUserPreferences.syncLocalToFirebase()
-            .timeout(const Duration(seconds: 10));
-        
-        await ErrorHandlerService.logSyncEvent('Preferences synced');
-
-        // Sync progress data
-        await FirebaseProgressService.syncLocalToFirebase()
-            .timeout(const Duration(seconds: 15));
-        
-        await ErrorHandlerService.logSyncEvent('Progress synced');
-
-        await ErrorHandlerService.logMessage('Data sync completed successfully');
-        return; // Success - exit retry loop
-        
-      } catch (e, stack) {
-        retryCount++;
-        
-        if (retryCount > maxRetries) {
-          await ErrorHandlerService.logError(
-            e,
-            stack,
-            context: 'Data Sync Failed (max retries)',
-            fatal: false,
-            additionalInfo: {'retry_count': retryCount},
-          );
-          // Don't throw - allow app to continue with local data
-          return;
-        }
-        
-        await ErrorHandlerService.logMessage(
-          'Sync attempt $retryCount failed, retrying...',
-        );
-        
-        // Wait before retrying with exponential backoff
-        await Future.delayed(Duration(seconds: retryCount * 2));
-      }
     }
   }
 
@@ -248,26 +200,15 @@ class AppInitializationService {
     try {
       await ErrorHandlerService.logMessage('Manual sync triggered');
 
-      // Check network
-      final connectivityResult = await Connectivity().checkConnectivity();
-      final isOnline = connectivityResult.any((result) => 
-        result != ConnectivityResult.none
-      );
-
-      if (!isOnline) {
-        await ErrorHandlerService.logMessage('Manual sync failed: offline');
+      final result = await SyncService().syncNow();
+      
+      if (result.success) {
+        await ErrorHandlerService.logMessage('Manual sync completed');
+        return true;
+      } else {
+        await ErrorHandlerService.logMessage('Manual sync failed: ${result.reason}');
         return false;
       }
-
-      final user = FirebaseAuth.instance.currentUser;
-      if (user == null || user.isAnonymous) {
-        await ErrorHandlerService.logMessage('Manual sync skipped: no auth');
-        return false;
-      }
-
-      await _syncDataToFirebase();
-      await ErrorHandlerService.logMessage('Manual sync completed');
-      return true;
     } catch (e, stack) {
       await ErrorHandlerService.logError(
         e,
