@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:confetti/confetti.dart';
 import 'flashcard_screen.dart';
 import '../models/flashcard_deck.dart';
 import '../models/flashcard.dart';
@@ -38,27 +39,39 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
   bool _isLoading = true;
   bool _hasError = false;
   String? _errorMessage;
+  
+  // Box level stats - global across all topics
+  Map<int, int> _globalBoxStats = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
+  Map<int, List<Flashcard>> _globalBoxCards = {1: [], 2: [], 3: [], 4: [], 5: []};
+  
+  // Original topic deck stats
   Map<String, Map<String, int>> _deckStats = {};
+  
   bool _showTutorial = false;
+  late ConfettiController _confettiController;
 
-  // Tutorial keys for highlighting
-  final GlobalKey _firstDeckKey = GlobalKey();
-  final GlobalKey _firstDeckProgressKey = GlobalKey(); // Changed name for clarity
-  final GlobalKey _forgottenKey = GlobalKey();
+  // Tutorial keys
+  final GlobalKey _firstLevelDeckKey = GlobalKey();
+  final GlobalKey _firstTopicDeckKey = GlobalKey();
 
   @override
   void initState() {
     super.initState();
+    _confettiController = ConfettiController(duration: const Duration(seconds: 2));
     _initializeProgressData();
     _checkTutorial();
   }
 
+  @override
+  void dispose() {
+    _confettiController.dispose();
+    super.dispose();
+  }
+
   Future<void> _checkTutorial() async {
-    // Check if tutorial should be shown
     if (widget.showTutorial) {
       final shouldShow = await TutorialService.shouldShowTutorial();
       if (shouldShow && mounted) {
-        // Delay to let the UI render first
         Future.delayed(const Duration(milliseconds: 500), () {
           if (mounted) {
             setState(() => _showTutorial = true);
@@ -75,18 +88,23 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
       _errorMessage = null;
     });
 
-    // Set default stats immediately so decks are accessible
+    // Set default stats
     final stats = <String, Map<String, int>>{};
+    int totalCards = 0;
+    
     for (final deck in widget.decks) {
       stats[deck.topicKey] = {'new': deck.cards.length, 'due': 0, 'review': 0};
+      totalCards += deck.cards.length;
     }
 
+    // Default: all cards in box 1
     setState(() {
       _deckStats = stats;
+      _globalBoxStats = {1: totalCards, 2: 0, 3: 0, 4: 0, 5: 0};
       _isLoading = false;
     });
 
-    // Load progress in background (non-blocking)
+    // Load progress in background
     _loadProgressInBackground();
   }
 
@@ -99,30 +117,72 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
         },
       );
 
-      final stats = <String, Map<String, int>>{};
-
+      // Collect all cards from all decks
+      final allCards = <Flashcard>[];
       for (final deck in widget.decks) {
-        try {
-          await _repetitionService.preloadProgress(deck.cards);
-          stats[deck.topicKey] = _repetitionService.getStudyStats(deck.cards);
-        } catch (e) {
-          print('Error loading deck ${deck.topicKey}: $e');
-          stats[deck.topicKey] = {
-            'new': deck.cards.length,
-            'due': 0,
-            'review': 0,
-          };
-        }
+        allCards.addAll(deck.cards);
+      }
+
+      // Preload progress for all cards
+      await _repetitionService.preloadProgress(allCards);
+
+      // Get global box breakdown (all topics combined)
+      final boxBreakdown = _repetitionService.groupByBox(allCards);
+      final globalBoxStats = <int, int>{};
+      final globalBoxCards = <int, List<Flashcard>>{};
+      
+      for (int box = 1; box <= 5; box++) {
+        final cardsInBox = boxBreakdown[box] ?? [];
+        globalBoxStats[box] = cardsInBox.length;
+        globalBoxCards[box] = cardsInBox;
+      }
+
+      // Get stats for original topic decks
+      final stats = <String, Map<String, int>>{};
+      for (final deck in widget.decks) {
+        stats[deck.topicKey] = _repetitionService.getStudyStats(deck.cards);
       }
 
       if (mounted) {
         setState(() {
+          _globalBoxStats = globalBoxStats;
+          _globalBoxCards = globalBoxCards;
           _deckStats = stats;
         });
       }
     } catch (e) {
       print('Background progress loading failed: $e');
     }
+  }
+
+  void _openLevelDeck(int level, List<Flashcard> cards) async {
+    if (cards.isEmpty) return;
+
+    await FirebaseUserPreferences.savePreferences(
+      baseLanguage: widget.baseLanguage,
+      targetLanguage: widget.targetLanguage,
+      deckKey: 'level_$level',
+    );
+
+    if (!mounted) return;
+
+    final shouldShowTutorial = await TutorialService.shouldShowTutorial();
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => FlashcardScreen(
+          baseLanguage: widget.baseLanguage,
+          targetLanguage: widget.targetLanguage,
+          topicKey: 'level_$level',
+          flashcards: cards,
+          showTutorial: shouldShowTutorial,
+        ),
+      ),
+    ).then((_) {
+      // Reload data when returning from flashcard screen
+      _loadProgressInBackground();
+    });
   }
 
   void _openFlashcards(BuildContext context, FlashcardDeck deck) async {
@@ -134,7 +194,6 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
 
     if (!context.mounted) return;
 
-    // Check if tutorial should continue on flashcard screen
     final shouldShowTutorial = await TutorialService.shouldShowTutorial();
 
     Navigator.push(
@@ -148,7 +207,10 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
           showTutorial: shouldShowTutorial,
         ),
       ),
-    );
+    ).then((_) {
+      // Reload data when returning
+      _loadProgressInBackground();
+    });
   }
 
   void _onMenuSelected(String value) async {
@@ -175,78 +237,227 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
     }
   }
 
-  void _openForgottenCards(
-    BuildContext context,
-    List<Flashcard> forgottenCards,
-  ) {
-    if (forgottenCards.isEmpty) return;
+  String _getLevelName(int level) {
+    switch (level) {
+      case 1:
+        return 'New';
+      case 2:
+        return 'Learning';
+      case 3:
+        return 'Reviewing';
+      case 4:
+        return 'Mastering';
+      case 5:
+        return 'Mastered';
+      default:
+        return 'Level $level';
+    }
+  }
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => FlashcardScreen(
-          baseLanguage: widget.baseLanguage,
-          targetLanguage: widget.targetLanguage,
-          topicKey: 'forgotten',
-          flashcards: forgottenCards,
+  Color _getLevelColor(int level) {
+    switch (level) {
+      case 1:
+        return Colors.blue;
+      case 2:
+        return Colors.orange;
+      case 3:
+        return Colors.purple;
+      case 4:
+        return Colors.teal;
+      case 5:
+        return Colors.green;
+      default:
+        return Colors.grey;
+    }
+  }
+
+  IconData _getLevelIcon(int level) {
+    switch (level) {
+      case 1:
+        return Icons.fiber_new;
+      case 2:
+        return Icons.school;
+      case 3:
+        return Icons.loop;
+      case 4:
+        return Icons.trending_up;
+      case 5:
+        return Icons.emoji_events;
+      default:
+        return Icons.collections_bookmark;
+    }
+  }
+
+  Widget _buildLevelDeckCard(int level, int cardCount, List<Flashcard> cards, {Key? key}) {
+    final isComplete = cardCount == 0;
+    final levelName = _getLevelName(level);
+    final levelColor = _getLevelColor(level);
+    final levelIcon = _getLevelIcon(level);
+
+    return GestureDetector(
+      onTap: isComplete ? null : () {
+        _openLevelDeck(level, cards);
+      },
+      child: Card(
+        key: key,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        elevation: isComplete ? 2 : 4,
+        color: isComplete ? Colors.green[50] : levelColor.withOpacity(0.1),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: isComplete ? Colors.green : levelColor.withOpacity(0.3),
+              width: 2,
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: isComplete 
+                            ? Colors.green.withOpacity(0.2)
+                            : levelColor.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Icon(
+                        levelIcon,
+                        color: isComplete ? Colors.green : levelColor,
+                        size: 24,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        levelName,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: isComplete ? Colors.green[700] : levelColor,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    if (isComplete)
+                      const Icon(
+                        Icons.check_circle,
+                        size: 24,
+                        color: Colors.green,
+                      ),
+                  ],
+                ),
+                const Spacer(),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: isComplete 
+                        ? Colors.green.withOpacity(0.2)
+                        : levelColor.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    isComplete ? 'Complete ✓' : '$cardCount cards left',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: isComplete ? Colors.green[700] : levelColor,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildProgressIndicator(Map<String, int> stats, int totalCount, {Key? key}) {
-    final newCount = stats['new'] ?? totalCount;
-    final dueCount = stats['due'] ?? 0;
-    final reviewCount = stats['review'] ?? 0;
-    final studiedCount = dueCount + reviewCount;
+  Widget _buildTopicDeckCard(
+    FlashcardDeck deck,
+    ReviewState reviewState, {
+    Key? key,
+  }) {
+    final deckName = TopicNames.getName(deck.topicKey, widget.baseLanguage);
+    final totalCount = deck.cards.length;
+    final stats = _deckStats[deck.topicKey] ?? {
+      'new': totalCount,
+      'due': 0,
+      'review': 0,
+    };
+    final studiedCount = (stats['due'] ?? 0) + (stats['review'] ?? 0);
+    final isComplete = totalCount > 0 && studiedCount >= totalCount;
+    final cardsLeft = totalCount - studiedCount;
 
-    if (totalCount == 0) return const SizedBox.shrink();
-
-    return Container(
-      key: key, // Accept optional key parameter
-      margin: const EdgeInsets.only(top: 8),
-      child: Column(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(2),
-            child: LinearProgressIndicator(
-              value: studiedCount / totalCount,
-              backgroundColor: Colors.grey[300],
-              valueColor: AlwaysStoppedAnimation<Color>(
-                studiedCount == totalCount ? Colors.green : Colors.brown,
-              ),
-              minHeight: 4,
+    return GestureDetector(
+      onTap: () => _openFlashcards(context, deck),
+      child: Card(
+        key: key,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        elevation: isComplete ? 2 : 4,
+        color: isComplete ? Colors.green[50] : Colors.brown[50],
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: isComplete ? Colors.green : Colors.brown.withOpacity(0.3),
+              width: 2,
             ),
           ),
-          const SizedBox(height: 4),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              if (newCount > 0) _buildStatChip('New', newCount, Colors.blue),
-              if (dueCount > 0) _buildStatChip('Due', dueCount, Colors.orange),
-              if (reviewCount > 0)
-                _buildStatChip('Learning', reviewCount, Colors.green),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        deckName,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: isComplete ? Colors.green[700] : Colors.brown,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    if (isComplete)
+                      const Icon(
+                        Icons.check_circle,
+                        size: 20,
+                        color: Colors.green,
+                      ),
+                  ],
+                ),
+                const Spacer(),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: isComplete 
+                        ? Colors.green.withOpacity(0.2)
+                        : Colors.brown.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    isComplete ? 'Complete ✓' : '$cardsLeft cards left',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: isComplete ? Colors.green[700] : Colors.brown[700],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildStatChip(String label, int count, Color color) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(6),
-        border: Border.all(color: color.withOpacity(0.3)),
-      ),
-      child: Text(
-        '$label: $count',
-        style: TextStyle(
-          fontSize: 9,
-          fontWeight: FontWeight.w500,
-          color: color.withOpacity(0.8),
         ),
       ),
     );
@@ -258,34 +469,13 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
       TutorialConfig.screenDeckSelector,
     );
 
-    // Assign keys to steps
     return allSteps.map((step) {
       if (step.id == TutorialConfig.deckSelectorDeckCard) {
         return TutorialStep(
           id: step.id,
           title: step.title,
           message: step.message,
-          targetKey: _firstDeckKey,
-          messagePosition: step.messagePosition,
-          icon: step.icon,
-          screen: step.screen,
-        );
-      } else if (step.id == TutorialConfig.deckSelectorProgress) {
-        return TutorialStep(
-          id: step.id,
-          title: step.title,
-          message: step.message,
-          targetKey: _firstDeckProgressKey, // Use unique key
-          messagePosition: step.messagePosition,
-          icon: step.icon,
-          screen: step.screen,
-        );
-      } else if (step.id == TutorialConfig.deckSelectorForgotten) {
-        return TutorialStep(
-          id: step.id,
-          title: step.title,
-          message: step.message,
-          targetKey: _forgottenKey,
+          targetKey: _firstLevelDeckKey,
           messagePosition: step.messagePosition,
           icon: step.icon,
           screen: step.screen,
@@ -342,7 +532,6 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
               ),
             ],
           ),
-          // Tutorial overlay
           if (_showTutorial)
             TutorialOverlay(
               steps: _getTutorialSteps(),
@@ -354,6 +543,26 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
                 setState(() => _showTutorial = false);
               },
             ),
+          // Confetti for level completion
+          Align(
+            alignment: Alignment.topCenter,
+            child: ConfettiWidget(
+              confettiController: _confettiController,
+              blastDirectionality: BlastDirectionality.explosive,
+              particleDrag: 0.05,
+              emissionFrequency: 0.05,
+              numberOfParticles: 20,
+              gravity: 0.2,
+              shouldLoop: false,
+              colors: const [
+                Colors.green,
+                Colors.blue,
+                Colors.pink,
+                Colors.orange,
+                Colors.purple,
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -428,16 +637,7 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
             const SizedBox(height: 24),
             TextButton(
               onPressed: () {
-                setState(() {
-                  _isLoading = false;
-                  for (final deck in widget.decks) {
-                    _deckStats[deck.topicKey] = {
-                      'new': deck.cards.length,
-                      'due': 0,
-                      'review': 0,
-                    };
-                  }
-                });
+                setState(() => _isLoading = false);
               },
               child: const Text('Skip and continue'),
             ),
@@ -445,6 +645,52 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
         ),
       );
     }
+
+    // Build list of all decks (level decks + topic decks)
+    final List<Widget> allDecks = [];
+
+    // Add level decks (highest level first, only if they have cards)
+    // Only show level decks that have cards (no completed/empty state)
+    for (int level = 5; level >= 1; level--) {
+      final cardCount = _globalBoxStats[level] ?? 0;
+      final cards = _globalBoxCards[level] ?? [];
+      
+      // Only add if there are cards in this level
+      if (cardCount > 0) {
+        allDecks.add(_buildLevelDeckCard(
+          level,
+          cardCount,
+          cards,
+          key: level == 5 && allDecks.isEmpty ? _firstLevelDeckKey : null,
+        ));
+      }
+    }
+
+    // Add topic decks
+    final activeTopicDecks = <Widget>[];
+    final completedTopicDecks = <Widget>[];
+
+    for (int i = 0; i < widget.decks.length; i++) {
+      final deck = widget.decks[i];
+      final stats = _deckStats[deck.topicKey] ?? {'new': deck.cards.length, 'due': 0, 'review': 0};
+      final studiedCount = (stats['due'] ?? 0) + (stats['review'] ?? 0);
+      final isComplete = deck.cards.length > 0 && studiedCount >= deck.cards.length;
+
+      final deckWidget = _buildTopicDeckCard(
+        deck,
+        reviewState,
+        key: i == 0 ? _firstTopicDeckKey : null,
+      );
+
+      if (isComplete) {
+        completedTopicDecks.add(deckWidget);
+      } else {
+        activeTopicDecks.add(deckWidget);
+      }
+    }
+
+    allDecks.addAll(activeTopicDecks);
+    allDecks.addAll(completedTopicDecks);
 
     return Padding(
       padding: const EdgeInsets.all(12.0),
@@ -455,160 +701,8 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
           mainAxisSpacing: 12,
           childAspectRatio: 0.85,
         ),
-        itemCount: widget.decks.length + 1,
-        itemBuilder: (context, index) {
-          if (index == 0) {
-            return _buildForgottenCardsCard(reviewState);
-          }
-
-          final deck = widget.decks[index - 1];
-          // Add key to first deck for tutorial, and add progress key to first deck's progress
-          final deckKey = index == 1 ? _firstDeckKey : null;
-          final progressKey = index == 1 ? _firstDeckProgressKey : null;
-          return _buildDeckCard(deck, reviewState, key: deckKey, progressKey: progressKey);
-        },
-      ),
-    );
-  }
-
-  Widget _buildForgottenCardsCard(ReviewState reviewState) {
-    final List<Flashcard> forgottenCards = reviewState.forgotten;
-
-    return GestureDetector(
-      onTap: forgottenCards.isEmpty
-          ? null
-          : () => _openForgottenCards(context, forgottenCards),
-      child: Card(
-        key: _forgottenKey, // Key for tutorial
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        elevation: forgottenCards.isEmpty ? 1 : 4,
-        color: Colors.red[50],
-        child: Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: Center(
-                      child: Text(
-                        'Forgotten Cards',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.red,
-                        ),
-                        textAlign: TextAlign.center,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ),
-                  if (forgottenCards.isNotEmpty)
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.red[100],
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(
-                        'Review ${forgottenCards.length} cards',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.red[700],
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-            ),
-            Positioned(
-              top: 8,
-              right: 8,
-              child: Text(
-                '${forgottenCards.length}',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.red[700],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDeckCard(
-    FlashcardDeck deck,
-    ReviewState reviewState, {
-    Key? key,
-    Key? progressKey, // Add parameter for progress key
-  }) {
-    final deckName = TopicNames.getName(deck.topicKey, widget.baseLanguage);
-    final revealedCount = reviewState.getRevealedCount(deck.topicKey);
-    final totalCount = deck.cards.length;
-    final stats = _deckStats[deck.topicKey] ?? {
-      'new': totalCount,
-      'due': 0,
-      'review': 0,
-    };
-    final studiedCount = (stats['due'] ?? 0) + (stats['review'] ?? 0);
-    final isComplete = totalCount > 0 && studiedCount >= totalCount;
-
-    return GestureDetector(
-      onTap: () => _openFlashcards(context, deck),
-      child: Card(
-        key: key, // Key for tutorial highlighting
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        elevation: 4,
-        color: isComplete ? Colors.green[50] : Colors.brown[50],
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      deckName,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.brown,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  if (isComplete)
-                    const Icon(
-                      Icons.check_circle,
-                      size: 20,
-                      color: Colors.green,
-                    ),
-                ],
-              ),
-              const Spacer(),
-              _buildProgressIndicator(stats, totalCount),
-              const SizedBox(height: 8),
-              Text(
-                '$revealedCount/$totalCount cards',
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.brown[600],
-                ),
-              ),
-            ],
-          ),
-        ),
+        itemCount: allDecks.length,
+        itemBuilder: (context, index) => allDecks[index],
       ),
     );
   }

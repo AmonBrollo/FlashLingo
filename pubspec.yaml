@@ -8,6 +8,7 @@ environment:
   sdk: ^3.8.1
 
 dependencies:
+  confetti: ^0.7.0
   flutter_svg: ^2.0.9
   flutter:
     sdk: flutter
