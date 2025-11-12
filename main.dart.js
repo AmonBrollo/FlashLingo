@@ -51038,9 +51038,9 @@ $3(a,b,c){var s,r=null,q=this.a,p=b.c.h(0,q.a.e),o=p==null?r:p.gD(p)
 if(o==null)o=0
 p=q.x
 p===$&&A.a()
-s=p.length
+s=p.length-o
 p=A.c_(12)
-return A.cx(r,A.ar(""+o+"/"+s,r,r,r,B.Y9,r,r),B.n,r,r,new A.bW(B.nT,r,r,p,r,r,B.O),r,r,q.ch,r,B.f1,r,r,r)},
+return A.cx(r,A.ar(s>0?""+s+" left":"Complete",r,r,r,B.Y9,r,r),B.n,r,r,new A.bW(B.nT,r,r,p,r,r,B.O),r,r,q.ch,r,B.f1,r,r,r)},
 $S:530}
 A.auG.prototype={
 $1(a){return A.b([B.QR,B.zQ,B.zR],t.Do)},
