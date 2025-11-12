@@ -516,31 +516,36 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
           children: [
             const Text('Flashlango'),
             const Spacer(),
-            Consumer<ReviewState>(
-              builder: (context, reviewState, child) {
-                final revealed = reviewState.getRevealedCount(widget.topicKey);
-                final total = _flashcards.length;
-                return Container(
-                  key: _progressKey, // Key for tutorial
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.brown[100],
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Text(
-                    '$revealed/$total',
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.brown,
-                    ),
-                  ),
-                );
-              },
-            ),
+            // In flashcard_screen.dart, find the appBar section (around line 390-420)
+// Replace the Consumer<ReviewState> widget in the title Row with this:
+
+Consumer<ReviewState>(
+  builder: (context, reviewState, child) {
+    final revealed = reviewState.getRevealedCount(widget.topicKey);
+    final total = _flashcards.length;
+    final cardsLeft = total - revealed;
+    
+    return Container(
+      key: _progressKey, // Key for tutorial
+      padding: const EdgeInsets.symmetric(
+        horizontal: 8,
+        vertical: 4,
+      ),
+      decoration: BoxDecoration(
+        color: Colors.brown[100],
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Text(
+        cardsLeft > 0 ? '$cardsLeft left' : 'Complete',
+        style: const TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.bold,
+          color: Colors.brown,
+        ),
+      ),
+    );
+  },
+),
           ],
         ),
         backgroundColor: Colors.brown,
