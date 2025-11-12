@@ -40,7 +40,7 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
   bool _hasError = false;
   String? _errorMessage;
   
-  // Box level stats - global across all topics
+  // Box level stats - global across all topics (excluding box 0 - unseen cards)
   Map<int, int> _globalBoxStats = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
   Map<int, List<Flashcard>> _globalBoxCards = {1: [], 2: [], 3: [], 4: [], 5: []};
   
@@ -83,50 +83,32 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
 
   Future<void> _initializeProgressData() async {
     setState(() {
-      _isLoading = true;
-      _hasError = false;
-      _errorMessage = null;
+      _isLoading = false; // Show UI immediately
     });
 
-    // Set default stats
-    final stats = <String, Map<String, int>>{};
-    int totalCards = 0;
-    
-    for (final deck in widget.decks) {
-      stats[deck.topicKey] = {'new': deck.cards.length, 'due': 0, 'review': 0};
-      totalCards += deck.cards.length;
-    }
-
-    // Default: all cards in box 1
-    setState(() {
-      _deckStats = stats;
-      _globalBoxStats = {1: totalCards, 2: 0, 3: 0, 4: 0, 5: 0};
-      _isLoading = false;
-    });
-
-    // Load progress in background
+    // Load progress in background without blocking
     _loadProgressInBackground();
   }
 
   Future<void> _loadProgressInBackground() async {
     try {
-      await _repetitionService.initialize().timeout(
-        const Duration(seconds: 5),
-        onTimeout: () {
-          print('Progress initialization timed out - continuing with defaults');
-        },
-      );
-
       // Collect all cards from all decks
       final allCards = <Flashcard>[];
       for (final deck in widget.decks) {
         allCards.addAll(deck.cards);
       }
 
-      // Preload progress for all cards
-      await _repetitionService.preloadProgress(allCards);
+      // Load progress data (this happens in background)
+      if (!_repetitionService.isCacheLoaded) {
+        await _repetitionService.initialize().timeout(
+          const Duration(seconds: 3),
+          onTimeout: () {
+            print('Progress initialization timed out - using defaults');
+          },
+        );
+      }
 
-      // Get global box breakdown (all topics combined)
+      // Calculate box stats from loaded data
       final boxBreakdown = _repetitionService.groupByBox(allCards);
       final globalBoxStats = <int, int>{};
       final globalBoxCards = <int, List<Flashcard>>{};
@@ -238,20 +220,7 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
   }
 
   String _getLevelName(int level) {
-    switch (level) {
-      case 1:
-        return 'New';
-      case 2:
-        return 'Learning';
-      case 3:
-        return 'Reviewing';
-      case 4:
-        return 'Mastering';
-      case 5:
-        return 'Mastered';
-      default:
-        return 'Level $level';
-    }
+    return 'Level $level';
   }
 
   Color _getLevelColor(int level) {
@@ -625,25 +594,8 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
     }
 
     if (_isLoading) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.brown),
-            ),
-            const SizedBox(height: 16),
-            const Text('Loading progress...'),
-            const SizedBox(height: 24),
-            TextButton(
-              onPressed: () {
-                setState(() => _isLoading = false);
-              },
-              child: const Text('Skip and continue'),
-            ),
-          ],
-        ),
-      );
+      // Don't show loading screen - show empty decks immediately
+      return _buildBody(reviewState);
     }
 
     // Build list of all decks (level decks + topic decks)

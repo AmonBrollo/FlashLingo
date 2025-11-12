@@ -32,32 +32,35 @@ class FirebaseUserPreferences {
       'updated_at': FieldValue.serverTimestamp(),
     };
 
-    // Always save to local storage first
+    // Always save to local storage first (fast and reliable)
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_baseLanguageKey, baseLanguage);
     await prefs.setString(_targetLanguageKey, targetLanguage);
     await prefs.setString(_deckKey, deckKey);
 
-    // Save to Firebase if user is authenticated and not anonymous
-    final userDoc = _getUserDocument();
-    if (userDoc != null) {
+    // Save to Firebase in background (non-blocking)
+    _saveToFirebaseBackground(preferences);
+
+    // Trigger sync after saving preferences (debounced)
+    SyncService().markDataChanged();
+  }
+
+  /// Save to Firebase in background without blocking
+  static void _saveToFirebaseBackground(Map<String, dynamic> preferences) {
+    Future.microtask(() async {
+      final userDoc = _getUserDocument();
+      if (userDoc == null) return;
+
       try {
         await userDoc
             .set({'preferences': preferences}, SetOptions(merge: true))
             .timeout(
-              const Duration(seconds: 5),
-              onTimeout: () {
-                print('Firebase save timed out, but local save succeeded');
-              },
+              const Duration(seconds: 3),
             );
       } catch (e) {
-        print('Error saving preferences to Firebase: $e');
-        // Continue using local storage if Firebase fails
+        print('Firebase preference save failed (expected if offline): $e');
       }
-    }
-
-    // Trigger sync after saving preferences (debounced)
-    SyncService().markDataChanged();
+    });
   }
 
   /// Load preferences from Firebase, fallback to local storage

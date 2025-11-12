@@ -4,7 +4,7 @@ class UsageLimiter {
   static const _usedKey = 'flashcards_used';
   static const _lastResetKey = 'last_reset_timestamp';
   static const int _limit = 30;
-  static const Duration _cooldown = Duration(hours: 3);
+  static const Duration _cooldown = Duration(hours: 0);
 
   Future<bool> canStudy() async {
     final prefs = await SharedPreferences.getInstance();

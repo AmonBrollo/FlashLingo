@@ -42,6 +42,9 @@ class AppInitializationService {
       // Initialize sync service first
       await SyncService().initialize();
 
+      // DON'T initialize RepetitionService here - let it load on-demand
+      // This makes app startup faster
+
       // Initialize Firebase Auth listener
       FirebaseAuth.instance.authStateChanges().listen(_handleAuthStateChange);
 
@@ -102,6 +105,9 @@ class AppInitializationService {
         if (isOnline) {
           await ErrorHandlerService.logMessage('User logged in - syncing data');
           await SyncService().syncNow();
+          
+          // Reload RepetitionService cache with new user data
+          RepetitionService().reloadCache();
         } else {
           await ErrorHandlerService.logMessage('User logged in - offline, sync deferred');
           SyncService().markDataChanged(); // Queue for later sync
@@ -112,6 +118,12 @@ class AppInitializationService {
           success: true,
         );
         await ErrorHandlerService.clearUserIdentifier();
+        
+        // Clear RepetitionService cache on logout
+        RepetitionService().clearCache();
+        
+        // Clear memory cache in progress service
+        FirebaseProgressService.clearMemoryCache();
       }
     } catch (e, stack) {
       await ErrorHandlerService.logError(
@@ -150,12 +162,12 @@ class AppInitializationService {
         return;
       }
 
-      // Load all progress data into cache with timeout
+      // Reload RepetitionService cache
       final repetitionService = RepetitionService();
-      await repetitionService.initialize().timeout(
+      await repetitionService.reloadCache().timeout(
         const Duration(seconds: 8),
         onTimeout: () {
-          ErrorHandlerService.logTimeout('RepetitionService initialization', 
+          ErrorHandlerService.logTimeout('RepetitionService reload', 
             const Duration(seconds: 8));
         },
       );
@@ -181,8 +193,7 @@ class AppInitializationService {
       await FirebaseProgressService.clearAllProgress();
 
       // Clear repetition service cache
-      final repetitionService = RepetitionService();
-      repetitionService.clearCache();
+      RepetitionService().clearCache();
 
       await ErrorHandlerService.logMessage('Local data cleared successfully');
     } catch (e, stack) {
@@ -204,6 +215,8 @@ class AppInitializationService {
       
       if (result.success) {
         await ErrorHandlerService.logMessage('Manual sync completed');
+        // Reload cache after successful sync
+        await RepetitionService().reloadCache();
         return true;
       } else {
         await ErrorHandlerService.logMessage('Manual sync failed: ${result.reason}');
@@ -235,6 +248,7 @@ class AppInitializationService {
         'is_anonymous': user?.isAnonymous ?? true,
         'is_online': isOnline,
         'user_id': user?.uid ?? 'none',
+        'cache_loaded': RepetitionService().isCacheLoaded,
       };
     } catch (e) {
       return {

@@ -70,39 +70,49 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
   }
 
   Future<void> _initializeScreen() async {
-    try {
+  try {
+    // Use singleton instance - no need to initialize again if already loaded
+    if (!_repetitionService.isCacheLoaded) {
       await _repetitionService.initialize();
-      await _repetitionService.preloadProgress(_flashcards);
-      await _loadLocalImages();
+    }
+    
+    // Preload is now instant since cache is already loaded
+    await _repetitionService.preloadProgress(_flashcards);
+    
+    // Load local images (your existing method)
+    await _loadLocalImages();
 
-      if (mounted) {
-        context.read<ReviewState>().setCurrentDeck(widget.topicKey);
-      }
+    if (mounted) {
+      context.read<ReviewState>().setCurrentDeck(widget.topicKey);
+    }
 
-      await _checkInitialLimit();
-      _selectOptimalStartingCard();
+    // Check initial limit (your existing method)
+    await _checkInitialLimit();
+    
+    // Select optimal starting card (your existing method)
+    _selectOptimalStartingCard();
 
-      // Check if tutorial should be shown
-      if (widget.showTutorial) {
-        final shouldShow = await TutorialService.shouldShowTutorial();
-        if (shouldShow && mounted) {
-          Future.delayed(const Duration(milliseconds: 800), () {
-            if (mounted) {
-              setState(() => _showTutorial = true);
-            }
-          });
-        }
-      }
-    } catch (e) {
-      print('Error initializing flashcard screen: $e');
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isInitializing = false;
+    // Check if tutorial should be shown
+    if (widget.showTutorial) {
+      final shouldShow = await TutorialService.shouldShowTutorial();
+      if (shouldShow && mounted) {
+        Future.delayed(const Duration(milliseconds: 800), () {
+          if (mounted) {
+            setState(() => _showTutorial = true);
+          }
         });
       }
     }
+  } catch (e) {
+    print('Error initializing flashcard screen: $e');
+  } finally {
+    if (mounted) {
+      setState(() {
+        _isInitializing = false;
+      });
+    }
   }
+}
 
   Future<void> _loadLocalImages() async {
     try {

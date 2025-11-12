@@ -2,21 +2,27 @@ class FlashcardProgress {
   int box;
   DateTime nextReview;
 
-  FlashcardProgress({this.box = 1, DateTime? nextReview})
+  FlashcardProgress({this.box = 0, DateTime? nextReview})
     : nextReview = nextReview ?? DateTime.now();
 
   /// Whether this card has been studied at least once.
-  bool get hasStarted => box > 1 || nextReview.isAfter(DateTime.now());
+  bool get hasStarted => box > 0;
 
   /// Whether this card is due for review.
   bool isDue() => DateTime.now().isAfter(nextReview);
 
-  /// Promote the card to the next Leitner box.
+  /// Promote the card to the next Leitner box (swipe right - remembered)
   void promote() {
-    if (box < 5) box++;
+    // If never studied (box 0), go to box 2
+    if (box == 0) {
+      box = 2;
+    } else if (box < 5) {
+      box++;
+    }
     _updateNextReview();
   }
 
+  /// Reset the card to box 1 (swipe left - forgotten)
   void reset() {
     box = 1;
     _updateNextReview();
@@ -24,9 +30,15 @@ class FlashcardProgress {
 
   /// Internal helper to schedule the next review date.
   void _updateNextReview() {
-    // Simple Leitner intervals (example):
-    // Box 1 → 1 day, Box 2 → 2 days, Box 3 → 4 days, Box 4 → 7 days, Box 5 → 15 days
+    // Leitner intervals
+    // Box 0 (unseen) → no interval, in topic deck
+    // Box 1 → 1 day (forgotten cards)
+    // Box 2 → 2 days (first remembered)
+    // Box 3 → 4 days
+    // Box 4 → 7 days
+    // Box 5 → 15 days (mastered)
     final intervals = {
+      0: const Duration(days: 0),
       1: const Duration(days: 1),
       2: const Duration(days: 2),
       3: const Duration(days: 4),
@@ -34,7 +46,7 @@ class FlashcardProgress {
       5: const Duration(days: 15),
     };
 
-    nextReview = DateTime.now().add(intervals[box]!);
+    nextReview = DateTime.now().add(intervals[box] ?? const Duration(days: 1));
   }
 
   /// Convert to JSON for storage
@@ -45,7 +57,7 @@ class FlashcardProgress {
   /// Create from JSON
   factory FlashcardProgress.fromJson(Map<String, dynamic> json) {
     return FlashcardProgress(
-      box: json['box'] ?? 1,
+      box: json['box'] ?? 0,
       nextReview: json['nextReview'] != null
           ? DateTime.fromMillisecondsSinceEpoch(json['nextReview'])
           : null,

@@ -8,6 +8,12 @@ import '../models/flashcard_progress.dart';
 class FirebaseProgressService {
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   static final FirebaseAuth _auth = FirebaseAuth.instance;
+  
+  // Single key for all progress data (FAST!)
+  static const String _allProgressKey = 'all_progress_v2';
+  
+  // In-memory cache for ultra-fast access
+  static Map<String, FlashcardProgress>? _memoryCache;
 
   /// Get the current user's progress collection reference
   static CollectionReference? _getProgressCollection() {
@@ -29,12 +35,23 @@ class FirebaseProgressService {
   ) async {
     final cardKey = _generateCardKey(card);
 
-    // Always save to local storage first
-    await _saveProgressLocally(cardKey, progress);
+    // Update memory cache (instant!)
+    _memoryCache ??= {};
+    _memoryCache![cardKey] = progress;
 
-    // Save to Firebase if user is authenticated
-    final progressCollection = _getProgressCollection();
-    if (progressCollection != null) {
+    // Save to local storage immediately (non-blocking)
+    _saveProgressToLocal(cardKey, progress);
+
+    // Save to Firebase in background (completely non-blocking)
+    _saveToFirebaseBackground(cardKey, progress);
+  }
+
+  /// Save to Firebase in background without blocking
+  static void _saveToFirebaseBackground(String cardKey, FlashcardProgress progress) {
+    Future.microtask(() async {
+      final progressCollection = _getProgressCollection();
+      if (progressCollection == null) return;
+
       try {
         await progressCollection
             .doc(cardKey)
@@ -43,106 +60,102 @@ class FirebaseProgressService {
               'nextReview': Timestamp.fromDate(progress.nextReview),
               'updatedAt': FieldValue.serverTimestamp(),
             })
-            .timeout(const Duration(seconds: 5));
+            .timeout(const Duration(seconds: 3));
       } catch (e) {
-        print('Error saving progress to Firebase: $e');
-        // Continue using local storage if Firebase fails
+        // Silent fail - local storage is primary
+        print('Firebase save failed (expected if offline): $e');
       }
-    }
+    });
   }
 
-  /// Load flashcard progress from Firebase, fallback to local storage
+  /// Load flashcard progress from cache/local/firebase
   static Future<FlashcardProgress> loadProgress(Flashcard card) async {
     final cardKey = _generateCardKey(card);
-    final progressCollection = _getProgressCollection();
-
-    if (progressCollection != null) {
-      try {
-        final doc = await progressCollection
-            .doc(cardKey)
-            .get()
-            .timeout(const Duration(seconds: 3));
-
-        if (doc.exists) {
-          final data = doc.data() as Map<String, dynamic>;
-          final progress = FlashcardProgress(
-            box: data['box'] ?? 1,
-            nextReview: (data['nextReview'] as Timestamp?)?.toDate(),
-          );
-
-          // Save to local storage for offline access (non-blocking)
-          _saveProgressLocally(cardKey, progress);
-          return progress;
-        }
-      } catch (e) {
-        print('Error loading progress from Firebase: $e');
-        // Fall through to local storage
-      }
+    
+    // Check memory cache first (instant!)
+    if (_memoryCache != null && _memoryCache!.containsKey(cardKey)) {
+      return _memoryCache![cardKey]!;
     }
-
-    // Fallback to local storage
-    return await _loadProgressLocally(cardKey);
+    
+    // Load all progress if not in cache
+    final allProgress = await loadAllProgress();
+    return allProgress[cardKey] ?? FlashcardProgress();
   }
 
-  /// Load all progress data from Firebase and sync to local storage
+  /// Load all progress data - OPTIMIZED VERSION
   static Future<Map<String, FlashcardProgress>> loadAllProgress() async {
+    // Return memory cache if available (instant!)
+    if (_memoryCache != null) {
+      print('Using memory cache (${_memoryCache!.length} cards)');
+      return Map.from(_memoryCache!);
+    }
+
     final Map<String, FlashcardProgress> allProgress = {};
 
-    // First, load from local storage (fast)
-    final localProgress = await _loadAllProgressLocally();
-    allProgress.addAll(localProgress);
+    // Load from local storage first (FAST - single key read)
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final progressJson = prefs.getString(_allProgressKey);
+      
+      if (progressJson != null) {
+        final Map<String, dynamic> progressMap = json.decode(progressJson);
+        
+        for (final entry in progressMap.entries) {
+          try {
+            allProgress[entry.key] = FlashcardProgress.fromJson(
+              entry.value as Map<String, dynamic>,
+            );
+          } catch (e) {
+            print('Error parsing progress for ${entry.key}: $e');
+          }
+        }
+        
+        print('Loaded ${allProgress.length} cards from local storage');
+      }
+    } catch (e) {
+      print('Error loading from local storage: $e');
+    }
+
+    // Check if we need to migrate old format
+    await _migrateOldFormatIfNeeded();
 
     final progressCollection = _getProgressCollection();
 
     // If no authentication or anonymous, return local only
     if (progressCollection == null) {
-      print(
-        'No Firebase auth - using local progress only (${allProgress.length} cards)',
-      );
+      _memoryCache = allProgress;
       return allProgress;
     }
 
+    // Load from Firebase (only if online and authenticated)
     try {
       final snapshot = await progressCollection
-          .limit(1)
           .get()
           .timeout(const Duration(seconds: 3));
 
-      // If collection is empty, return immediately
-      if (snapshot.docs.isEmpty && localProgress.isEmpty) {
-        print('No progress data found - new user');
-        return allProgress;
+      if (snapshot.docs.isNotEmpty) {
+        // Process all documents
+        for (final doc in snapshot.docs) {
+          final data = doc.data() as Map<String, dynamic>;
+          final progress = FlashcardProgress(
+            box: data['box'] ?? 1,
+            nextReview: (data['nextReview'] as Timestamp?)?.toDate(),
+          );
+          allProgress[doc.id] = progress;
+        }
+
+        // Save to local storage for offline access
+        _saveAllProgressToLocal(allProgress);
+        
+        print('Loaded ${allProgress.length} cards from Firebase');
       }
-
-      // Load full collection if there's data
-      final fullSnapshot = await progressCollection.get().timeout(
-        const Duration(seconds: 6),
-      );
-
-      // Process all documents
-      final updates = <String, FlashcardProgress>{};
-      for (final doc in fullSnapshot.docs) {
-        final data = doc.data() as Map<String, dynamic>;
-        final progress = FlashcardProgress(
-          box: data['box'] ?? 1,
-          nextReview: (data['nextReview'] as Timestamp?)?.toDate(),
-        );
-        updates[doc.id] = progress;
-      }
-
-      allProgress.addAll(updates);
-
-      // Save to local storage in batch (non-blocking)
-      if (updates.isNotEmpty) {
-        _batchSaveProgressLocally(updates);
-      }
-
-      print('Loaded ${allProgress.length} cards from Firebase');
     } catch (e) {
-      print('Error loading all progress from Firebase: $e');
+      print('Error loading from Firebase (using local): $e');
       // Continue with local progress
     }
 
+    // Cache in memory
+    _memoryCache = allProgress;
     return allProgress;
   }
 
@@ -150,8 +163,13 @@ class FirebaseProgressService {
   static Future<void> deleteProgress(Flashcard card) async {
     final cardKey = _generateCardKey(card);
 
-    // Delete from local storage
-    await _deleteProgressLocally(cardKey);
+    // Remove from memory cache
+    _memoryCache?.remove(cardKey);
+
+    // Update local storage
+    if (_memoryCache != null) {
+      await _saveAllProgressToLocal(_memoryCache!);
+    }
 
     // Delete from Firebase if user is authenticated
     final progressCollection = _getProgressCollection();
@@ -169,8 +187,25 @@ class FirebaseProgressService {
 
   /// Clear all progress data
   static Future<void> clearAllProgress() async {
+    // Clear memory cache
+    _memoryCache = null;
+
     // Clear local storage
-    await _clearAllProgressLocally();
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove(_allProgressKey);
+      
+      // Also clear old format keys
+      final keysToRemove = prefs
+          .getKeys()
+          .where((key) => key.startsWith('progress_'))
+          .toList();
+      for (final key in keysToRemove) {
+        await prefs.remove(key);
+      }
+    } catch (e) {
+      print('Error clearing local storage: $e');
+    }
 
     // Clear Firebase if user is authenticated
     final progressCollection = _getProgressCollection();
@@ -186,7 +221,7 @@ class FirebaseProgressService {
         }
         await batch.commit().timeout(const Duration(seconds: 5));
       } catch (e) {
-        print('Error clearing all progress from Firebase: $e');
+        print('Error clearing Firebase: $e');
       }
     }
   }
@@ -197,18 +232,27 @@ class FirebaseProgressService {
     if (progressCollection == null) return;
 
     try {
-      final localProgress = await _loadAllProgressLocally();
+      // Load from local storage
+      final prefs = await SharedPreferences.getInstance();
+      final progressJson = prefs.getString(_allProgressKey);
+      
+      if (progressJson == null) return;
 
-      if (localProgress.isEmpty) return;
+      final Map<String, dynamic> progressMap = json.decode(progressJson);
+      if (progressMap.isEmpty) return;
 
       final batch = _firestore.batch();
       int count = 0;
 
-      for (final entry in localProgress.entries) {
+      for (final entry in progressMap.entries) {
         final docRef = progressCollection.doc(entry.key);
+        final progressData = entry.value as Map<String, dynamic>;
+        
         batch.set(docRef, {
-          'box': entry.value.box,
-          'nextReview': Timestamp.fromDate(entry.value.nextReview),
+          'box': progressData['box'],
+          'nextReview': Timestamp.fromMillisecondsSinceEpoch(
+            progressData['nextReview'],
+          ),
           'updatedAt': FieldValue.serverTimestamp(),
         });
 
@@ -223,130 +267,115 @@ class FirebaseProgressService {
       if (count > 0) {
         await batch.commit().timeout(const Duration(seconds: 10));
       }
+      
+      print('Synced $count cards to Firebase');
     } catch (e) {
-      print('Error syncing local progress to Firebase: $e');
+      print('Error syncing to Firebase: $e');
     }
   }
 
-  // Local storage helper methods
-  static Future<void> _saveProgressLocally(
-    String cardKey,
-    FlashcardProgress progress,
-  ) async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final progressData = {
-        'box': progress.box,
-        'nextReview': progress.nextReview.millisecondsSinceEpoch,
-      };
-      await prefs.setString('progress_$cardKey', json.encode(progressData));
-    } catch (e) {
-      print('Error saving progress locally: $e');
-    }
-  }
+  // ==================== OPTIMIZED LOCAL STORAGE ====================
 
-  /// Batch save progress to local storage (non-blocking)
-  static void _batchSaveProgressLocally(
-    Map<String, FlashcardProgress> progressMap,
-  ) {
-    // Run in background without blocking
+  /// Save single progress to local storage (non-blocking)
+  static void _saveProgressToLocal(String cardKey, FlashcardProgress progress) {
     Future.microtask(() async {
       try {
         final prefs = await SharedPreferences.getInstance();
-        for (final entry in progressMap.entries) {
-          final progressData = {
-            'box': entry.value.box,
-            'nextReview': entry.value.nextReview.millisecondsSinceEpoch,
-          };
-          await prefs.setString(
-            'progress_${entry.key}',
-            json.encode(progressData),
-          );
+        final progressJson = prefs.getString(_allProgressKey);
+        
+        Map<String, dynamic> allProgress = {};
+        if (progressJson != null) {
+          allProgress = json.decode(progressJson) as Map<String, dynamic>;
         }
+        
+        allProgress[cardKey] = progress.toJson();
+        
+        await prefs.setString(_allProgressKey, json.encode(allProgress));
       } catch (e) {
-        print('Error batch saving progress locally: $e');
+        print('Error saving to local storage: $e');
       }
     });
   }
 
-  static Future<FlashcardProgress> _loadProgressLocally(String cardKey) async {
+  /// Save all progress to local storage (FAST - single write)
+  static Future<void> _saveAllProgressToLocal(
+    Map<String, FlashcardProgress> progressMap,
+  ) async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final progressJson = prefs.getString('progress_$cardKey');
-
-      if (progressJson != null) {
-        final progressData = json.decode(progressJson);
-        return FlashcardProgress(
-          box: progressData['box'] ?? 1,
-          nextReview: DateTime.fromMillisecondsSinceEpoch(
-            progressData['nextReview'] ?? DateTime.now().millisecondsSinceEpoch,
-          ),
-        );
+      
+      final Map<String, dynamic> jsonMap = {};
+      for (final entry in progressMap.entries) {
+        jsonMap[entry.key] = entry.value.toJson();
       }
+      
+      await prefs.setString(_allProgressKey, json.encode(jsonMap));
+      print('Saved ${progressMap.length} cards to local storage');
     } catch (e) {
-      print('Error loading progress locally: $e');
+      print('Error saving all progress locally: $e');
     }
-
-    return FlashcardProgress();
   }
 
-  static Future<Map<String, FlashcardProgress>>
-  _loadAllProgressLocally() async {
-    final Map<String, FlashcardProgress> allProgress = {};
-
+  /// Migrate old format (progress_card_X) to new format (single key)
+  static Future<void> _migrateOldFormatIfNeeded() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-
-      for (final key in prefs.getKeys()) {
-        if (key.startsWith('progress_')) {
-          final cardKey = key.substring('progress_'.length);
-          final progressJson = prefs.getString(key);
-
-          if (progressJson != null) {
-            try {
-              final progressData = json.decode(progressJson);
-              allProgress[cardKey] = FlashcardProgress(
-                box: progressData['box'] ?? 1,
-                nextReview: DateTime.fromMillisecondsSinceEpoch(
-                  progressData['nextReview'] ??
-                      DateTime.now().millisecondsSinceEpoch,
-                ),
-              );
-            } catch (e) {
-              print('Error parsing progress for $cardKey: $e');
-            }
-          }
-        }
+      
+      // Check if new format already exists
+      if (prefs.containsKey(_allProgressKey)) {
+        return; // Already migrated
       }
-    } catch (e) {
-      print('Error loading all progress locally: $e');
-    }
-
-    return allProgress;
-  }
-
-  static Future<void> _deleteProgressLocally(String cardKey) async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.remove('progress_$cardKey');
-    } catch (e) {
-      print('Error deleting progress locally: $e');
-    }
-  }
-
-  static Future<void> _clearAllProgressLocally() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final keysToRemove = prefs
+      
+      // Find old format keys
+      final oldKeys = prefs
           .getKeys()
           .where((key) => key.startsWith('progress_'))
           .toList();
-
-      for (final key in keysToRemove) {
+      
+      if (oldKeys.isEmpty) {
+        return; // Nothing to migrate
+      }
+      
+      print('Migrating ${oldKeys.length} cards from old format...');
+      
+      final Map<String, dynamic> allProgress = {};
+      
+      for (final key in oldKeys) {
+        final cardKey = key.substring('progress_'.length);
+        final progressJson = prefs.getString(key);
+        
+        if (progressJson != null) {
+          try {
+            final progressData = json.decode(progressJson);
+            allProgress[cardKey] = progressData;
+          } catch (e) {
+            print('Error migrating $cardKey: $e');
+          }
+        }
+      }
+      
+      // Save in new format
+      await prefs.setString(_allProgressKey, json.encode(allProgress));
+      
+      // Delete old keys
+      for (final key in oldKeys) {
         await prefs.remove(key);
       }
+      
+      print('Migration complete: ${allProgress.length} cards');
     } catch (e) {
-      print('Error clearing all progress locally: $e');
+      print('Error during migration: $e');
     }
+  }
+
+  /// Clear memory cache (useful for logout)
+  static void clearMemoryCache() {
+    _memoryCache = null;
+  }
+
+  /// Force reload from disk (bypass memory cache)
+  static Future<Map<String, FlashcardProgress>> forceReload() async {
+    _memoryCache = null;
+    return await loadAllProgress();
   }
 }
