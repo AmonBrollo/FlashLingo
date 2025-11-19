@@ -2,7 +2,7 @@ name: flashlingo
 description: "A robust language learning flashcard app"
 publish_to: 'none'
 
-version: 1.0.1+2  # Increment build number for updates
+version: 1.0.1+3  # Increment build number for updates
 
 environment:
   sdk: ^3.8.1

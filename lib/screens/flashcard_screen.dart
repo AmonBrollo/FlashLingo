@@ -17,7 +17,6 @@ import '../utils/usage_limiter.dart';
 import '../widgets/flashcard_view.dart';
 import '../widgets/finished_deck_card.dart';
 import '../widgets/limit_reached_card.dart';
-import '../widgets/tutorial_overlay.dart';
 import 'add_flashcard_screen.dart';
 import 'review_screen.dart';
 import 'profile_screen.dart';
@@ -475,8 +474,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
       return step;
     }).toList();
   }
-
-  @override
+@override
   Widget build(BuildContext context) {
     if (_isInitializing) {
       return Scaffold(
@@ -516,36 +514,33 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
           children: [
             const Text('Flashlango'),
             const Spacer(),
-            // In flashcard_screen.dart, find the appBar section (around line 390-420)
-// Replace the Consumer<ReviewState> widget in the title Row with this:
-
-Consumer<ReviewState>(
-  builder: (context, reviewState, child) {
-    final revealed = reviewState.getRevealedCount(widget.topicKey);
-    final total = _flashcards.length;
-    final cardsLeft = total - revealed;
-    
-    return Container(
-      key: _progressKey, // Key for tutorial
-      padding: const EdgeInsets.symmetric(
-        horizontal: 8,
-        vertical: 4,
-      ),
-      decoration: BoxDecoration(
-        color: Colors.brown[100],
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Text(
-        cardsLeft > 0 ? '$cardsLeft left' : 'Complete',
-        style: const TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.bold,
-          color: Colors.brown,
-        ),
-      ),
-    );
-  },
-),
+            Consumer<ReviewState>(
+              builder: (context, reviewState, child) {
+                final revealed = reviewState.getRevealedCount(widget.topicKey);
+                final total = _flashcards.length;
+                final cardsLeft = total - revealed;
+                
+                return Container(
+                  key: _progressKey, // Key for tutorial
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.brown[100],
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    cardsLeft > 0 ? '$cardsLeft left' : 'Complete',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.brown,
+                    ),
+                  ),
+                );
+              },
+            ),
           ],
         ),
         backgroundColor: Colors.brown,
@@ -611,48 +606,44 @@ Consumer<ReviewState>(
         backgroundColor: Colors.brown,
         child: const Icon(Icons.add),
       ),
-      body: Stack(
-        children: [
-          Center(
-            child: GestureDetector(
-              onPanUpdate: (details) {
-                if (!_limitReached && !_finishedDeck) {
-                  setState(() => _dragDx += details.delta.dx);
-                }
-              },
-              onPanEnd: (details) {
-                if (!_limitReached && !_finishedDeck) {
-                  final currentCard = _flashcards[_currentIndex];
-                  if (_dragDx > 100) {
-                    _handleSwipe(currentCard, true);
-                  } else if (_dragDx < -100) {
-                    _handleSwipe(currentCard, false);
-                  }
-                  setState(() => _dragDx = 0.0);
-                }
-              },
-              onTap: () {
-                if (!_limitReached && !_finishedDeck) {
-                  setState(() => _isFlipped = !_isFlipped);
-                }
-              },
-              child: _buildCardContent(displayName),
-            ),
-          ),
-          // Tutorial overlay
-          if (_showTutorial)
-            TutorialOverlay(
-              steps: _getTutorialSteps(),
-              language: widget.baseLanguage,
-              onComplete: () {
-                setState(() => _showTutorial = false);
-              },
-              onSkip: () {
-                setState(() => _showTutorial = false);
-              },
-            ),
-        ],
+      body: Center(
+        child: GestureDetector(
+          onPanUpdate: (details) {
+            if (!_limitReached && !_finishedDeck) {
+              setState(() => _dragDx += details.delta.dx);
+            }
+          },
+          onPanEnd: (details) {
+            if (!_limitReached && !_finishedDeck) {
+              final currentCard = _flashcards[_currentIndex];
+              if (_dragDx > 100) {
+                _handleSwipe(currentCard, true);
+              } else if (_dragDx < -100) {
+                _handleSwipe(currentCard, false);
+              }
+              setState(() => _dragDx = 0.0);
+            }
+          },
+          onTap: () {
+            if (!_limitReached && !_finishedDeck) {
+              setState(() => _isFlipped = !_isFlipped);
+            }
+          },
+          child: _buildCardContent(displayName),
+        ),
       ),
+      // Tutorial temporarily disabled
+      // body: Stack(
+      //   children: [
+      //     Center(
+      //       child: GestureDetector(
+      //         ...
+      //       ),
+      //     ),
+      //     if (_showTutorial)
+      //       TutorialOverlay(...),
+      //   ],
+      // ),
     );
   }
 

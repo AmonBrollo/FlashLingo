@@ -493,6 +493,7 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
       ),
       body: Stack(
         children: [
+          // Main content
           Column(
             children: [
               const EmailVerificationBanner(),
@@ -501,17 +502,7 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
               ),
             ],
           ),
-          if (_showTutorial)
-            TutorialOverlay(
-              steps: _getTutorialSteps(),
-              language: widget.baseLanguage,
-              onComplete: () {
-                setState(() => _showTutorial = false);
-              },
-              onSkip: () {
-                setState(() => _showTutorial = false);
-              },
-            ),
+          
           // Confetti for level completion
           Align(
             alignment: Alignment.topCenter,
@@ -532,6 +523,20 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
               ],
             ),
           ),
+          
+          // Tutorial overlay (MUST be last to appear on top)
+          // if (_showTutorial)
+          //   TutorialOverlay(
+          //     steps: _getTutorialSteps(),
+          //     language: widget.baseLanguage,
+          //     onComplete: () {
+          //       setState(() => _showTutorial = false);
+          //     },
+          //     onSkip: () {
+          //       setState(() => _showTutorial = false);
+          //     },
+          //   ),
+
         ],
       ),
     );
@@ -626,7 +631,7 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
       final deck = widget.decks[i];
       final stats = _deckStats[deck.topicKey] ?? {'new': deck.cards.length, 'due': 0, 'review': 0};
       final studiedCount = (stats['due'] ?? 0) + (stats['review'] ?? 0);
-      final isComplete = deck.cards.length > 0 && studiedCount >= deck.cards.length;
+      final isComplete = deck.cards.isNotEmpty && studiedCount >= deck.cards.length;
 
       final deckWidget = _buildTopicDeckCard(
         deck,

@@ -4,7 +4,30 @@ import 'package:flutter/foundation.dart';
 /// Centralized error handling service
 /// Logs errors to Crashlytics and console with context
 class ErrorHandlerService {
-  static final FirebaseCrashlytics _crashlytics = FirebaseCrashlytics.instance;
+  static FirebaseCrashlytics? _crashlytics;
+  static bool _initialized = false;
+
+  /// Initialize the error handler service
+  /// MUST be called after Firebase.initializeApp()
+  static Future<void> initialize() async {
+    if (_initialized) return;
+    
+    try {
+      _crashlytics = FirebaseCrashlytics.instance;
+      
+      // Verify Crashlytics is working
+      await _crashlytics!.log('ErrorHandlerService initialized');
+      
+      _initialized = true;
+      debugPrint('✅ ErrorHandlerService initialized successfully');
+    } catch (e) {
+      debugPrint('⚠️ Failed to initialize ErrorHandlerService: $e');
+      _initialized = false;
+    }
+  }
+
+  /// Check if service is initialized
+  static bool get isInitialized => _initialized;
 
   /// Log an error with context to Crashlytics
   static Future<void> logError(
@@ -15,25 +38,31 @@ class ErrorHandlerService {
     Map<String, dynamic>? additionalInfo,
   }) async {
     try {
-      // Log to console
+      // Always log to console
       debugPrint('❌ ERROR [$context]: $error');
       if (stack != null) {
         debugPrint('Stack trace: $stack');
       }
 
+      // Only use Crashlytics if initialized
+      if (!_initialized || _crashlytics == null) {
+        debugPrint('⚠️ Crashlytics not initialized - error not reported');
+        return;
+      }
+
       // Set custom keys for better debugging
       if (context != null) {
-        await _crashlytics.setCustomKey('error_context', context);
+        await _crashlytics!.setCustomKey('error_context', context);
       }
       
       if (additionalInfo != null) {
         for (final entry in additionalInfo.entries) {
-          await _crashlytics.setCustomKey(entry.key, entry.value.toString());
+          await _crashlytics!.setCustomKey(entry.key, entry.value.toString());
         }
       }
 
       // Record to Crashlytics
-      await _crashlytics.recordError(
+      await _crashlytics!.recordError(
         error,
         stack,
         reason: context,
@@ -41,7 +70,7 @@ class ErrorHandlerService {
       );
 
       // Log message to Crashlytics breadcrumbs
-      await _crashlytics.log('Error in $context: ${error.toString()}');
+      await _crashlytics!.log('Error in $context: ${error.toString()}');
     } catch (e) {
       // If Crashlytics fails, at least log to console
       debugPrint('⚠️ Failed to log error to Crashlytics: $e');
@@ -50,8 +79,14 @@ class ErrorHandlerService {
 
   /// Handle Flutter framework errors
   static void handleFlutterError(FlutterErrorDetails details) {
-    // Log to console
+    // Always log to console first
     FlutterError.presentError(details);
+    
+    // Only use Crashlytics if initialized
+    if (!_initialized || _crashlytics == null) {
+      debugPrint('⚠️ Crashlytics not initialized - Flutter error not reported');
+      return;
+    }
     
     // Log to Crashlytics
     logError(
@@ -69,8 +104,14 @@ class ErrorHandlerService {
   static Future<void> logMessage(String message, {String? context}) async {
     try {
       final logMessage = context != null ? '[$context] $message' : message;
-      await _crashlytics.log(logMessage);
+      
+      // Always log to console
       debugPrint('📝 $logMessage');
+      
+      // Only use Crashlytics if initialized
+      if (_initialized && _crashlytics != null) {
+        await _crashlytics!.log(logMessage);
+      }
     } catch (e) {
       debugPrint('⚠️ Failed to log message: $e');
     }
@@ -79,7 +120,12 @@ class ErrorHandlerService {
   /// Set user identifier for crash reports
   static Future<void> setUserIdentifier(String userId) async {
     try {
-      await _crashlytics.setUserIdentifier(userId);
+      if (!_initialized || _crashlytics == null) {
+        debugPrint('⚠️ Crashlytics not initialized - user identifier not set');
+        return;
+      }
+      
+      await _crashlytics!.setUserIdentifier(userId);
       debugPrint('👤 User identifier set: $userId');
     } catch (e) {
       debugPrint('⚠️ Failed to set user identifier: $e');
@@ -89,7 +135,11 @@ class ErrorHandlerService {
   /// Clear user identifier (on logout)
   static Future<void> clearUserIdentifier() async {
     try {
-      await _crashlytics.setUserIdentifier('');
+      if (!_initialized || _crashlytics == null) {
+        return;
+      }
+      
+      await _crashlytics!.setUserIdentifier('');
       debugPrint('👤 User identifier cleared');
     } catch (e) {
       debugPrint('⚠️ Failed to clear user identifier: $e');
@@ -99,7 +149,9 @@ class ErrorHandlerService {
   /// Set custom key-value pairs for debugging
   static Future<void> setCustomKey(String key, dynamic value) async {
     try {
-      await _crashlytics.setCustomKey(key, value.toString());
+      if (_initialized && _crashlytics != null) {
+        await _crashlytics!.setCustomKey(key, value.toString());
+      }
     } catch (e) {
       debugPrint('⚠️ Failed to set custom key: $e');
     }
@@ -165,15 +217,36 @@ class ErrorHandlerService {
 
   /// Test crash (for testing Crashlytics integration)
   static Future<void> testCrash() async {
-    _crashlytics.crash();
+    if (!_initialized || _crashlytics == null) {
+      debugPrint('⚠️ Crashlytics not initialized - cannot test crash');
+      return;
+    }
+    
+    await _crashlytics!.log('Test crash triggered');
+    _crashlytics!.crash();
   }
 
   /// Check if crash reporting is enabled
   static Future<bool> isCrashlyticsEnabled() async {
     try {
-      return _crashlytics.isCrashlyticsCollectionEnabled;
+      if (!_initialized || _crashlytics == null) {
+        return false;
+      }
+      return _crashlytics!.isCrashlyticsCollectionEnabled;
     } catch (e) {
       return false;
+    }
+  }
+  
+  /// Force send any pending crash reports
+  static Future<void> sendUnsentReports() async {
+    try {
+      if (_initialized && _crashlytics != null) {
+        await _crashlytics!.sendUnsentReports();
+        debugPrint('📤 Sent unsent crash reports');
+      }
+    } catch (e) {
+      debugPrint('⚠️ Failed to send unsent reports: $e');
     }
   }
 }

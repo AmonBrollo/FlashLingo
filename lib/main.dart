@@ -9,43 +9,86 @@ import 'services/app_state_service.dart';
 import 'services/error_handler_service.dart';
 import 'firebase_options.dart';
 import 'screens/auth_gate.dart';
-import 'package:flutter/foundation.dart'; // For kDebugMode
+import 'package:flutter/foundation.dart';
 
 void main() async {
-  // Run app in error zone to catch all errors
-  await runZonedGuarded<Future<void>>(() async {
-    WidgetsFlutterBinding.ensureInitialized();
+  // CRITICAL: Ensure Flutter is initialized FIRST
+  WidgetsFlutterBinding.ensureInitialized();
 
+  // Run app in error zone to catch ALL errors
+  await runZonedGuarded<Future<void>>(() async {
     try {
-      // Initialize Firebase
+      // STEP 1: Initialize Firebase (MUST be first)
+      debugPrint('🔧 Initializing Firebase...');
       await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
       );
+      debugPrint('✅ Firebase initialized');
 
-      // Initialize Crashlytics
+      // STEP 2: Initialize Crashlytics IMMEDIATELY after Firebase
+      debugPrint('🔧 Initializing Crashlytics...');
+      
+      // Pass all uncaught Flutter errors to Crashlytics
       FlutterError.onError = (errorDetails) {
         FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
-        ErrorHandlerService.handleFlutterError(errorDetails);
+      };
+      
+      // Pass all uncaught async errors to Crashlytics
+      PlatformDispatcher.instance.onError = (error, stack) {
+        FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+        return true;
       };
 
-      // Initialize app services
-      await AppInitializationService.initialize();
+      // Enable Crashlytics collection
+      await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
       
-      // Log app start
-      await FirebaseCrashlytics.instance.log('App started successfully');
+      debugPrint('✅ Crashlytics initialized and enabled');
       
-      debugPrint('✅ Firebase and Crashlytics initialized successfully');
+      // Log successful initialization
+      await FirebaseCrashlytics.instance.log('App started - Crashlytics active');
+
+      // STEP 3: Initialize ErrorHandlerService (now that Crashlytics is ready)
+      await ErrorHandlerService.initialize();
+      await ErrorHandlerService.logMessage('ErrorHandlerService initialized');
+
+      // STEP 4: Initialize app services (NON-BLOCKING)
+      debugPrint('🔧 Initializing app services...');
+      // Don't await - let it initialize in background
+      AppInitializationService.initialize().then((_) {
+        debugPrint('✅ App services initialized');
+      }).catchError((e, stack) {
+        debugPrint('⚠️ App services initialization error: $e');
+        ErrorHandlerService.logError(
+          e,
+          stack,
+          context: 'App Services Init',
+          fatal: false,
+        );
+      });
+      
+      debugPrint('✅ All critical systems initialized');
     } catch (e, stack) {
-      // Log initialization error but continue
-      debugPrint('⚠️ Error during initialization: $e');
-      ErrorHandlerService.logError(
-        e,
-        stack,
-        context: 'App Initialization',
-        fatal: false,
-      );
+      // Log initialization error
+      debugPrint('❌ CRITICAL: Initialization failed: $e');
+      debugPrint('Stack: $stack');
+      
+      // Try to report to Crashlytics if available
+      try {
+        await FirebaseCrashlytics.instance.recordError(
+          e,
+          stack,
+          reason: 'Critical initialization failure',
+          fatal: true,
+        );
+      } catch (_) {
+        debugPrint('⚠️ Could not report error to Crashlytics');
+      }
+      
+      // Rethrow to show error screen
+      rethrow;
     }
 
+    // STEP 5: Run the app
     runApp(
       MultiProvider(
         providers: [
@@ -57,10 +100,14 @@ void main() async {
     );
   }, (error, stack) {
     // Catch errors that escape the error boundary
-    ErrorHandlerService.logError(
+    debugPrint('❌ UNCAUGHT ERROR: $error');
+    debugPrint('Stack: $stack');
+    
+    // Report to Crashlytics
+    FirebaseCrashlytics.instance.recordError(
       error,
       stack,
-      context: 'Uncaught Error',
+      reason: 'Uncaught error in runZonedGuarded',
       fatal: true,
     );
   });
@@ -91,18 +138,25 @@ class _FlashLangoState extends State<FlashLango> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
     
-    // Track app lifecycle for debugging
     switch (state) {
       case AppLifecycleState.resumed:
         _recordAppLifecycle('App Resumed');
-        context.read<AppStateService>().onAppResumed();
+        try {
+          context.read<AppStateService>().onAppResumed();
+        } catch (e) {
+          debugPrint('⚠️ Error in onAppResumed: $e');
+        }
         break;
       case AppLifecycleState.inactive:
         _recordAppLifecycle('App Inactive');
         break;
       case AppLifecycleState.paused:
         _recordAppLifecycle('App Paused');
-        context.read<AppStateService>().onAppPaused();
+        try {
+          context.read<AppStateService>().onAppPaused();
+        } catch (e) {
+          debugPrint('⚠️ Error in onAppPaused: $e');
+        }
         break;
       case AppLifecycleState.detached:
         _recordAppLifecycle('App Detached');
@@ -114,8 +168,12 @@ class _FlashLangoState extends State<FlashLango> with WidgetsBindingObserver {
   }
 
   void _recordAppLifecycle(String event) {
-    FirebaseCrashlytics.instance.log(event);
-    debugPrint('🔄 Lifecycle: $event');
+    try {
+      FirebaseCrashlytics.instance.log(event);
+      debugPrint('📱 Lifecycle: $event');
+    } catch (e) {
+      debugPrint('⚠️ Failed to log lifecycle: $e');
+    }
   }
 
   @override
@@ -130,10 +188,11 @@ class _FlashLangoState extends State<FlashLango> with WidgetsBindingObserver {
         useMaterial3: true,
       ),
       home: const AuthGate(),
-      // Global error handling for navigation
       builder: (context, child) {
+        // Global error handling for widget errors
         ErrorWidget.builder = (FlutterErrorDetails details) {
-          ErrorHandlerService.handleFlutterError(details);
+          // Log to Crashlytics
+          FirebaseCrashlytics.instance.recordFlutterFatalError(details);
           return _buildErrorWidget(details);
         };
         return child ?? const SizedBox.shrink();
