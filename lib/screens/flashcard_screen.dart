@@ -69,49 +69,49 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
   }
 
   Future<void> _initializeScreen() async {
-  try {
-    // Use singleton instance - no need to initialize again if already loaded
-    if (!_repetitionService.isCacheLoaded) {
-      await _repetitionService.initialize();
-    }
-    
-    // Preload is now instant since cache is already loaded
-    await _repetitionService.preloadProgress(_flashcards);
-    
-    // Load local images (your existing method)
-    await _loadLocalImages();
+    try {
+      // Use singleton instance - no need to initialize again if already loaded
+      if (!_repetitionService.isCacheLoaded) {
+        await _repetitionService.initialize();
+      }
+      
+      // Preload is now instant since cache is already loaded
+      await _repetitionService.preloadProgress(_flashcards);
+      
+      // Load local images (your existing method)
+      await _loadLocalImages();
 
-    if (mounted) {
-      context.read<ReviewState>().setCurrentDeck(widget.topicKey);
-    }
+      if (mounted) {
+        context.read<ReviewState>().setCurrentDeck(widget.topicKey);
+      }
 
-    // Check initial limit (your existing method)
-    await _checkInitialLimit();
-    
-    // Select optimal starting card (your existing method)
-    _selectOptimalStartingCard();
+      // Check initial limit (your existing method)
+      await _checkInitialLimit();
+      
+      // Select optimal starting card (your existing method)
+      _selectOptimalStartingCard();
 
-    // Check if tutorial should be shown
-    if (widget.showTutorial) {
-      final shouldShow = await TutorialService.shouldShowTutorial();
-      if (shouldShow && mounted) {
-        Future.delayed(const Duration(milliseconds: 800), () {
-          if (mounted) {
-            setState(() => _showTutorial = true);
-          }
+      // Check if tutorial should be shown
+      if (widget.showTutorial) {
+        final shouldShow = await TutorialService.shouldShowTutorial();
+        if (shouldShow && mounted) {
+          Future.delayed(const Duration(milliseconds: 800), () {
+            if (mounted) {
+              setState(() => _showTutorial = true);
+            }
+          });
+        }
+      }
+    } catch (e) {
+      print('Error initializing flashcard screen: $e');
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isInitializing = false;
         });
       }
     }
-  } catch (e) {
-    print('Error initializing flashcard screen: $e');
-  } finally {
-    if (mounted) {
-      setState(() {
-        _isInitializing = false;
-      });
-    }
   }
-}
 
   Future<void> _loadLocalImages() async {
     try {
@@ -433,6 +433,28 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
     _nextCard();
   }
 
+  void _handleButtonPress(bool remembered) async {
+    final currentCard = _flashcards[_currentIndex];
+    
+    // Animate the swipe with multiple frames
+    final targetDx = remembered ? 400.0 : -400.0;
+    final frames = 10;
+    final increment = targetDx / frames;
+    
+    for (int i = 0; i < frames; i++) {
+      await Future.delayed(const Duration(milliseconds: 20));
+      if (mounted) {
+        setState(() {
+          _dragDx += increment;
+        });
+      }
+    }
+    
+    // Wait a bit at the end, then process
+    await Future.delayed(const Duration(milliseconds: 100));
+    _handleSwipe(currentCard, remembered);
+  }
+
   List<TutorialStep> _getTutorialSteps() {
     final allSteps = TutorialService.getStepsForScreen(
       widget.baseLanguage,
@@ -474,7 +496,8 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
       return step;
     }).toList();
   }
-@override
+
+  @override
   Widget build(BuildContext context) {
     if (_isInitializing) {
       return Scaffold(
@@ -624,8 +647,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
                       label: 'Forgot',
                       color: Colors.red,
                       onPressed: () {
-                        final currentCard = _flashcards[_currentIndex];
-                        _handleSwipe(currentCard, false);
+                        _handleButtonPress(false);
                       },
                     ),
                     
@@ -645,8 +667,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
                       label: 'Remember',
                       color: Colors.green,
                       onPressed: () {
-                        final currentCard = _flashcards[_currentIndex];
-                        _handleSwipe(currentCard, true);
+                        _handleButtonPress(true);
                       },
                     ),
                   ],
