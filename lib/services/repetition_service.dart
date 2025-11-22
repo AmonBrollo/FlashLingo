@@ -3,7 +3,7 @@ import '../models/flashcard_progress.dart';
 import 'firebase_progress_service.dart';
 import 'sync_service.dart';
 
-/// Service responsible for handling spaced repetition logic (currently Leitner).
+/// Service responsible for handling spaced repetition logic (Leitner system).
 /// Keeps track of flashcard progress and determines which cards are due.
 /// Now uses singleton pattern for performance optimization.
 class RepetitionService {
@@ -28,10 +28,10 @@ class RepetitionService {
     try {
       _progressCache.clear();
 
-      // Load with a SHORT timeout - new system is fast!
+      // Load with a SHORT timeout
       final allProgress = await FirebaseProgressService.loadAllProgress()
           .timeout(
-            const Duration(seconds: 2), // Reduced from 5s to 2s
+            const Duration(seconds: 2),
             onTimeout: () {
               print('Progress loading timed out - using empty cache');
               return <String, FlashcardProgress>{};
@@ -51,7 +51,52 @@ class RepetitionService {
     }
   }
 
-  /// Get box statistics without loading full progress (fast)
+  /// Get box statistics with DUE cards only (for level decks)
+  Map<int, int> getDueBoxStats(List<Flashcard> cards) {
+    final stats = <int, int>{1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
+    
+    for (final card in cards) {
+      final key = _generateCardKey(card);
+      final progress = _progressCache[key];
+      
+      if (progress != null && progress.hasStarted && progress.isDue()) {
+        final box = progress.box;
+        if (box >= 1 && box <= 5) {
+          stats[box] = (stats[box] ?? 0) + 1;
+        }
+      }
+    }
+    
+    return stats;
+  }
+
+  /// Get DUE cards grouped by box (for level decks)
+  Map<int, List<Flashcard>> getDueBoxCards(List<Flashcard> cards) {
+    final boxCards = <int, List<Flashcard>>{
+      1: [],
+      2: [],
+      3: [],
+      4: [],
+      5: [],
+    };
+    
+    for (final card in cards) {
+      final key = _generateCardKey(card);
+      final progress = _progressCache[key];
+      
+      // Only include cards that are due for review
+      if (progress != null && progress.hasStarted && progress.isDue()) {
+        final box = progress.box;
+        if (box >= 1 && box <= 5) {
+          boxCards[box]!.add(card);
+        }
+      }
+    }
+    
+    return boxCards;
+  }
+
+  /// Get box statistics without loading full progress (fast) - ALL cards including not due
   Map<int, int> getQuickBoxStats(List<Flashcard> cards) {
     final stats = <int, int>{0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
     
@@ -71,7 +116,7 @@ class RepetitionService {
     return stats;
   }
 
-  /// Get cards grouped by box (optimized for cached data)
+  /// Get cards grouped by box (optimized for cached data) - ALL cards including not due
   Map<int, List<Flashcard>> getQuickBoxCards(List<Flashcard> cards) {
     final boxCards = <int, List<Flashcard>>{
       0: [],
@@ -102,9 +147,8 @@ class RepetitionService {
     await initialize();
   }
 
-  /// Generate a unique key for a flashcard (consistent with your existing logic)
+  /// Generate a unique key for a flashcard
   String _generateCardKey(Flashcard card) {
-    // Use card ID if available, otherwise fallback to first translation.
     final key = card.translations['id'] ?? card.translations.values.first;
     return key;
   }
@@ -135,7 +179,6 @@ class RepetitionService {
       return progress;
     } catch (e) {
       print('Error loading progress for card: $e');
-      // Return cached or new progress
       return getProgress(card);
     }
   }
@@ -147,7 +190,6 @@ class RepetitionService {
 
     try {
       await FirebaseProgressService.saveProgress(card, progress);
-      // Mark that data changed to trigger sync
       SyncService().markDataChanged();
     } catch (e) {
       print('Error saving progress: $e');
@@ -158,7 +200,6 @@ class RepetitionService {
   void markRemembered(Flashcard card) {
     final progress = getProgress(card);
     progress.promote();
-    // Save asynchronously without blocking UI
     _saveProgress(card, progress);
   }
 
@@ -166,7 +207,6 @@ class RepetitionService {
   void markForgotten(Flashcard card) {
     final progress = getProgress(card);
     progress.reset();
-    // Save asynchronously without blocking UI
     _saveProgress(card, progress);
   }
 
@@ -175,12 +215,12 @@ class RepetitionService {
     return allCards.where((card) => getProgress(card).isDue()).toList();
   }
 
-  /// Returns flashcards that have **never been studied** (new cards).
+  /// Returns flashcards that have **never been studied** (new cards - box 0).
   List<Flashcard> newCards(List<Flashcard> allCards) {
     return allCards.where((card) => !getProgress(card).hasStarted).toList();
   }
 
-  /// Returns a map of box levels → list of flashcards (useful for progress screens).
+  /// Returns a map of box levels → list of flashcards.
   Map<int, List<Flashcard>> groupByBox(List<Flashcard> allCards) {
     final Map<int, List<Flashcard>> grouped = {};
     for (final card in allCards) {
@@ -224,25 +264,19 @@ class RepetitionService {
     _cacheLoaded = false;
   }
 
-  /// Preload progress for multiple cards (optimized to avoid individual Firebase calls)
+  /// Preload progress for multiple cards
   Future<void> preloadProgress(List<Flashcard> cards) async {
-    // Ensure cache is loaded first
     if (!_cacheLoaded) {
       await initialize();
     }
 
-    // After initialization, all progress should be in cache
-    // Just populate cache for any cards that don't have progress yet
     for (final card in cards) {
       final key = _generateCardKey(card);
       if (!_progressCache.containsKey(key)) {
-        // Create default progress for new cards (no Firebase call needed)
         _progressCache[key] = FlashcardProgress();
       }
     }
 
-    // Note: We don't make individual Firebase calls here anymore
-    // All Firebase data was loaded during initialize()
     print(
       'Preloaded progress for ${cards.length} cards (${_progressCache.length} total in cache)',
     );
@@ -266,6 +300,18 @@ class RepetitionService {
     return progress.hasStarted;
   }
 
+  /// Check if a card is due for review
+  bool isCardDue(Flashcard card) {
+    final progress = getProgress(card);
+    return progress.isDue();
+  }
+
+  /// Get days until card is due (negative if overdue)
+  int daysUntilDue(Flashcard card) {
+    final progress = getProgress(card);
+    return progress.daysUntilReview();
+  }
+
   /// Reset progress for a specific card
   Future<void> resetCardProgress(Flashcard card) async {
     final progress = FlashcardProgress();
@@ -279,7 +325,6 @@ class RepetitionService {
 
     try {
       await FirebaseProgressService.deleteProgress(card);
-      // Mark that data changed to trigger sync
       SyncService().markDataChanged();
     } catch (e) {
       print('Error deleting progress: $e');

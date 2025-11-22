@@ -44,6 +44,10 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
   Map<int, int> _globalBoxStats = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
   Map<int, List<Flashcard>> _globalBoxCards = {1: [], 2: [], 3: [], 4: [], 5: []};
   
+  // All box stats (including not due cards)
+  Map<int, int> _allBoxStats = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
+  Map<int, List<Flashcard>> _allBoxCards = {1: [], 2: [], 3: [], 4: [], 5: []};
+  
   // Original topic deck stats
   Map<String, Map<String, int>> _deckStats = {};
   
@@ -108,16 +112,13 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
         );
       }
 
-      // Calculate box stats from loaded data
-      final boxBreakdown = _repetitionService.groupByBox(allCards);
-      final globalBoxStats = <int, int>{};
-      final globalBoxCards = <int, List<Flashcard>>{};
+      // Calculate DUE box stats (only cards that are due for review TODAY)
+      final dueBoxStats = _repetitionService.getDueBoxStats(allCards);
+      final dueBoxCards = _repetitionService.getDueBoxCards(allCards);
       
-      for (int box = 1; box <= 5; box++) {
-        final cardsInBox = boxBreakdown[box] ?? [];
-        globalBoxStats[box] = cardsInBox.length;
-        globalBoxCards[box] = cardsInBox;
-      }
+      // Get ALL box stats to show upcoming cards
+      final allBoxStats = _repetitionService.getQuickBoxStats(allCards);
+      final allBoxCards = _repetitionService.getQuickBoxCards(allCards);
 
       // Get stats for original topic decks
       final stats = <String, Map<String, int>>{};
@@ -127,8 +128,10 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
 
       if (mounted) {
         setState(() {
-          _globalBoxStats = globalBoxStats;
-          _globalBoxCards = globalBoxCards;
+          _globalBoxStats = dueBoxStats;
+          _globalBoxCards = dueBoxCards;
+          _allBoxStats = allBoxStats;
+          _allBoxCards = allBoxCards;
           _deckStats = stats;
         });
       }
@@ -258,89 +261,167 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
   }
 
   Widget _buildLevelDeckCard(int level, int cardCount, List<Flashcard> cards, {Key? key}) {
-    final isComplete = cardCount == 0;
+    final isDue = cardCount > 0;
+    final totalCards = _allBoxStats[level] ?? 0;
     final levelName = _getLevelName(level);
     final levelColor = _getLevelColor(level);
     final levelIcon = _getLevelIcon(level);
 
+    // Find the earliest next review date for cards in this level
+    DateTime? earliestReview;
+    if (!isDue && totalCards > 0) {
+      final allCards = _allBoxCards[level] ?? [];
+      for (final card in allCards) {
+        final nextReview = _repetitionService.getNextReviewDate(card);
+        if (nextReview != null) {
+          if (earliestReview == null || nextReview.isBefore(earliestReview)) {
+            earliestReview = nextReview;
+          }
+        }
+      }
+    }
+
+    // Calculate time until available
+    String availableText = '';
+    if (!isDue && earliestReview != null) {
+      final now = DateTime.now();
+      final difference = earliestReview.difference(now);
+      
+      if (difference.inDays > 0) {
+        availableText = 'Available in ${difference.inDays}d';
+      } else if (difference.inHours > 0) {
+        availableText = 'Available in ${difference.inHours}h';
+      } else if (difference.inMinutes > 0) {
+        availableText = 'Available in ${difference.inMinutes}m';
+      } else {
+        availableText = 'Available soon';
+      }
+    }
+
     return GestureDetector(
-      onTap: isComplete ? null : () {
+      onTap: isDue ? () {
         _openLevelDeck(level, cards);
-      },
-      child: Card(
-        key: key,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        elevation: isComplete ? 2 : 4,
-        color: isComplete ? Colors.green[50] : levelColor.withOpacity(0.1),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: isComplete ? Colors.green : levelColor.withOpacity(0.3),
-              width: 2,
+      } : null,
+      child: Opacity(
+        opacity: isDue ? 1.0 : 0.6,
+        child: Card(
+          key: key,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          elevation: isDue ? 4 : 2,
+          color: levelColor.withOpacity(0.1),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: levelColor.withOpacity(isDue ? 0.3 : 0.2),
+                width: 2,
+              ),
             ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: levelColor.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Icon(
+                          levelIcon,
+                          color: levelColor,
+                          size: 24,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          levelName,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: levelColor,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      if (!isDue && totalCards > 0)
+                        Icon(
+                          Icons.schedule,
+                          size: 20,
+                          color: levelColor.withOpacity(0.7),
+                        ),
+                    ],
+                  ),
+                  const Spacer(),
+                  if (isDue)
                     Container(
-                      padding: const EdgeInsets.all(8),
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
-                        color: isComplete 
-                            ? Colors.green.withOpacity(0.2)
-                            : levelColor.withOpacity(0.2),
+                        color: levelColor.withOpacity(0.2),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: Icon(
-                        levelIcon,
-                        color: isComplete ? Colors.green : levelColor,
-                        size: 24,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
                       child: Text(
-                        levelName,
+                        '$cardCount cards due',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 13,
                           fontWeight: FontWeight.bold,
-                          color: isComplete ? Colors.green[700] : levelColor,
+                          color: levelColor,
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                      ),
+                    )
+                  else if (totalCards > 0)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: levelColor.withOpacity(0.15),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(
+                            '$totalCards cards',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: levelColor.withOpacity(0.8),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          availableText,
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w500,
+                            color: levelColor.withOpacity(0.7),
+                          ),
+                        ),
+                      ],
+                    )
+                  else
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        'No cards',
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey.shade600,
+                        ),
                       ),
                     ),
-                    if (isComplete)
-                      const Icon(
-                        Icons.check_circle,
-                        size: 24,
-                        color: Colors.green,
-                      ),
-                  ],
-                ),
-                const Spacer(),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: isComplete 
-                        ? Colors.green.withOpacity(0.2)
-                        : levelColor.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Text(
-                    isComplete ? 'Complete ✓' : '$cardCount cards left',
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold,
-                      color: isComplete ? Colors.green[700] : levelColor,
-                    ),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -524,7 +605,7 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
             ),
           ),
           
-          // Tutorial overlay (MUST be last to appear on top)
+          // Tutorial temporarily disabled
           // if (_showTutorial)
           //   TutorialOverlay(
           //     steps: _getTutorialSteps(),
@@ -536,7 +617,6 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
           //       setState(() => _showTutorial = false);
           //     },
           //   ),
-
         ],
       ),
     );
@@ -606,21 +686,17 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
     // Build list of all decks (level decks + topic decks)
     final List<Widget> allDecks = [];
 
-    // Add level decks (highest level first, only if they have cards)
-    // Only show level decks that have cards (no completed/empty state)
+    // Add ALL level decks (always show, even if no cards due)
     for (int level = 5; level >= 1; level--) {
-      final cardCount = _globalBoxStats[level] ?? 0;
-      final cards = _globalBoxCards[level] ?? [];
+      final dueCount = _globalBoxStats[level] ?? 0;
+      final dueCards = _globalBoxCards[level] ?? [];
       
-      // Only add if there are cards in this level
-      if (cardCount > 0) {
-        allDecks.add(_buildLevelDeckCard(
-          level,
-          cardCount,
-          cards,
-          key: level == 5 && allDecks.isEmpty ? _firstLevelDeckKey : null,
-        ));
-      }
+      allDecks.add(_buildLevelDeckCard(
+        level,
+        dueCount,
+        dueCards,
+        key: level == 5 && allDecks.isEmpty ? _firstLevelDeckKey : null,
+      ));
     }
 
     // Add topic decks
