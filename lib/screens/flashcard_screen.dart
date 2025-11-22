@@ -42,7 +42,7 @@ class FlashcardScreen extends StatefulWidget {
   State<FlashcardScreen> createState() => _FlashcardScreenState();
 }
 
-class _FlashcardScreenState extends State<FlashcardScreen> {
+class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProviderStateMixin {
   bool _isFlipped = false;
   bool _finishedDeck = false;
   bool _limitReached = false;
@@ -51,6 +51,9 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
   late List<Flashcard> _flashcards;
   bool _isInitializing = true;
   bool _showTutorial = false;
+  
+  late AnimationController _flipController;
+  late Animation<double> _flipAnimation;
 
   final UsageLimiter _limiter = UsageLimiter();
   final RepetitionService _repetitionService = RepetitionService();
@@ -65,7 +68,23 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
   void initState() {
     super.initState();
     _flashcards = List.from(widget.flashcards);
+    
+    // Initialize flip animation
+    _flipController = AnimationController(
+      duration: const Duration(milliseconds: 200),
+      vsync: this,
+    );
+    _flipAnimation = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(parent: _flipController, curve: Curves.easeInOut),
+    );
+    
     _initializeScreen();
+  }
+
+  @override
+  void dispose() {
+    _flipController.dispose();
+    super.dispose();
   }
 
   Future<void> _initializeScreen() async {
@@ -455,6 +474,24 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
     _handleSwipe(currentCard, remembered);
   }
 
+  void _handleFlip() async {
+    if (_flipController.isAnimating) return;
+    
+    // Start the flip animation
+    _flipController.forward(from: 0.0).then((_) {
+      // Reset controller after animation completes
+      _flipController.reset();
+    });
+    
+    // Change the state at halfway point (when card is edge-on)
+    await Future.delayed(const Duration(milliseconds: 100));
+    if (mounted) {
+      setState(() {
+        _isFlipped = !_isFlipped;
+      });
+    }
+  }
+
   List<TutorialStep> _getTutorialSteps() {
     final allSteps = TutorialService.getStepsForScreen(
       widget.baseLanguage,
@@ -626,9 +663,29 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
                   setState(() => _dragDx = 0.0);
                 },
                 onTap: () {
-                  setState(() => _isFlipped = !_isFlipped);
+                  _handleFlip();
                 },
-                child: _buildCardContent(displayName),
+                child: AnimatedBuilder(
+                  animation: _flipAnimation,
+                  builder: (context, child) {
+                    final angle = _flipAnimation.value * 3.14159; // pi radians
+                    final isHalfway = _flipAnimation.value > 0.5;
+                    
+                    return Transform(
+                      transform: Matrix4.identity()
+                        ..setEntry(3, 2, 0.001) // perspective
+                        ..rotateY(angle),
+                      alignment: Alignment.center,
+                      child: isHalfway
+                          ? Transform(
+                              transform: Matrix4.identity()..rotateY(3.14159), // flip back
+                              alignment: Alignment.center,
+                              child: _buildCardContent(displayName),
+                            )
+                          : _buildCardContent(displayName),
+                    );
+                  },
+                ),
               )
             else
               _buildCardContent(displayName),
@@ -657,7 +714,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
                       label: 'Flip',
                       color: Colors.blue,
                       onPressed: () {
-                        setState(() => _isFlipped = !_isFlipped);
+                        _handleFlip();
                       },
                     ),
                     
