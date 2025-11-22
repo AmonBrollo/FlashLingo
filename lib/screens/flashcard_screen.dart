@@ -521,7 +521,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
                 final cardsLeft = total - revealed;
                 
                 return Container(
-                  key: _progressKey, // Key for tutorial
+                  key: _progressKey,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 8,
                     vertical: 4,
@@ -583,67 +583,112 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        key: _fabKey, // Key for tutorial
-        onPressed: () async {
-          await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => AddFlashcardScreen(
-                onAdd: (newCard) {
-                  setState(() {
-                    _flashcards.add(newCard);
-                    _currentIndex = _flashcards.length - 1;
-                    _isFlipped = false;
-                  });
-                },
-                baseLanguage: widget.baseLanguage,
-                targetLanguage: widget.targetLanguage,
-              ),
-            ),
-          );
-        },
-        backgroundColor: Colors.brown,
-        child: const Icon(Icons.add),
-      ),
       body: Center(
-        child: GestureDetector(
-          onPanUpdate: (details) {
-            if (!_limitReached && !_finishedDeck) {
-              setState(() => _dragDx += details.delta.dx);
-            }
-          },
-          onPanEnd: (details) {
-            if (!_limitReached && !_finishedDeck) {
-              final currentCard = _flashcards[_currentIndex];
-              if (_dragDx > 100) {
-                _handleSwipe(currentCard, true);
-              } else if (_dragDx < -100) {
-                _handleSwipe(currentCard, false);
-              }
-              setState(() => _dragDx = 0.0);
-            }
-          },
-          onTap: () {
-            if (!_limitReached && !_finishedDeck) {
-              setState(() => _isFlipped = !_isFlipped);
-            }
-          },
-          child: _buildCardContent(displayName),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Card
+            if (!_limitReached && !_finishedDeck)
+              GestureDetector(
+                onPanUpdate: (details) {
+                  setState(() => _dragDx += details.delta.dx);
+                },
+                onPanEnd: (details) {
+                  final currentCard = _flashcards[_currentIndex];
+                  if (_dragDx > 100) {
+                    _handleSwipe(currentCard, true);
+                  } else if (_dragDx < -100) {
+                    _handleSwipe(currentCard, false);
+                  }
+                  setState(() => _dragDx = 0.0);
+                },
+                onTap: () {
+                  setState(() => _isFlipped = !_isFlipped);
+                },
+                child: _buildCardContent(displayName),
+              )
+            else
+              _buildCardContent(displayName),
+            
+            // Action buttons (right under the card)
+            if (!_limitReached && !_finishedDeck) ...[
+              const SizedBox(height: 24),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 32),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    // Forgot button
+                    _buildActionButton(
+                      icon: Icons.close,
+                      label: 'Forgot',
+                      color: Colors.red,
+                      onPressed: () {
+                        final currentCard = _flashcards[_currentIndex];
+                        _handleSwipe(currentCard, false);
+                      },
+                    ),
+                    
+                    // Flip button
+                    _buildActionButton(
+                      icon: _isFlipped ? Icons.visibility_off : Icons.visibility,
+                      label: 'Flip',
+                      color: Colors.blue,
+                      onPressed: () {
+                        setState(() => _isFlipped = !_isFlipped);
+                      },
+                    ),
+                    
+                    // Remember button
+                    _buildActionButton(
+                      icon: Icons.check,
+                      label: 'Remember',
+                      color: Colors.green,
+                      onPressed: () {
+                        final currentCard = _flashcards[_currentIndex];
+                        _handleSwipe(currentCard, true);
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ],
         ),
       ),
-      // Tutorial temporarily disabled
-      // body: Stack(
-      //   children: [
-      //     Center(
-      //       child: GestureDetector(
-      //         ...
-      //       ),
-      //     ),
-      //     if (_showTutorial)
-      //       TutorialOverlay(...),
-      //   ],
-      // ),
+    );
+  }
+
+  Widget _buildActionButton({
+    required IconData icon,
+    required String label,
+    required Color color,
+    required VoidCallback onPressed,
+  }) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        ElevatedButton(
+          onPressed: onPressed,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: color,
+            foregroundColor: Colors.white,
+            shape: const CircleBorder(),
+            padding: const EdgeInsets.all(20),
+            elevation: 4,
+          ),
+          child: Icon(icon, size: 28),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+            color: color,
+          ),
+        ),
+      ],
     );
   }
 
@@ -668,7 +713,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
     } else {
       final currentCard = _flashcards[_currentIndex];
       return Container(
-        key: _flashcardKey, // Key for tutorial
+        key: _flashcardKey,
         child: FlashcardView(
           flashcard: currentCard,
           progress: _repetitionService.getProgress(currentCard),
