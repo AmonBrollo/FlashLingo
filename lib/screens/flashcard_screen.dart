@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 import '../models/flashcard.dart';
 import '../models/tutorial_step.dart';
@@ -54,6 +55,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
   
   late AnimationController _flipController;
   late Animation<double> _flipAnimation;
+  late AudioPlayer _audioPlayer;
 
   final UsageLimiter _limiter = UsageLimiter();
   final RepetitionService _repetitionService = RepetitionService();
@@ -68,6 +70,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
   void initState() {
     super.initState();
     _flashcards = List.from(widget.flashcards);
+    _audioPlayer = AudioPlayer();
     
     // Initialize flip animation
     _flipController = AnimationController(
@@ -83,6 +86,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
 
   @override
   void dispose() {
+    _audioPlayer.dispose();
     _flipController.dispose();
     super.dispose();
   }
@@ -236,6 +240,34 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
       _isFlipped = false;
       _dragDx = 0.0;
     });
+  }
+
+  Future<void> _playAudio() async {
+    try {
+      final currentCard = _flashcards[_currentIndex];
+      
+      // Audio files are named based on English words
+      // JSON uses "english" as the key, not "en"
+      final englishWord = currentCard.getTranslation('english');
+      
+      // Generate the audio filename using the static method
+      final audioFilename = Flashcard.getAudioFilename(widget.topicKey, englishWord);
+      final audioPath = 'audio/$audioFilename.mp3';
+      
+      print('Attempting to play audio: $audioPath'); // Debug line
+      print('English word: $englishWord'); // Debug line
+      print('Topic: ${widget.topicKey}'); // Debug line
+      
+      await _audioPlayer.stop();
+      await _audioPlayer.play(AssetSource(audioPath));
+    } catch (e) {
+      print('Error playing audio: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Audio not available: $e')),
+        );
+      }
+    }
   }
 
   Future<void> _changeCurrentImage() async {
@@ -804,6 +836,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
           onRemoveImage: _removeCurrentImage,
           onRemembered: () => _handleSwipe(currentCard, true),
           onForgotten: () => _handleSwipe(currentCard, false),
+          onPlayAudio: _playAudio,
         ),
       );
     }

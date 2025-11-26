@@ -12,6 +12,7 @@ dependencies:
   flutter_svg: ^2.0.9
   flutter:
     sdk: flutter
+  audioplayers: ^6.5.1
   
   # Firebase Core Services
   firebase_core: ^4.1.1
@@ -43,6 +44,9 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+  googleapis: ^13.1.0
+  googleapis_auth: ^1.6.0
+  http: ^1.2.0
 
 flutter_launcher_icons:
   android: true
@@ -58,6 +62,7 @@ flutter:
      - assets/data/
      - assets/icons/
      - assets/images/
+     - assets/audio/
   
   # Uncomment and configure fonts if needed
   # fonts:

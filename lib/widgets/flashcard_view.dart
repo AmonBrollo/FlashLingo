@@ -1,3 +1,4 @@
+// flashcard_view.dart
 import 'dart:io';
 import 'package:flutter/material.dart';
 import '../models/flashcard.dart';
@@ -16,6 +17,7 @@ class FlashcardView extends StatelessWidget {
   final VoidCallback? onRemoveImage;
   final VoidCallback onRemembered;
   final VoidCallback onForgotten;
+  final VoidCallback onPlayAudio;
 
   const FlashcardView({
     super.key,
@@ -30,6 +32,7 @@ class FlashcardView extends StatelessWidget {
     this.onRemoveImage,
     required this.onRemembered,
     required this.onForgotten,
+    required this.onPlayAudio,
   });
 
   @override
@@ -140,30 +143,62 @@ class FlashcardView extends StatelessWidget {
   }
 
   Widget _buildCardContent() {
-    if (isFlipped) {
-      // Back side - always show text
+    // Determine which translation to show
+    final String cardText = isFlipped
+        ? flashcard.getTranslation(targetLanguage)
+        : flashcard.getTranslation(baseLanguage);
+
+    if (!isFlipped && flashcard.hasLocalImage && flashcard.imagePath != null) {
+      // Front side with image - no audio button here
+      return _buildImageContent();
+    } else if (isFlipped) {
+      // Back side (target language) - use Stack for precise positioning
+      return SizedBox.expand(
+        child: Stack(
+          children: [
+            // The word (absolutely centered)
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Text(
+                  cardText,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+            // Audio button (positioned between center and bottom)
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 60,
+              child: Center(
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.volume_up,
+                    size: 28.0,
+                    color: Colors.grey,
+                  ),
+                  onPressed: onPlayAudio,
+                  tooltip: 'Play audio',
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    } else {
+      // Front side (base language) - no audio button, just text
       return Padding(
         padding: const EdgeInsets.all(16.0),
         child: Text(
-          flashcard.getTranslation(targetLanguage),
+          cardText,
           textAlign: TextAlign.center,
           style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
         ),
       );
-    } else {
-      // Front side - show image if available, otherwise text
-      if (flashcard.hasLocalImage && flashcard.imagePath != null) {
-        return _buildImageContent();
-      } else {
-        return Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Text(
-            flashcard.getTranslation(baseLanguage),
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-          ),
-        );
-      }
     }
   }
 

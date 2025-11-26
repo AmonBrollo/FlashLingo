@@ -1,3 +1,6 @@
+// flashcard.dart
+import 'package:collection/collection.dart';
+
 class Flashcard {
   final Map<String, String> translations;
   final String? imagePath;
@@ -69,10 +72,26 @@ class Flashcard {
         .where((key) => translations[key]!.isNotEmpty)
         .toList();
   }
-
+  
   /// Get a unique identifier for this card
   String get id {
     return translations['id'] ?? translations.values.first;
+  }
+  
+  /// Generates a standardized filename for the audio asset.
+  /// Format: topic_englishword.mp3 (sanitized)
+  static String getAudioFilename(String topic, String englishWord) {
+    // 1. Convert to lowercase
+    String sanitized = englishWord.toLowerCase();
+    
+    // 2. Replace slashes, spaces, and parentheses with underscores
+    sanitized = sanitized.replaceAll(RegExp(r'[/\s()]+'), '_');
+    
+    // 3. Remove any other non-alphanumeric characters (except underscores and hyphens)
+    sanitized = sanitized.replaceAll(RegExp(r'[^a-z0-9_-]+'), '');
+    
+    // 4. Combine topic and sanitized word
+    return '${topic}_$sanitized';
   }
 
   @override
