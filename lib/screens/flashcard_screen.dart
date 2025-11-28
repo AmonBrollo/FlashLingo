@@ -6,19 +6,16 @@ import 'package:provider/provider.dart';
 import 'package:audioplayers/audioplayers.dart';
 
 import '../models/flashcard.dart';
-import '../models/tutorial_step.dart';
 import '../services/repetition_service.dart';
 import '../services/review_state.dart';
 import '../services/deck_loader.dart';
 import '../services/local_image_service.dart';
-import '../services/tutorial_service.dart';
 import '../utils/ui_strings.dart';
 import '../utils/topic_names.dart';
 import '../utils/usage_limiter.dart';
 import '../widgets/flashcard_view.dart';
 import '../widgets/finished_deck_card.dart';
 import '../widgets/limit_reached_card.dart';
-import 'add_flashcard_screen.dart';
 import 'review_screen.dart';
 import 'profile_screen.dart';
 import 'deck_selector_screen.dart';
@@ -51,7 +48,6 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
   double _dragDx = 0.0;
   late List<Flashcard> _flashcards;
   bool _isInitializing = true;
-  bool _showTutorial = false;
   
   late AnimationController _flipController;
   late Animation<double> _flipAnimation;
@@ -61,9 +57,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
   final RepetitionService _repetitionService = RepetitionService();
   final Set<Flashcard> _swipedThisSession = {};
 
-  // Tutorial keys
   final GlobalKey _flashcardKey = GlobalKey();
-  final GlobalKey _fabKey = GlobalKey();
   final GlobalKey _progressKey = GlobalKey();
 
   @override
@@ -93,38 +87,19 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
 
   Future<void> _initializeScreen() async {
     try {
-      // Use singleton instance - no need to initialize again if already loaded
       if (!_repetitionService.isCacheLoaded) {
         await _repetitionService.initialize();
       }
       
-      // Preload is now instant since cache is already loaded
       await _repetitionService.preloadProgress(_flashcards);
-      
-      // Load local images (your existing method)
       await _loadLocalImages();
 
       if (mounted) {
         context.read<ReviewState>().setCurrentDeck(widget.topicKey);
       }
 
-      // Check initial limit (your existing method)
       await _checkInitialLimit();
-      
-      // Select optimal starting card (your existing method)
       _selectOptimalStartingCard();
-
-      // Check if tutorial should be shown
-      if (widget.showTutorial) {
-        final shouldShow = await TutorialService.shouldShowTutorial();
-        if (shouldShow && mounted) {
-          Future.delayed(const Duration(milliseconds: 800), () {
-            if (mounted) {
-              setState(() => _showTutorial = true);
-            }
-          });
-        }
-      }
     } catch (e) {
       print('Error initializing flashcard screen: $e');
     } finally {
@@ -246,17 +221,13 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
     try {
       final currentCard = _flashcards[_currentIndex];
       
-      // Audio files are named based on English words
-      // JSON uses "english" as the key, not "en"
       final englishWord = currentCard.getTranslation('english');
-      
-      // Generate the audio filename using the static method
       final audioFilename = Flashcard.getAudioFilename(widget.topicKey, englishWord);
       final audioPath = 'audio/$audioFilename.mp3';
       
-      print('Attempting to play audio: $audioPath'); // Debug line
-      print('English word: $englishWord'); // Debug line
-      print('Topic: ${widget.topicKey}'); // Debug line
+      print('Attempting to play audio: $audioPath');
+      print('English word: $englishWord');
+      print('Topic: ${widget.topicKey}');
       
       await _audioPlayer.stop();
       await _audioPlayer.play(AssetSource(audioPath));
@@ -487,7 +458,6 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
   void _handleButtonPress(bool remembered) async {
     final currentCard = _flashcards[_currentIndex];
     
-    // Animate the swipe with multiple frames
     final targetDx = remembered ? 400.0 : -400.0;
     final frames = 10;
     final increment = targetDx / frames;
@@ -501,7 +471,6 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
       }
     }
     
-    // Wait a bit at the end, then process
     await Future.delayed(const Duration(milliseconds: 100));
     _handleSwipe(currentCard, remembered);
   }
@@ -509,61 +478,16 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
   void _handleFlip() async {
     if (_flipController.isAnimating) return;
     
-    // Start the flip animation
     _flipController.forward(from: 0.0).then((_) {
-      // Reset controller after animation completes
       _flipController.reset();
     });
     
-    // Change the state at halfway point (when card is edge-on)
     await Future.delayed(const Duration(milliseconds: 100));
     if (mounted) {
       setState(() {
         _isFlipped = !_isFlipped;
       });
     }
-  }
-
-  List<TutorialStep> _getTutorialSteps() {
-    final allSteps = TutorialService.getStepsForScreen(
-      widget.baseLanguage,
-      TutorialConfig.screenFlashcard,
-    );
-
-    return allSteps.map((step) {
-      if (step.id == TutorialConfig.flashcardSwipe) {
-        return TutorialStep(
-          id: step.id,
-          title: step.title,
-          message: step.message,
-          targetKey: _flashcardKey,
-          messagePosition: step.messagePosition,
-          icon: step.icon,
-          screen: step.screen,
-        );
-      } else if (step.id == TutorialConfig.flashcardAdd) {
-        return TutorialStep(
-          id: step.id,
-          title: step.title,
-          message: step.message,
-          targetKey: _fabKey,
-          messagePosition: step.messagePosition,
-          icon: step.icon,
-          screen: step.screen,
-        );
-      } else if (step.id == TutorialConfig.flashcardProgress) {
-        return TutorialStep(
-          id: step.id,
-          title: step.title,
-          message: step.message,
-          targetKey: _progressKey,
-          messagePosition: step.messagePosition,
-          icon: step.icon,
-          screen: step.screen,
-        );
-      }
-      return step;
-    }).toList();
   }
 
   @override
@@ -679,7 +603,6 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Card
             if (!_limitReached && !_finishedDeck)
               GestureDetector(
                 onPanUpdate: (details) {
@@ -700,17 +623,17 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
                 child: AnimatedBuilder(
                   animation: _flipAnimation,
                   builder: (context, child) {
-                    final angle = _flipAnimation.value * 3.14159; // pi radians
+                    final angle = _flipAnimation.value * 3.14159;
                     final isHalfway = _flipAnimation.value > 0.5;
                     
                     return Transform(
                       transform: Matrix4.identity()
-                        ..setEntry(3, 2, 0.001) // perspective
+                        ..setEntry(3, 2, 0.001)
                         ..rotateY(angle),
                       alignment: Alignment.center,
                       child: isHalfway
                           ? Transform(
-                              transform: Matrix4.identity()..rotateY(3.14159), // flip back
+                              transform: Matrix4.identity()..rotateY(3.14159),
                               alignment: Alignment.center,
                               child: _buildCardContent(displayName),
                             )
@@ -722,7 +645,6 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
             else
               _buildCardContent(displayName),
             
-            // Action buttons (right under the card)
             if (!_limitReached && !_finishedDeck) ...[
               const SizedBox(height: 24),
               Padding(
@@ -730,7 +652,6 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    // Forgot button
                     _buildActionButton(
                       icon: Icons.close,
                       label: 'Forgot',
@@ -739,8 +660,6 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
                         _handleButtonPress(false);
                       },
                     ),
-                    
-                    // Flip button
                     _buildActionButton(
                       icon: _isFlipped ? Icons.visibility_off : Icons.visibility,
                       label: 'Flip',
@@ -749,8 +668,6 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
                         _handleFlip();
                       },
                     ),
-                    
-                    // Remember button
                     _buildActionButton(
                       icon: Icons.check,
                       label: 'Remember',

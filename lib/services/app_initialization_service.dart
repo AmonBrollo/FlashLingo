@@ -76,9 +76,9 @@ class AppInitializationService {
         if (isOnline) {
           await ErrorHandlerService.logMessage('User logged in - scheduling background sync');
           // Don't await - sync in background
-          SyncService().syncNow().then((_) {
+          SyncService().syncNow().then((result) {
             ErrorHandlerService.logMessage('Background sync completed');
-          }).catchError((e, stack) {
+          }, onError: (e, stack) {
             ErrorHandlerService.logError(
               e,
               stack,
@@ -137,7 +137,9 @@ class AppInitializationService {
         if (isOnline) {
           await ErrorHandlerService.logMessage('User logged in - syncing data');
           // Don't await - sync in background
-          SyncService().syncNow().catchError((e, stack) {
+          SyncService().syncNow().then((result) {
+            // Sync completed
+          }, onError: (e, stack) {
             ErrorHandlerService.logError(
               e,
               stack,

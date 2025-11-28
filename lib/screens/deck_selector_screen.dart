@@ -4,7 +4,6 @@ import 'package:confetti/confetti.dart';
 import 'flashcard_screen.dart';
 import '../models/flashcard_deck.dart';
 import '../models/flashcard.dart';
-import '../models/tutorial_step.dart';
 import '../services/review_state.dart';
 import '../services/firebase_user_preferences.dart';
 import '../services/repetition_service.dart';
@@ -12,7 +11,6 @@ import '../services/tutorial_service.dart';
 import '../utils/topic_names.dart';
 import '../utils/ui_strings.dart';
 import '../widgets/email_verification_banner.dart';
-import '../widgets/tutorial_overlay.dart';
 import 'profile_screen.dart';
 import 'review_screen.dart';
 
@@ -51,7 +49,6 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
   // Original topic deck stats
   Map<String, Map<String, int>> _deckStats = {};
   
-  bool _showTutorial = false;
   late ConfettiController _confettiController;
 
   // Tutorial keys
@@ -63,26 +60,12 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
     super.initState();
     _confettiController = ConfettiController(duration: const Duration(seconds: 2));
     _initializeProgressData();
-    _checkTutorial();
   }
 
   @override
   void dispose() {
     _confettiController.dispose();
     super.dispose();
-  }
-
-  Future<void> _checkTutorial() async {
-    if (widget.showTutorial) {
-      final shouldShow = await TutorialService.shouldShowTutorial();
-      if (shouldShow && mounted) {
-        Future.delayed(const Duration(milliseconds: 500), () {
-          if (mounted) {
-            setState(() => _showTutorial = true);
-          }
-        });
-      }
-    }
   }
 
   Future<void> _initializeProgressData() async {
@@ -513,28 +496,6 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
     );
   }
 
-  List<TutorialStep> _getTutorialSteps() {
-    final allSteps = TutorialService.getStepsForScreen(
-      widget.baseLanguage,
-      TutorialConfig.screenDeckSelector,
-    );
-
-    return allSteps.map((step) {
-      if (step.id == TutorialConfig.deckSelectorDeckCard) {
-        return TutorialStep(
-          id: step.id,
-          title: step.title,
-          message: step.message,
-          targetKey: _firstLevelDeckKey,
-          messagePosition: step.messagePosition,
-          icon: step.icon,
-          screen: step.screen,
-        );
-      }
-      return step;
-    }).toList();
-  }
-
   @override
   Widget build(BuildContext context) {
     final reviewState = context.watch<ReviewState>();
@@ -604,19 +565,6 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
               ],
             ),
           ),
-          
-          // Tutorial temporarily disabled
-          // if (_showTutorial)
-          //   TutorialOverlay(
-          //     steps: _getTutorialSteps(),
-          //     language: widget.baseLanguage,
-          //     onComplete: () {
-          //       setState(() => _showTutorial = false);
-          //     },
-          //     onSkip: () {
-          //       setState(() => _showTutorial = false);
-          //     },
-          //   ),
         ],
       ),
     );

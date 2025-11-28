@@ -1,6 +1,3 @@
-// flashcard.dart
-import 'package:collection/collection.dart';
-
 class Flashcard {
   final Map<String, String> translations;
   final String? imagePath;
