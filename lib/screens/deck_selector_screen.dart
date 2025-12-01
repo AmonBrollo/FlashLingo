@@ -634,17 +634,20 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
     // Build list of all decks (level decks + topic decks)
     final List<Widget> allDecks = [];
 
-    // Add ALL level decks (always show, even if no cards due)
+    // Add level decks that have cards due
     for (int level = 5; level >= 1; level--) {
       final dueCount = _globalBoxStats[level] ?? 0;
       final dueCards = _globalBoxCards[level] ?? [];
       
-      allDecks.add(_buildLevelDeckCard(
-        level,
-        dueCount,
-        dueCards,
-        key: level == 5 && allDecks.isEmpty ? _firstLevelDeckKey : null,
-      ));
+      // Only add level deck if it has cards due
+      if (dueCount > 0) {
+        allDecks.add(_buildLevelDeckCard(
+          level,
+          dueCount,
+          dueCards,
+          key: level == 5 && allDecks.isEmpty ? _firstLevelDeckKey : null,
+        ));
+      }
     }
 
     // Add topic decks
