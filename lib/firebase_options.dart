@@ -23,10 +23,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+  	  return ios;
       case TargetPlatform.macOS:
         return macos;
       case TargetPlatform.windows:
@@ -78,6 +75,15 @@ class DefaultFirebaseOptions {
     messagingSenderId: '316317586609',
     projectId: 'flashlango-2000',
     storageBucket: 'flashlango-2000.firebasestorage.app',
+  );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyANRruffHcyp8h1hTLvxF1yZhFntAPyUbU',
+    appId: '1:316317586609:ios:dbada16f3a434115ecbe90',
+    messagingSenderId: '316317586609',
+    projectId: 'flashlingo-2000',
+    storageBucket: 'flashlingo-2000.firebasestorage.app',
+    iosBundleId: 'com.example.flashlingo',
   );
 
 }
