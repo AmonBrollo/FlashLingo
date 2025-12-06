@@ -661,9 +661,9 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
                       },
                     ),
                     _buildActionButton(
-                      icon: _isFlipped ? Icons.visibility_off : Icons.visibility,
+                      icon: Icons.sync,
                       label: 'Flip',
-                      color: Colors.blue,
+                      color: Colors.grey,
                       onPressed: () {
                         _handleFlip();
                       },
