@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import '../services/error_handler_service.dart';
 import '../services/app_state_service.dart';
+import '../services/ui_language_provider.dart';
 import 'login_screen.dart';
 import 'app_router.dart';
 
@@ -26,13 +27,11 @@ class _AuthGateState extends State<AuthGate> {
 
   Future<void> _initialize() async {
     try {
-      // Initialize app state service
       final appState = context.read<AppStateService>();
       if (!appState.isInitialized) {
         await appState.initialize();
       }
 
-      // Log app state
       await appState.logState();
 
       if (mounted) {
@@ -59,21 +58,23 @@ class _AuthGateState extends State<AuthGate> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = context.watch<UiLanguageProvider>().loc;
+    
     // Show loading during initialization
     if (_isInitializing) {
-      return const Scaffold(
+      return Scaffold(
         backgroundColor: Colors.brown,
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              CircularProgressIndicator(
+              const CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Text(
-                'Initializing...',
-                style: TextStyle(
+                loc.initializing,
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 16,
                 ),
@@ -100,9 +101,9 @@ class _AuthGateState extends State<AuthGate> {
                   color: Colors.red,
                 ),
                 const SizedBox(height: 16),
-                const Text(
-                  'Initialization Error',
-                  style: TextStyle(
+                Text(
+                  loc.initializationError,
+                  style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
@@ -122,7 +123,7 @@ class _AuthGateState extends State<AuthGate> {
                     });
                     _initialize();
                   },
-                  child: const Text('Retry'),
+                  child: Text(loc.retry),
                 ),
               ],
             ),
@@ -182,9 +183,9 @@ class _AuthGateState extends State<AuthGate> {
                     color: Colors.red,
                   ),
                   const SizedBox(height: 16),
-                  const Text(
-                    'Authentication Error',
-                    style: TextStyle(
+                  Text(
+                    loc.authenticationError,
+                    style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
@@ -197,10 +198,9 @@ class _AuthGateState extends State<AuthGate> {
                   const SizedBox(height: 24),
                   ElevatedButton(
                     onPressed: () {
-                      // Force rebuild
                       setState(() {});
                     },
-                    child: const Text('Retry'),
+                    child: Text(loc.retry),
                   ),
                 ],
               ),

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'deck_selector_screen.dart';
 import '../services/deck_loader.dart';
 import '../services/tutorial_service.dart';
+import '../services/ui_language_provider.dart';
 import '../widgets/language_option_button.dart';
-import '../utils/ui_strings.dart';
+import '../l10n/language.dart';
 
 class TargetLanguageSelectorScreen extends StatelessWidget {
   final String baseLanguage;
@@ -13,12 +15,13 @@ class TargetLanguageSelectorScreen extends StatelessWidget {
     BuildContext context,
     String targetLanguage,
   ) async {
+    final loc = context.read<UiLanguageProvider>().loc;
+    
     try {
       final decks = await DeckLoader.loadDecks();
 
       if (!context.mounted) return;
 
-      // Check if this is first time user (should show tutorial)
       final shouldShowTutorial = await TutorialService.shouldShowTutorial();
 
       Navigator.push(
@@ -28,7 +31,7 @@ class TargetLanguageSelectorScreen extends StatelessWidget {
             baseLanguage: baseLanguage,
             targetLanguage: targetLanguage,
             decks: decks,
-            showTutorial: shouldShowTutorial, // Pass tutorial flag
+            showTutorial: shouldShowTutorial,
           ),
         ),
       );
@@ -37,16 +40,18 @@ class TargetLanguageSelectorScreen extends StatelessWidget {
 
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text('Error loading decks: $e')));
+      ).showSnackBar(SnackBar(content: Text('${loc.errorLoadingDecks}: $e')));
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final loc = context.watch<UiLanguageProvider>().loc;
+    
     return Scaffold(
       backgroundColor: Colors.brown[50],
       appBar: AppBar(
-        title: Text(UiStrings.selectTargetLanguage(baseLanguage)),
+        title: Text(loc.selectTargetLanguage),
         backgroundColor: Colors.brown,
       ),
       body: Center(
@@ -54,12 +59,11 @@ class TargetLanguageSelectorScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             LanguageOptionButton(
-              text: "Magyar",
+              text: AppLanguages.hungarian.name,
               color: Colors.red.shade700,
-              emoji: "🇭🇺",
+              emoji: AppLanguages.hungarian.flag,
               onTap: () => _selectTargetLanguage(context, "hungarian"),
             ),
-            // Add more target languages here
           ],
         ),
       ),

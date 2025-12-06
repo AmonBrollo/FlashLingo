@@ -6,6 +6,7 @@ import '../services/deck_loader.dart';
 import '../services/loading_with_timeout.dart';
 import '../services/error_handler_service.dart';
 import '../services/app_state_service.dart';
+import '../services/ui_language_provider.dart';
 import 'login_screen.dart';
 import 'base_language_selector_screen.dart';
 import 'target_language_selector_screen.dart';
@@ -20,7 +21,7 @@ class AppRouter extends StatefulWidget {
 }
 
 class _AppRouterState extends State<AppRouter> {
-  String _loadingStatus = 'Initializing...';
+  String _loadingStatus = '';
   bool _hasError = false;
   String? _errorMessage;
   int _retryCount = 0;
@@ -30,16 +31,27 @@ class _AppRouterState extends State<AppRouter> {
   @override
   void initState() {
     super.initState();
-    _loadApp();
+    // Initialize loading status immediately
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        final loc = context.read<UiLanguageProvider>().loc;
+        setState(() {
+          _loadingStatus = loc.initializing;
+        });
+        _loadApp();
+      }
+    });
   }
 
   Future<void> _loadApp() async {
-    if (_isNavigating) return; // Prevent multiple navigations
+    if (_isNavigating) return;
 
+    final loc = context.read<UiLanguageProvider>().loc;
+    
     setState(() {
       _hasError = false;
       _errorMessage = null;
-      _loadingStatus = 'Initializing...';
+      _loadingStatus = loc.loading;
     });
 
     await ErrorHandlerService.logMessage('AppRouter: Starting app load');
@@ -51,7 +63,6 @@ class _AppRouterState extends State<AppRouter> {
       
       setState(() => _isNavigating = true);
       
-      // Use pushReplacement to avoid back navigation issues
       await Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => screen),
@@ -77,21 +88,26 @@ class _AppRouterState extends State<AppRouter> {
   }
 
   String _getReadableError(dynamic error) {
-    final errorStr = error.toString();
+    final loc = context.read<UiLanguageProvider>().loc;
+    final errorStr = error.toString().toLowerCase();
+    
+    // Return localized error messages for known error types
     if (errorStr.contains('timeout')) {
-      return 'Connection timeout. Please check your internet.';
+      return loc.connectionTimeout;
     } else if (errorStr.contains('network')) {
-      return 'Network error. Please check your connection.';
+      return loc.networkError;
     } else if (errorStr.contains('permission')) {
-      return 'Permission denied. Please check your settings.';
+      return loc.permissionDenied;
     }
-    return 'An unexpected error occurred.';
+    return loc.unexpectedError;
   }
 
   Future<Widget> _determineStartScreen() async {
+    final loc = context.read<UiLanguageProvider>().loc;
+    
     try {
-      // Step 1: Check authentication with timeout
-      setState(() => _loadingStatus = 'Checking authentication...');
+      // Step 1: Check authentication
+      setState(() => _loadingStatus = loc.checkingAuthentication);
       await ErrorHandlerService.logMessage('Step 1: Checking auth');
       
       final user = await LoadingWithTimeout.execute(
@@ -112,13 +128,13 @@ class _AppRouterState extends State<AppRouter> {
       // Step 2: Check if app needs data refresh
       final appState = context.read<AppStateService>();
       if (appState.shouldRefreshData()) {
-        setState(() => _loadingStatus = 'Refreshing data...');
+        setState(() => _loadingStatus = loc.refreshingData);
         await ErrorHandlerService.logMessage('Refreshing stale data');
         await appState.refreshData();
       }
 
-      // Step 3: Load preferences with timeout
-      setState(() => _loadingStatus = 'Loading preferences...');
+      // Step 3: Load preferences
+      setState(() => _loadingStatus = loc.loadingProgress);
       await ErrorHandlerService.logMessage('Step 2: Loading preferences');
       
       final prefs = await LoadingWithTimeout.execute(
@@ -131,12 +147,10 @@ class _AppRouterState extends State<AppRouter> {
       final targetLang = prefs['targetLanguage'];
       final deckKey = prefs['deckKey'];
 
-      // Log preferences state
       await ErrorHandlerService.logMessage(
         'Preferences: base=$baseLang, target=$targetLang, deck=$deckKey',
       );
 
-      // Navigate based on setup completion
       if (baseLang == null) {
         await ErrorHandlerService.logMessage('No base language, going to setup');
         return const BaseLanguageSelectorScreen();
@@ -147,8 +161,8 @@ class _AppRouterState extends State<AppRouter> {
         return TargetLanguageSelectorScreen(baseLanguage: baseLang);
       }
 
-      // Step 4: Load decks with timeout
-      setState(() => _loadingStatus = 'Loading flashcard decks...');
+      // Step 4: Load decks
+      setState(() => _loadingStatus = loc.loadingDecks);
       await ErrorHandlerService.logMessage('Step 3: Loading decks');
       
       final decks = await LoadingWithTimeout.execute(
@@ -165,6 +179,8 @@ class _AppRouterState extends State<AppRouter> {
           fatal: false,
         );
         
+        final errorLoc = context.read<UiLanguageProvider>().loc;
+        
         return Scaffold(
           body: Center(
             child: Padding(
@@ -174,16 +190,16 @@ class _AppRouterState extends State<AppRouter> {
                 children: [
                   const Icon(Icons.error_outline, size: 64, color: Colors.orange),
                   const SizedBox(height: 16),
-                  const Text(
-                    'No flashcard decks found',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  Text(
+                    errorLoc.noDeckFound,
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
-                  const Text('Please check your installation'),
+                  Text(errorLoc.checkInstallation),
                   const SizedBox(height: 24),
                   ElevatedButton(
                     onPressed: () => _handleRetry(),
-                    child: const Text('Retry'),
+                    child: Text(errorLoc.retry),
                   ),
                 ],
               ),
@@ -194,14 +210,11 @@ class _AppRouterState extends State<AppRouter> {
 
       await ErrorHandlerService.logMessage('Loaded ${decks.length} decks');
 
-      // Step 5: Decide between deck selector or specific deck
-      // If user has a saved deck preference, check if they want to continue or see all decks
+      // Step 5: Navigate to appropriate screen
       if (deckKey != null && deckKey != 'forgotten') {
-        // Check if user was in middle of studying
         final appState = context.read<AppStateService>();
         final timeSinceActive = appState.getTimeSinceLastActive();
         
-        // If recently active (< 10 minutes), go to deck selector to show all options
         if (timeSinceActive != null && timeSinceActive.inMinutes < 10) {
           await ErrorHandlerService.logMessage('Recent activity, going to deck selector');
           return DeckSelectorScreen(
@@ -212,7 +225,6 @@ class _AppRouterState extends State<AppRouter> {
         }
       }
 
-      // Default: Go to deck selector to let user choose
       await ErrorHandlerService.logMessage('Going to deck selector');
       return DeckSelectorScreen(
         baseLanguage: baseLang,
@@ -228,10 +240,10 @@ class _AppRouterState extends State<AppRouter> {
         fatal: false,
       );
 
-      // If this is a timeout or network error, try local-only recovery
       if (e.toString().contains('timeout') || e.toString().contains('network')) {
         try {
-          setState(() => _loadingStatus = 'Using offline data...');
+          final loc = context.read<UiLanguageProvider>().loc;
+          setState(() => _loadingStatus = loc.usingOfflineData);
           await ErrorHandlerService.logMessage('Attempting offline recovery');
           return await _loadWithLocalDataOnly();
         } catch (localError, localStack) {
@@ -244,13 +256,11 @@ class _AppRouterState extends State<AppRouter> {
         }
       }
 
-      // Complete fallback to setup
       await ErrorHandlerService.logMessage('Falling back to base language setup');
       return const BaseLanguageSelectorScreen();
     }
   }
 
-  /// Attempt to load using only local data (no Firebase calls)
   Future<Widget> _loadWithLocalDataOnly() async {
     await ErrorHandlerService.logMessage('Loading with local data only');
     
@@ -292,13 +302,13 @@ class _AppRouterState extends State<AppRouter> {
   }
 
   void _showResetDialog() {
+    final loc = context.read<UiLanguageProvider>().loc;
+    
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Unable to Load'),
-        content: const Text(
-          'We\'re having trouble loading your data. What would you like to do?',
-        ),
+        title: Text(loc.unableToLoad),
+        content: Text(loc.havingTroubleLoading),
         actions: [
           TextButton(
             onPressed: () {
@@ -310,7 +320,7 @@ class _AppRouterState extends State<AppRouter> {
               ErrorHandlerService.logMessage('User initiated final retry');
               _loadApp();
             },
-            child: const Text('Try Again'),
+            child: Text(loc.tryAgain),
           ),
           TextButton(
             onPressed: () async {
@@ -324,7 +334,7 @@ class _AppRouterState extends State<AppRouter> {
                 ),
               );
             },
-            child: const Text('Reset Setup'),
+            child: Text(loc.resetSetup),
           ),
           TextButton(
             onPressed: () {
@@ -337,7 +347,7 @@ class _AppRouterState extends State<AppRouter> {
                 ),
               );
             },
-            child: const Text('Continue'),
+            child: Text(loc.continueText),
           ),
         ],
       ),
@@ -346,6 +356,8 @@ class _AppRouterState extends State<AppRouter> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = context.watch<UiLanguageProvider>().loc;
+    
     if (_hasError) {
       return Scaffold(
         backgroundColor: Colors.brown.shade50,
@@ -359,7 +371,7 @@ class _AppRouterState extends State<AppRouter> {
                   const Icon(Icons.wifi_off, size: 80, color: Colors.brown),
                   const SizedBox(height: 24),
                   Text(
-                    'Connection Issue',
+                    loc.connectionIssue,
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: Colors.brown.shade900,
@@ -367,7 +379,7 @@ class _AppRouterState extends State<AppRouter> {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    _errorMessage ?? 'Please check your internet connection.',
+                    _errorMessage ?? loc.checkInternetConnection,
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       color: Colors.brown.shade700,
@@ -379,8 +391,8 @@ class _AppRouterState extends State<AppRouter> {
                     icon: const Icon(Icons.refresh),
                     label: Text(
                       _retryCount > 0
-                          ? 'Retry ($_retryCount/$_maxRetries)'
-                          : 'Retry',
+                          ? '${loc.retry} ($_retryCount/$_maxRetries)'
+                          : loc.retry,
                     ),
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(
@@ -400,7 +412,7 @@ class _AppRouterState extends State<AppRouter> {
                         ),
                       );
                     },
-                    child: const Text('Skip to Setup'),
+                    child: Text(loc.skipToSetup),
                   ),
                 ],
               ),
@@ -410,7 +422,7 @@ class _AppRouterState extends State<AppRouter> {
       );
     }
 
-    // Loading state
+    // Loading screen
     return Scaffold(
       backgroundColor: Colors.brown,
       body: SafeArea(
@@ -424,7 +436,7 @@ class _AppRouterState extends State<AppRouter> {
               ),
               const SizedBox(height: 24),
               Text(
-                _loadingStatus,
+                _loadingStatus.isEmpty ? loc.initializing : _loadingStatus,
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 16,
@@ -434,7 +446,7 @@ class _AppRouterState extends State<AppRouter> {
               ),
               const SizedBox(height: 8),
               Text(
-                'This usually takes just a moment...',
+                loc.takesJustMoment,
                 style: TextStyle(
                   color: Colors.white.withOpacity(0.8),
                   fontSize: 14,

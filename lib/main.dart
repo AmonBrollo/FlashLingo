@@ -7,6 +7,7 @@ import 'services/review_state.dart';
 import 'services/app_initialization_service.dart';
 import 'services/app_state_service.dart';
 import 'services/error_handler_service.dart';
+import 'services/ui_language_provider.dart'; // NEW
 import 'firebase_options.dart';
 import 'screens/auth_gate.dart';
 import 'package:flutter/foundation.dart';
@@ -94,6 +95,7 @@ void main() async {
         providers: [
           ChangeNotifierProvider(create: (_) => ReviewState()),
           ChangeNotifierProvider(create: (_) => AppStateService()),
+          ChangeNotifierProvider(create: (_) => UiLanguageProvider()), // NEW
         ],
         child: const FlashLango(),
       ),
@@ -193,14 +195,17 @@ class _FlashLangoState extends State<FlashLango> with WidgetsBindingObserver {
         ErrorWidget.builder = (FlutterErrorDetails details) {
           // Log to Crashlytics
           FirebaseCrashlytics.instance.recordFlutterFatalError(details);
-          return _buildErrorWidget(details);
+          return _buildErrorWidget(context, details);
         };
         return child ?? const SizedBox.shrink();
       },
     );
   }
 
-  Widget _buildErrorWidget(FlutterErrorDetails details) {
+  Widget _buildErrorWidget(BuildContext context, FlutterErrorDetails details) {
+    // Use the UI language provider if available
+    final loc = context.watch<UiLanguageProvider>().loc;
+    
     return Scaffold(
       backgroundColor: Colors.brown.shade50,
       body: Center(
@@ -215,16 +220,16 @@ class _FlashLangoState extends State<FlashLango> with WidgetsBindingObserver {
                 color: Colors.red,
               ),
               const SizedBox(height: 16),
-              const Text(
-                'Something went wrong',
-                style: TextStyle(
+              Text(
+                loc.somethingWentWrong,
+                style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(height: 8),
-              const Text(
-                'Please restart the app',
+              Text(
+                loc.pleaseRestartApp,
                 textAlign: TextAlign.center,
               ),
               if (kDebugMode) ...[

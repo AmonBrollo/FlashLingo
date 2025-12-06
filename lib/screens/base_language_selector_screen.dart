@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'target_language_selector_screen.dart';
 import '../widgets/language_option_button.dart';
+import '../services/ui_language_provider.dart';
+import '../l10n/language.dart';
 
 class BaseLanguageSelectorScreen extends StatelessWidget {
   const BaseLanguageSelectorScreen({super.key});
@@ -17,25 +20,27 @@ class BaseLanguageSelectorScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = context.watch<UiLanguageProvider>().loc;
+    
     return Scaffold(
       backgroundColor: Colors.brown[50],
       appBar: AppBar(
-        title: const Text("Choose Base Language"),
+        title: Text(loc.chooseBaseLanguage),
         backgroundColor: Colors.brown,
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           LanguageOptionButton(
-            text: "Português",
+            text: AppLanguages.portuguese.name,
             color: Colors.green.shade700,
-            emoji: "🇧🇷",
+            emoji: AppLanguages.portuguese.flag,
             onTap: () => _selectBaseLanguage(context, "portuguese"),
           ),
           LanguageOptionButton(
-            text: "English",
+            text: AppLanguages.english.name,
             color: Colors.blue.shade700,
-            emoji: "🇬🇧",
+            emoji: AppLanguages.english.flag,
             onTap: () => _selectBaseLanguage(context, "english"),
           ),
         ],
