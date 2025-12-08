@@ -327,4 +327,8 @@ class EnglishStrings {
   
   // Deck Selector specific
   static const String completeCheckmark = 'Complete ✓';
+  
+  // Flashcard Screen specific
+  static const String left = 'left';
+  static const String audioNotAvailableError = 'Audio not available';
 }

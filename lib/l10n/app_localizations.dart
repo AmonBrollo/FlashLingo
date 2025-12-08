@@ -957,6 +957,17 @@ class AppLocalizations {
         en: EnglishStrings.completeCheckmark,
       );
 
+  // Flashcard Screen specific
+  String get left => _getString(
+        pt: PortugueseStrings.left,
+        en: EnglishStrings.left,
+      );
+
+  String get audioNotAvailableError => _getString(
+        pt: PortugueseStrings.audioNotAvailableError,
+        en: EnglishStrings.audioNotAvailableError,
+      );
+
   // Convenience properties
   String get languageCode => language.code;
   bool get isPortuguese => language.code == 'pt';

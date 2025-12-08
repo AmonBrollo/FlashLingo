@@ -10,7 +10,7 @@ import '../services/repetition_service.dart';
 import '../services/review_state.dart';
 import '../services/deck_loader.dart';
 import '../services/local_image_service.dart';
-import '../utils/ui_strings.dart';
+import '../services/ui_language_provider.dart';
 import '../utils/topic_names.dart';
 import '../utils/usage_limiter.dart';
 import '../widgets/flashcard_view.dart';
@@ -101,7 +101,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
       await _checkInitialLimit();
       _selectOptimalStartingCard();
     } catch (e) {
-      print('Error initializing flashcard screen: $e');
+      debugPrint('Error initializing flashcard screen: $e');
     } finally {
       if (mounted) {
         setState(() {
@@ -132,7 +132,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
         });
       }
     } catch (e) {
-      print('Error loading local images: $e');
+      debugPrint('Error loading local images: $e');
     }
   }
 
@@ -218,6 +218,8 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
   }
 
   Future<void> _playAudio() async {
+    final loc = context.read<UiLanguageProvider>().loc;
+    
     try {
       final currentCard = _flashcards[_currentIndex];
       
@@ -225,23 +227,24 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
       final audioFilename = Flashcard.getAudioFilename(widget.topicKey, englishWord);
       final audioPath = 'audio/$audioFilename.mp3';
       
-      print('Attempting to play audio: $audioPath');
-      print('English word: $englishWord');
-      print('Topic: ${widget.topicKey}');
+      debugPrint('Attempting to play audio: $audioPath');
+      debugPrint('English word: $englishWord');
+      debugPrint('Topic: ${widget.topicKey}');
       
       await _audioPlayer.stop();
       await _audioPlayer.play(AssetSource(audioPath));
     } catch (e) {
-      print('Error playing audio: $e');
+      debugPrint('Error playing audio: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Audio not available: $e')),
+          SnackBar(content: Text('${loc.audioNotAvailableError}: $e')),
         );
       }
     }
   }
 
   Future<void> _changeCurrentImage() async {
+    final loc = context.read<UiLanguageProvider>().loc;
     final currentCard = _flashcards[_currentIndex];
 
     try {
@@ -285,8 +288,8 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
 
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Image saved successfully'),
+            SnackBar(
+              content: Text(loc.imageSavedSuccessfully),
               backgroundColor: Colors.green,
             ),
           );
@@ -294,8 +297,8 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
       } else {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Failed to save image'),
+            SnackBar(
+              content: Text(loc.failedToSaveImage),
               backgroundColor: Colors.red,
             ),
           );
@@ -306,31 +309,36 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
         Navigator.of(context).pop();
       }
 
-      print('Error changing image: $e');
+      debugPrint('Error changing image: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
+          SnackBar(
+            content: Text('${loc.error}: $e'),
+            backgroundColor: Colors.red,
+          ),
         );
       }
     }
   }
 
   Future<ImageSource?> _showImageSourceDialog() async {
+    final loc = context.read<UiLanguageProvider>().loc;
+    
     return await showDialog<ImageSource>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Select Image Source'),
+        title: Text(loc.selectImageSource),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
               leading: const Icon(Icons.camera_alt),
-              title: const Text('Camera'),
+              title: Text(loc.camera),
               onTap: () => Navigator.pop(context, ImageSource.camera),
             ),
             ListTile(
               leading: const Icon(Icons.photo_library),
-              title: const Text('Gallery'),
+              title: Text(loc.gallery),
               onTap: () => Navigator.pop(context, ImageSource.gallery),
             ),
           ],
@@ -340,6 +348,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
   }
 
   Future<void> _removeCurrentImage() async {
+    final loc = context.read<UiLanguageProvider>().loc;
     final currentCard = _flashcards[_currentIndex];
 
     if (!currentCard.hasLocalImage) return;
@@ -347,17 +356,17 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Remove Image'),
-        content: const Text('Are you sure you want to remove this image?'),
+        title: Text(loc.removeImage),
+        content: Text(loc.removeImageConfirm),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text(loc.cancel),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
             style: TextButton.styleFrom(foregroundColor: Colors.red),
-            child: const Text('Remove'),
+            child: Text(loc.remove),
           ),
         ],
       ),
@@ -373,8 +382,8 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Image removed'),
+          SnackBar(
+            content: Text(loc.imageRemoved),
             backgroundColor: Colors.orange,
           ),
         );
@@ -383,6 +392,8 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
   }
 
   Future<void> _goToDeckSelector() async {
+    final loc = context.read<UiLanguageProvider>().loc;
+    
     try {
       final decks = await DeckLoader.loadDecks();
 
@@ -403,7 +414,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Error loading decks: $e'),
+          content: Text('${loc.errorLoadingDecks}: $e'),
           backgroundColor: Colors.red,
         ),
       );
@@ -492,18 +503,20 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
 
   @override
   Widget build(BuildContext context) {
+    final loc = context.watch<UiLanguageProvider>().loc;
+    
     if (_isInitializing) {
       return Scaffold(
         backgroundColor: Colors.brown[50],
-        body: const Center(
+        body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              CircularProgressIndicator(
+              const CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(Colors.brown),
               ),
-              SizedBox(height: 16),
-              Text('Loading progress...'),
+              const SizedBox(height: 16),
+              Text(loc.loadingProgress),
             ],
           ),
         ),
@@ -528,7 +541,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
         ),
         title: Row(
           children: [
-            const Text('Flashlango'),
+            Text(loc.flashLango),
             const Spacer(),
             Consumer<ReviewState>(
               builder: (context, reviewState, child) {
@@ -547,7 +560,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
-                    cardsLeft > 0 ? '$cardsLeft left' : 'Complete',
+                    cardsLeft > 0 ? '$cardsLeft ${loc.left}' : loc.complete,
                     style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
@@ -565,33 +578,33 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
             icon: const Icon(Icons.more_horiz),
             onSelected: _onMenuSelected,
             itemBuilder: (context) => [
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: 'select_deck',
                 child: Row(
                   children: [
-                    Icon(Icons.view_module, size: 20),
-                    SizedBox(width: 8),
-                    Text('Select Deck'),
+                    const Icon(Icons.view_module, size: 20),
+                    const SizedBox(width: 8),
+                    Text(loc.selectDeck),
                   ],
                 ),
               ),
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: 'review',
                 child: Row(
                   children: [
-                    Icon(Icons.rate_review, size: 20),
-                    SizedBox(width: 8),
-                    Text('Review'),
+                    const Icon(Icons.rate_review, size: 20),
+                    const SizedBox(width: 8),
+                    Text(loc.review),
                   ],
                 ),
               ),
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: 'profile',
                 child: Row(
                   children: [
-                    Icon(Icons.person, size: 20),
-                    SizedBox(width: 8),
-                    Text('Profile'),
+                    const Icon(Icons.person, size: 20),
+                    const SizedBox(width: 8),
+                    Text(loc.profile),
                   ],
                 ),
               ),
@@ -654,7 +667,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
                   children: [
                     _buildActionButton(
                       icon: Icons.close,
-                      label: 'Forgot',
+                      label: loc.forgot,
                       color: Colors.red,
                       onPressed: () {
                         _handleButtonPress(false);
@@ -662,7 +675,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
                     ),
                     _buildActionButton(
                       icon: Icons.sync,
-                      label: 'Flip',
+                      label: loc.flip,
                       color: Colors.grey,
                       onPressed: () {
                         _handleFlip();
@@ -670,7 +683,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
                     ),
                     _buildActionButton(
                       icon: Icons.check,
-                      label: 'Remember',
+                      label: loc.remember,
                       color: Colors.green,
                       onPressed: () {
                         _handleButtonPress(true);
@@ -735,7 +748,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
       );
     } else if (_finishedDeck) {
       return FinishedDeckCard(
-        message: UiStrings.finishedDeckText(widget.baseLanguage),
+        message: context.read<UiLanguageProvider>().loc.finishedDeck,
       );
     } else {
       final currentCard = _flashcards[_currentIndex];
