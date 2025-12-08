@@ -951,6 +951,12 @@ class AppLocalizations {
         en: EnglishStrings.errorLoadingDecks,
       );
 
+  // Deck Selector specific
+  String get completeCheckmark => _getString(
+        pt: PortugueseStrings.completeCheckmark,
+        en: EnglishStrings.completeCheckmark,
+      );
+
   // Convenience properties
   String get languageCode => language.code;
   bool get isPortuguese => language.code == 'pt';

@@ -324,4 +324,7 @@ class EnglishStrings {
   static const String networkError = 'Network error. Please check your connection.';
   static const String permissionDenied = 'Permission denied. Please check your settings.';
   static const String unexpectedError = 'An unexpected error occurred.';
+  
+  // Deck Selector specific
+  static const String completeCheckmark = 'Complete ✓';
 }

@@ -8,8 +8,8 @@ import '../services/review_state.dart';
 import '../services/firebase_user_preferences.dart';
 import '../services/repetition_service.dart';
 import '../services/tutorial_service.dart';
+import '../services/ui_language_provider.dart';
 import '../utils/topic_names.dart';
-import '../utils/ui_strings.dart';
 import '../widgets/email_verification_banner.dart';
 import 'profile_screen.dart';
 import 'review_screen.dart';
@@ -90,7 +90,7 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
         await _repetitionService.initialize().timeout(
           const Duration(seconds: 3),
           onTimeout: () {
-            print('Progress initialization timed out - using defaults');
+            debugPrint('Progress initialization timed out - using defaults');
           },
         );
       }
@@ -119,7 +119,7 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
         });
       }
     } catch (e) {
-      print('Background progress loading failed: $e');
+      debugPrint('Background progress loading failed: $e');
     }
   }
 
@@ -205,10 +205,6 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
     }
   }
 
-  String _getLevelName(int level) {
-    return 'Level $level';
-  }
-
   Color _getLevelColor(int level) {
     switch (level) {
       case 1:
@@ -244,9 +240,10 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
   }
 
   Widget _buildLevelDeckCard(int level, int cardCount, List<Flashcard> cards, {Key? key}) {
+    final loc = context.read<UiLanguageProvider>().loc;
     final isDue = cardCount > 0;
     final totalCards = _allBoxStats[level] ?? 0;
-    final levelName = _getLevelName(level);
+    final levelName = loc.levelName(level);
     final levelColor = _getLevelColor(level);
     final levelIcon = _getLevelIcon(level);
 
@@ -271,13 +268,13 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
       final difference = earliestReview.difference(now);
       
       if (difference.inDays > 0) {
-        availableText = 'Available in ${difference.inDays}d';
+        availableText = loc.dueInDays(difference.inDays);
       } else if (difference.inHours > 0) {
-        availableText = 'Available in ${difference.inHours}h';
+        availableText = loc.dueInHours(difference.inHours);
       } else if (difference.inMinutes > 0) {
-        availableText = 'Available in ${difference.inMinutes}m';
+        availableText = loc.dueInMinutes(difference.inMinutes);
       } else {
-        availableText = 'Available soon';
+        availableText = loc.availableSoon;
       }
     }
 
@@ -349,7 +346,7 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
-                        '$cardCount cards due',
+                        loc.cardsDue(cardCount),
                         style: TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.bold,
@@ -368,7 +365,7 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
-                            '$totalCards cards',
+                            loc.cardsTotal(totalCards),
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
@@ -395,7 +392,7 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
-                        'No cards',
+                        loc.noCards,
                         style: TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.bold,
@@ -417,6 +414,7 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
     ReviewState reviewState, {
     Key? key,
   }) {
+    final loc = context.read<UiLanguageProvider>().loc;
     final deckName = TopicNames.getName(deck.topicKey, widget.baseLanguage);
     final totalCount = deck.cards.length;
     final stats = _deckStats[deck.topicKey] ?? {
@@ -480,7 +478,9 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
-                    isComplete ? 'Complete ✓' : '$cardsLeft cards left',
+                    isComplete 
+                        ? loc.completeCheckmark 
+                        : '${cardsLeft} ${loc.cardsLeft}',
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
@@ -498,34 +498,35 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = context.watch<UiLanguageProvider>().loc;
     final reviewState = context.watch<ReviewState>();
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(UiStrings.selectDeck(widget.baseLanguage)),
+        title: Text(loc.selectDeck),
         backgroundColor: Colors.brown,
         actions: [
           PopupMenuButton<String>(
             icon: const Icon(Icons.more_horiz),
             onSelected: _onMenuSelected,
             itemBuilder: (context) => [
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: 'review',
                 child: Row(
                   children: [
-                    Icon(Icons.rate_review, size: 20),
-                    SizedBox(width: 8),
-                    Text('Review'),
+                    const Icon(Icons.rate_review, size: 20),
+                    const SizedBox(width: 8),
+                    Text(loc.review),
                   ],
                 ),
               ),
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: 'profile',
                 child: Row(
                   children: [
-                    Icon(Icons.person, size: 20),
-                    SizedBox(width: 8),
-                    Text('Profile'),
+                    const Icon(Icons.person, size: 20),
+                    const SizedBox(width: 8),
+                    Text(loc.profile),
                   ],
                 ),
               ),
@@ -571,6 +572,8 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
   }
 
   Widget _buildBody(ReviewState reviewState) {
+    final loc = context.read<UiLanguageProvider>().loc;
+    
     if (_hasError) {
       return Center(
         child: Padding(
@@ -584,13 +587,13 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
                 color: Colors.orange,
               ),
               const SizedBox(height: 16),
-              const Text(
-                'Could not load progress',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              Text(
+                loc.couldNotLoadProgress,
+                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
               Text(
-                'Don\'t worry, your decks are still available!',
+                loc.decksStillAvailable,
                 style: TextStyle(color: Colors.grey.shade600),
                 textAlign: TextAlign.center,
               ),
@@ -608,7 +611,7 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
               ElevatedButton.icon(
                 onPressed: _initializeProgressData,
                 icon: const Icon(Icons.refresh),
-                label: const Text('Retry Loading Progress'),
+                label: Text(loc.retryLoadingProgress),
               ),
               const SizedBox(height: 12),
               TextButton(
@@ -618,7 +621,7 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
                     _isLoading = false;
                   });
                 },
-                child: const Text('Continue Without Progress Data'),
+                child: Text(loc.continueWithoutProgress),
               ),
             ],
           ),
