@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../models/flashcard.dart';
 import '../services/repetition_service.dart';
-import '../utils/ui_strings.dart';
+import '../services/ui_language_provider.dart';
 
 class ReviewScreen extends StatefulWidget {
   final List<Flashcard> cards;
@@ -48,7 +49,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
         });
       }
     } catch (e) {
-      print('Error loading review data: $e');
+      debugPrint('Error loading review data: $e');
       if (mounted) {
         setState(() {
           _isLoading = false;
@@ -86,57 +87,43 @@ class _ReviewScreenState extends State<ReviewScreen> {
     }
   }
 
-  String _getLevelDescription(int level) {
-    switch (level) {
-      case 1:
-        return 'New/Difficult (1 day)';
-      case 2:
-        return 'Learning (2 days)';
-      case 3:
-        return 'Familiar (4 days)';
-      case 4:
-        return 'Known (1 week)';
-      case 5:
-        return 'Mastered (2 weeks)';
-      default:
-        return 'Level $level';
-    }
-  }
-
   String _getNextReviewText(Flashcard card) {
+    final loc = context.read<UiLanguageProvider>().loc;
     final progress = _repetitionService.getProgress(card);
     final nextReview = progress.nextReview;
     final now = DateTime.now();
     final difference = nextReview.difference(now);
 
     if (difference.isNegative) {
-      return 'Due now';
+      return loc.dueNow;
     } else if (difference.inDays > 0) {
-      return 'Due in ${difference.inDays}d';
+      return loc.dueInDays(difference.inDays);
     } else if (difference.inHours > 0) {
-      return 'Due in ${difference.inHours}h';
+      return loc.dueInHours(difference.inHours);
     } else {
-      return 'Due in ${difference.inMinutes}m';
+      return loc.dueInMinutes(difference.inMinutes);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final loc = context.watch<UiLanguageProvider>().loc;
+
     if (_isLoading) {
       return Scaffold(
         appBar: AppBar(
-          title: Text(UiStrings.reviewTitle(widget.baseLanguage)),
+          title: Text(loc.reviewProgress),
           backgroundColor: Colors.brown,
         ),
-        body: const Center(
+        body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              CircularProgressIndicator(
+              const CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(Colors.brown),
               ),
-              SizedBox(height: 16),
-              Text('Loading review data...'),
+              const SizedBox(height: 16),
+              Text(loc.loadingReviewData),
             ],
           ),
         ),
@@ -146,23 +133,23 @@ class _ReviewScreenState extends State<ReviewScreen> {
     if (widget.cards.isEmpty) {
       return Scaffold(
         appBar: AppBar(
-          title: Text(UiStrings.reviewTitle(widget.baseLanguage)),
+          title: Text(loc.reviewProgress),
           backgroundColor: Colors.brown,
         ),
-        body: const Center(
+        body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.inbox_outlined, size: 64, color: Colors.grey),
-              SizedBox(height: 16),
+              const Icon(Icons.inbox_outlined, size: 64, color: Colors.grey),
+              const SizedBox(height: 16),
               Text(
-                'No cards to review yet',
-                style: TextStyle(fontSize: 18, color: Colors.grey),
+                loc.noCardsToReviewYet,
+                style: const TextStyle(fontSize: 18, color: Colors.grey),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Text(
-                'Study some flashcards to see them here',
-                style: TextStyle(color: Colors.grey),
+                loc.studyFlashcardsToSeeHere,
+                style: const TextStyle(color: Colors.grey),
               ),
             ],
           ),
@@ -174,14 +161,14 @@ class _ReviewScreenState extends State<ReviewScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(UiStrings.reviewTitle(widget.baseLanguage)),
+        title: Text(loc.reviewProgress),
         backgroundColor: Colors.brown,
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16),
             child: Center(
               child: Text(
-                '${widget.cards.length} cards',
+                '${widget.cards.length} ${loc.cardsLowercase}',
                 style: const TextStyle(fontSize: 16),
               ),
             ),
@@ -238,7 +225,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              _getLevelDescription(level),
+                              loc.levelDescription(level),
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -246,7 +233,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
                               ),
                             ),
                             Text(
-                              '${levelCards.length} cards',
+                              loc.cardsTotal(levelCards.length),
                               style: TextStyle(
                                 fontSize: 12,
                                 color: levelColor.withOpacity(0.7),
@@ -336,7 +323,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
                                         ),
                                         const SizedBox(width: 2),
                                         Text(
-                                          'Image',
+                                          loc.image,
                                           style: TextStyle(
                                             fontSize: 10,
                                             color: Colors.blue[600],

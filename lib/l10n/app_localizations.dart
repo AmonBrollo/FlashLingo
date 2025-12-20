@@ -379,6 +379,170 @@ class AppLocalizations {
         en: EnglishStrings.weakPassword,
       );
 
+  String get anonymousSignInFailed => _getString(
+        pt: PortugueseStrings.anonymousSignInFailed,
+        en: EnglishStrings.anonymousSignInFailed,
+      );
+
+  String get errorSendingResetEmail => _getString(
+        pt: PortugueseStrings.errorSendingResetEmail,
+        en: EnglishStrings.errorSendingResetEmail,
+      );
+
+  String get loginFailed => _getString(
+        pt: PortugueseStrings.loginFailed,
+        en: EnglishStrings.loginFailed,
+      );
+
+  String get accountDisabled => _getString(
+        pt: PortugueseStrings.accountDisabled,
+        en: EnglishStrings.accountDisabled,
+      );
+
+  String get passwordResetFailed => _getString(
+        pt: PortugueseStrings.passwordResetFailed,
+        en: EnglishStrings.passwordResetFailed,
+      );
+
+  String get checkInboxAndSpam => _getString(
+        pt: PortugueseStrings.checkInboxAndSpam,
+        en: EnglishStrings.checkInboxAndSpam,
+      );
+
+  String get sendResetEmail => _getString(
+        pt: PortugueseStrings.sendResetEmail,
+        en: EnglishStrings.sendResetEmail,
+      );
+
+  String get passwordResetEmailSent => _getString(
+        pt: PortugueseStrings.passwordResetEmailSent,
+        en: EnglishStrings.passwordResetEmailSent,
+      );
+
+  // Profile Screen - Sync Status
+  String get syncCompleted => _getString(
+        pt: PortugueseStrings.syncCompleted,
+        en: EnglishStrings.syncCompleted,
+      );
+
+  String get syncFailed => _getString(
+        pt: PortugueseStrings.syncFailed,
+        en: EnglishStrings.syncFailed,
+      );
+
+  String get syncError => _getString(
+        pt: PortugueseStrings.syncError,
+        en: EnglishStrings.syncError,
+      );
+
+  // Profile Screen - Email Verification
+  String get verificationEmailSent => _getString(
+        pt: PortugueseStrings.verificationEmailSent,
+        en: EnglishStrings.verificationEmailSent,
+      );
+
+  String get failedToSendVerificationEmail => _getString(
+        pt: PortugueseStrings.failedToSendVerificationEmail,
+        en: EnglishStrings.failedToSendVerificationEmail,
+      );
+
+  String get tooManyEmailRequests => _getString(
+        pt: PortugueseStrings.tooManyEmailRequests,
+        en: EnglishStrings.tooManyEmailRequests,
+      );
+
+  String get emailVerifiedSuccessfully => _getString(
+        pt: PortugueseStrings.emailVerifiedSuccessfully,
+        en: EnglishStrings.emailVerifiedSuccessfully,
+      );
+
+  String get emailNotVerifiedYet => _getString(
+        pt: PortugueseStrings.emailNotVerifiedYet,
+        en: EnglishStrings.emailNotVerifiedYet,
+      );
+
+  String get errorCheckingVerification => _getString(
+        pt: PortugueseStrings.errorCheckingVerification,
+        en: EnglishStrings.errorCheckingVerification,
+      );
+
+  // Profile Screen - Data Management
+  String get progressResetSuccessfully => _getString(
+        pt: PortugueseStrings.progressResetSuccessfully,
+        en: EnglishStrings.progressResetSuccessfully,
+      );
+
+  String get errorResettingProgress => _getString(
+        pt: PortugueseStrings.errorResettingProgress,
+        en: EnglishStrings.errorResettingProgress,
+      );
+
+  String get allDataReset => _getString(
+        pt: PortugueseStrings.allDataReset,
+        en: EnglishStrings.allDataReset,
+      );
+
+  String get errorResettingAllData => _getString(
+        pt: PortugueseStrings.errorResettingAllData,
+        en: EnglishStrings.errorResettingAllData,
+      );
+
+  String get imagesCleared => _getString(
+        pt: PortugueseStrings.imagesCleared,
+        en: EnglishStrings.imagesCleared,
+      );
+
+  String get errorClearingImages => _getString(
+        pt: PortugueseStrings.errorClearingImages,
+        en: EnglishStrings.errorClearingImages,
+      );
+
+  String get errorDuringCleanup => _getString(
+        pt: PortugueseStrings.errorDuringCleanup,
+        en: EnglishStrings.errorDuringCleanup,
+      );
+
+  String get cleanupCompleted => _getString(
+        pt: PortugueseStrings.cleanupCompleted,
+        en: EnglishStrings.cleanupCompleted,
+      );
+
+  // Confirmation Messages - Reset All Data
+  String get thisWillPermanentlyDelete => _getString(
+        pt: PortugueseStrings.thisWillPermanentlyDelete,
+        en: EnglishStrings.thisWillPermanentlyDelete,
+      );
+
+  String get learningProgressAndStats => _getString(
+        pt: PortugueseStrings.learningProgressAndStats,
+        en: EnglishStrings.learningProgressAndStats,
+      );
+
+  String get languageAndDeckPrefs => _getString(
+        pt: PortugueseStrings.languageAndDeckPrefs,
+        en: EnglishStrings.languageAndDeckPrefs,
+      );
+
+  String get allFlashcardImages => _getString(
+        pt: PortugueseStrings.allFlashcardImages,
+        en: EnglishStrings.allFlashcardImages,
+      );
+
+  String get accountPreferences => _getString(
+        pt: PortugueseStrings.accountPreferences,
+        en: EnglishStrings.accountPreferences,
+      );
+
+  String get thisCannotBeUndone => _getString(
+        pt: PortugueseStrings.thisCannotBeUndone,
+        en: EnglishStrings.thisCannotBeUndone,
+      );
+
+  String get deleteAllData => _getString(
+        pt: PortugueseStrings.deleteAllData,
+        en: EnglishStrings.deleteAllData,
+      );
+
   // Dynamic strings
   String comeBackIn(int hours, int minutes) {
     return language.code == 'pt'
@@ -546,11 +710,6 @@ class AppLocalizations {
         en: EnglishStrings.syncing,
       );
 
-  String get syncCompleted => _getString(
-        pt: PortugueseStrings.syncCompleted,
-        en: EnglishStrings.syncCompleted,
-      );
-
   String get changesPending => _getString(
         pt: PortugueseStrings.changesPending,
         en: EnglishStrings.changesPending,
@@ -605,11 +764,6 @@ class AppLocalizations {
   String get storageUsed => _getString(
         pt: PortugueseStrings.storageUsed,
         en: EnglishStrings.storageUsed,
-      );
-
-  String get cleanupCompleted => _getString(
-        pt: PortugueseStrings.cleanupCompleted,
-        en: EnglishStrings.cleanupCompleted,
       );
 
   // Confirmation Messages
@@ -780,11 +934,6 @@ class AppLocalizations {
   String get canStartUsingAppNow => _getString(
         pt: PortugueseStrings.canStartUsingAppNow,
         en: EnglishStrings.canStartUsingAppNow,
-      );
-
-  String get verificationEmailSent => _getString(
-        pt: PortugueseStrings.verificationEmailSent,
-        en: EnglishStrings.verificationEmailSent,
       );
 
   String get alreadyHaveAccountForgotPassword => _getString(
@@ -966,6 +1115,60 @@ class AppLocalizations {
   String get audioNotAvailableError => _getString(
         pt: PortugueseStrings.audioNotAvailableError,
         en: EnglishStrings.audioNotAvailableError,
+      );
+
+  // Login Screen specific
+  String get createNewAccount => _getString(
+        pt: PortugueseStrings.createNewAccount,
+        en: EnglishStrings.createNewAccount,
+      );
+
+  // Profile Screen specific
+  String get deleteAll => _getString(
+        pt: PortugueseStrings.deleteAll,
+        en: EnglishStrings.deleteAll,
+      );
+
+  String get errorStartingTutorial => _getString(
+        pt: PortugueseStrings.errorStartingTutorial,
+        en: EnglishStrings.errorStartingTutorial,
+      );
+
+  String get errorLoggingOut => _getString(
+        pt: PortugueseStrings.errorLoggingOut,
+        en: EnglishStrings.errorLoggingOut,
+      );
+
+  // Register Screen specific
+  String get enterAPassword => _getString(
+        pt: PortugueseStrings.enterAPassword,
+        en: EnglishStrings.enterAPassword,
+      );
+
+  String get registrationFailed => _getString(
+        pt: PortugueseStrings.registrationFailed,
+        en: EnglishStrings.registrationFailed,
+      );
+
+  String get operationNotAllowed => _getString(
+        pt: PortugueseStrings.operationNotAllowed,
+        en: EnglishStrings.operationNotAllowed,
+      );
+
+  String get accountCreatedButEmailFailed => _getString(
+        pt: PortugueseStrings.accountCreatedButEmailFailed,
+        en: EnglishStrings.accountCreatedButEmailFailed,
+      );
+
+// Review Screen specific
+  String get loadingReviewData => _getString(
+        pt: PortugueseStrings.loadingReviewData,
+        en: EnglishStrings.loadingReviewData,
+      );
+
+  String get cardsLowercase => _getString(
+        pt: PortugueseStrings.cardsLowercase,
+        en: EnglishStrings.cardsLowercase,
       );
 
   // Convenience properties

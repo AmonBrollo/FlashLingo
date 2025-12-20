@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 import 'dart:async';
 import '../services/app_initialization_service.dart';
 import '../services/local_image_service.dart';
@@ -7,6 +8,7 @@ import '../services/tutorial_service.dart';
 import '../services/firebase_user_preferences.dart';
 import '../services/deck_loader.dart';
 import '../services/sync_service.dart';
+import '../services/ui_language_provider.dart';
 import 'app_router.dart';
 import 'login_screen.dart';
 import 'deck_selector_screen.dart';
@@ -58,7 +60,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         });
       }
     } catch (e) {
-      print('Error loading storage stats: $e');
+      debugPrint('Error loading storage stats: $e');
     }
   }
 
@@ -67,22 +69,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     setState(() => _isManualSyncing = true);
 
+    final loc = context.read<UiLanguageProvider>().loc;
+
     try {
       final result = await SyncService().syncNow();
 
       if (mounted) {
         if (result.success) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
+            SnackBar(
               content: Row(
                 children: [
-                  Icon(Icons.check_circle, color: Colors.white),
-                  SizedBox(width: 8),
-                  Text('Sync completed successfully'),
+                  const Icon(Icons.check_circle, color: Colors.white),
+                  const SizedBox(width: 8),
+                  Text(loc.syncCompleted),
                 ],
               ),
               backgroundColor: Colors.green,
-              duration: Duration(seconds: 2),
+              duration: const Duration(seconds: 2),
             ),
           );
         } else {
@@ -93,7 +97,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const Icon(Icons.error_outline, color: Colors.white),
                   const SizedBox(width: 8),
                   Expanded(
-                    child: Text(result.reason ?? 'Sync failed'),
+                    child: Text(result.reason ?? loc.syncFailed),
                   ),
                 ],
               ),
@@ -105,13 +109,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
       }
     } catch (e) {
       if (mounted) {
+        final errorLoc = context.read<UiLanguageProvider>().loc;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Row(
               children: [
                 const Icon(Icons.error, color: Colors.white),
                 const SizedBox(width: 8),
-                Expanded(child: Text('Sync error: $e')),
+                Expanded(child: Text('${errorLoc.syncError}: $e')),
               ],
             ),
             backgroundColor: Colors.red,
@@ -150,16 +155,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   String _getSyncStatusText() {
+    final loc = context.read<UiLanguageProvider>().loc;
+    
     switch (_currentSyncStatus) {
       case SyncStatus.syncing:
-        return 'Syncing...';
+        return loc.syncing;
       case SyncStatus.synced:
         return SyncService().getSyncStatusText();
       case SyncStatus.error:
-        return 'Sync error';
+        return loc.syncError;
       case SyncStatus.idle:
         if (SyncService().hasPendingChanges) {
-          return 'Changes pending';
+          return loc.changesPending;
         }
         return SyncService().getSyncStatusText();
     }
@@ -184,6 +191,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Future<void> _resendVerificationEmail() async {
     setState(() => _isResendingVerification = true);
 
+    final loc = context.read<UiLanguageProvider>().loc;
+
     try {
       final user = FirebaseAuth.instance.currentUser;
       if (user != null && !user.emailVerified) {
@@ -191,21 +200,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Verification email sent! Check your inbox.'),
+            SnackBar(
+              content: Text(loc.verificationEmailSent),
               backgroundColor: Colors.green,
-              duration: Duration(seconds: 4),
+              duration: const Duration(seconds: 4),
             ),
           );
         }
       }
     } on FirebaseAuthException catch (e) {
       if (mounted) {
-        String errorMessage = 'Failed to send verification email';
+        final errorLoc = context.read<UiLanguageProvider>().loc;
+        String errorMessage = errorLoc.failedToSendVerificationEmail;
 
         switch (e.code) {
           case 'too-many-requests':
-            errorMessage = 'Too many requests. Please try again later.';
+            errorMessage = errorLoc.tooManyEmailRequests;
             break;
           default:
             errorMessage = e.message ?? errorMessage;
@@ -228,6 +238,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Future<void> _checkEmailVerification() async {
     setState(() => _isLoading = true);
 
+    final loc = context.read<UiLanguageProvider>().loc;
+
     try {
       final user = FirebaseAuth.instance.currentUser;
       if (user != null) {
@@ -239,17 +251,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
           if (updatedUser?.emailVerified == true) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Email verified successfully! 🎉'),
+              SnackBar(
+                content: Text(loc.emailVerifiedSuccessfully),
                 backgroundColor: Colors.green,
               ),
             );
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text(
-                  'Email not verified yet. Please check your inbox.',
-                ),
+              SnackBar(
+                content: Text(loc.emailNotVerifiedYet),
                 backgroundColor: Colors.orange,
               ),
             );
@@ -258,9 +268,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       }
     } catch (e) {
       if (mounted) {
+        final errorLoc = context.read<UiLanguageProvider>().loc;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error checking verification: $e'),
+            content: Text('${errorLoc.errorCheckingVerification}: $e'),
             backgroundColor: Colors.red,
           ),
         );
@@ -273,6 +284,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _replayTutorial() async {
+    final loc = context.read<UiLanguageProvider>().loc;
+    
     try {
       // Reset tutorial state
       await TutorialService.resetTutorial();
@@ -283,28 +296,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
       final confirmed = await showDialog<bool>(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Row(
+          title: Row(
             children: [
-              Icon(Icons.school, color: Colors.brown, size: 28),
-              SizedBox(width: 12),
-              Text('Tutorial'),
+              const Icon(Icons.school, color: Colors.brown, size: 28),
+              const SizedBox(width: 12),
+              Text(loc.viewTutorial),
             ],
           ),
-          content: const Text(
-            'The tutorial will start from the deck selector screen.\n\n'
-            'You can skip it anytime by tapping the "Skip" button.',
-          ),
+          content: Text(loc.tutorialWillStart),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: const Text('Cancel'),
+              child: Text(loc.cancel),
             ),
             ElevatedButton(
               onPressed: () => Navigator.pop(context, true),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.brown,
               ),
-              child: const Text('Start Tutorial'),
+              child: Text(loc.startTutorial),
             ),
           ],
         ),
@@ -334,9 +344,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       );
     } catch (e) {
       if (!mounted) return;
+      final errorLoc = context.read<UiLanguageProvider>().loc;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Error starting tutorial: $e'),
+          content: Text('${errorLoc.errorStartingTutorial}: $e'),
           backgroundColor: Colors.red,
         ),
       );
@@ -344,20 +355,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _logout(BuildContext context) async {
+    final loc = context.read<UiLanguageProvider>().loc;
+    
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Logout'),
-        content: const Text('Are you sure you want to logout?'),
+        title: Text(loc.logout),
+        content: Text(loc.logoutConfirm),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text(loc.cancel),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
             style: TextButton.styleFrom(foregroundColor: Colors.brown),
-            child: const Text('Logout'),
+            child: Text(loc.logout),
           ),
         ],
       ),
@@ -378,9 +391,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       }
     } catch (e) {
       if (mounted) {
+        final errorLoc = context.read<UiLanguageProvider>().loc;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error logging out: $e'),
+            content: Text('${errorLoc.errorLoggingOut}: $e'),
             backgroundColor: Colors.red,
           ),
         );
@@ -401,23 +415,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _resetProgress() async {
+    final loc = context.read<UiLanguageProvider>().loc;
+    
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Reset Progress'),
-        content: const Text(
-          'Are you sure you want to reset all your learning progress? '
-          'This action cannot be undone.',
+        title: Text(loc.resetProgress),
+        content: Text(
+          '${loc.areYouSure} ${loc.cannotBeUndone}',
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text(loc.cancel),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
             style: TextButton.styleFrom(foregroundColor: Colors.red),
-            child: const Text('Reset'),
+            child: Text(loc.resetProgress),
           ),
         ],
       ),
@@ -430,18 +445,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
         await AppInitializationService.clearLocalData();
 
         if (mounted) {
+          final successLoc = context.read<UiLanguageProvider>().loc;
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Progress reset successfully'),
+            SnackBar(
+              content: Text(successLoc.progressResetSuccessfully),
               backgroundColor: Colors.green,
             ),
           );
         }
       } catch (e) {
         if (mounted) {
+          final errorLoc = context.read<UiLanguageProvider>().loc;
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Error resetting progress: $e'),
+              content: Text('${errorLoc.errorResettingProgress}: $e'),
               backgroundColor: Colors.red,
             ),
           );
@@ -455,23 +472,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _resetAllData() async {
+    final loc = context.read<UiLanguageProvider>().loc;
+    
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Reset All Data'),
+        title: Text(loc.resetAllData),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'This will permanently delete ALL your data:',
-              style: TextStyle(fontWeight: FontWeight.bold),
+            Text(
+              loc.thisWillPermanentlyDelete,
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
-            const Text('• Learning progress and statistics'),
-            const Text('• Language and deck preferences'),
-            const Text('• All flashcard images'),
-            const Text('• Account preferences'),
+            Text(loc.learningProgressAndStats),
+            Text(loc.languageAndDeckPrefs),
+            Text(loc.allFlashcardImages),
+            Text(loc.accountPreferences),
             const SizedBox(height: 12),
             Container(
               padding: const EdgeInsets.all(8),
@@ -480,9 +499,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(color: Colors.red[200]!),
               ),
-              child: const Text(
-                '⚠️ THIS CANNOT BE UNDONE',
-                style: TextStyle(
+              child: Text(
+                loc.thisCannotBeUndone,
+                style: const TextStyle(
                   color: Colors.red,
                   fontWeight: FontWeight.bold,
                 ),
@@ -491,7 +510,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             const SizedBox(height: 8),
             if (_storageStats != null)
               Text(
-                'This will free up ${_storageStats!['totalSizeMB']} MB of storage space.',
+                loc.freeUpStorage(_storageStats!['totalSizeMB'].toString()),
                 style: TextStyle(fontSize: 12, color: Colors.grey[600]),
               ),
           ],
@@ -499,7 +518,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text(loc.cancel),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
@@ -507,7 +526,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               foregroundColor: Colors.white,
               backgroundColor: Colors.red,
             ),
-            child: const Text('DELETE ALL DATA'),
+            child: Text(loc.deleteAllData),
           ),
         ],
       ),
@@ -522,11 +541,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
         await _loadStorageStats();
 
         if (mounted) {
+          final successLoc = context.read<UiLanguageProvider>().loc;
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('All data has been reset'),
+            SnackBar(
+              content: Text(successLoc.allDataReset),
               backgroundColor: Colors.green,
-              duration: Duration(seconds: 3),
+              duration: const Duration(seconds: 3),
             ),
           );
 
@@ -538,9 +558,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         }
       } catch (e) {
         if (mounted) {
+          final errorLoc = context.read<UiLanguageProvider>().loc;
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Error resetting all data: $e'),
+              content: Text('${errorLoc.errorResettingAllData}: $e'),
               backgroundColor: Colors.red,
             ),
           );
@@ -554,22 +575,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _clearImages() async {
+    final loc = context.read<UiLanguageProvider>().loc;
+    
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Clear All Images'),
+        title: Text(loc.clearAllImages),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Are you sure you want to delete all flashcard images? '
-              'This action cannot be undone.',
+            Text(
+              '${loc.areYouSure} ${loc.cannotBeUndone}',
             ),
             const SizedBox(height: 8),
             if (_storageStats != null) ...[
               Text(
-                'This will free up ${_storageStats!['totalSizeMB']} MB of storage space.',
+                loc.freeUpStorage(_storageStats!['totalSizeMB'].toString()),
                 style: TextStyle(fontSize: 12, color: Colors.grey[600]),
               ),
             ],
@@ -578,12 +600,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text(loc.cancel),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
             style: TextButton.styleFrom(foregroundColor: Colors.red),
-            child: const Text('Delete All'),
+            child: Text(loc.deleteAll),
           ),
         ],
       ),
@@ -597,18 +619,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
         await _loadStorageStats();
 
         if (mounted) {
+          final successLoc = context.read<UiLanguageProvider>().loc;
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('All images cleared successfully'),
+            SnackBar(
+              content: Text(successLoc.imagesCleared),
               backgroundColor: Colors.green,
             ),
           );
         }
       } catch (e) {
         if (mounted) {
+          final errorLoc = context.read<UiLanguageProvider>().loc;
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Error clearing images: $e'),
+              content: Text('${errorLoc.errorClearingImages}: $e'),
               backgroundColor: Colors.red,
             ),
           );
@@ -624,23 +648,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Future<void> _cleanupImages() async {
     setState(() => _isLoading = true);
 
+    final loc = context.read<UiLanguageProvider>().loc;
+
     try {
       await LocalImageService.cleanupOrphanedImages();
       await _loadStorageStats();
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Cleanup completed'),
+          SnackBar(
+            content: Text(loc.cleanupCompleted),
             backgroundColor: Colors.green,
           ),
         );
       }
     } catch (e) {
       if (mounted) {
+        final errorLoc = context.read<UiLanguageProvider>().loc;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error during cleanup: $e'),
+            content: Text('${errorLoc.errorDuringCleanup}: $e'),
             backgroundColor: Colors.red,
           ),
         );
@@ -657,10 +684,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final user = FirebaseAuth.instance.currentUser;
     final isAnonymous = user?.isAnonymous ?? true;
     final isEmailVerified = user?.emailVerified ?? false;
+    final loc = context.watch<UiLanguageProvider>().loc;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile'),
+        title: Text(loc.profile),
         backgroundColor: Colors.brown,
       ),
       body: _isLoading
@@ -694,8 +722,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   children: [
                                     Text(
                                       isAnonymous
-                                          ? 'Anonymous User'
-                                          : 'Logged In',
+                                          ? loc.anonymousUser
+                                          : loc.loggedIn,
                                       style: const TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold,
@@ -735,8 +763,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 Expanded(
                                   child: Text(
                                     isEmailVerified
-                                        ? 'Email Verified'
-                                        : 'Email Not Verified',
+                                        ? loc.emailVerified
+                                        : loc.emailNotVerified,
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: isEmailVerified
@@ -762,7 +790,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Please verify your email address to secure your account.',
+                                      loc.pleaseVerifyEmail,
                                       style: TextStyle(
                                         fontSize: 13,
                                         color: Colors.orange[900],
@@ -787,7 +815,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   )
                                                 : const Icon(Icons.email,
                                                     size: 18),
-                                            label: const Text('Resend Email'),
+                                            label: Text(loc.resendEmail),
                                             style: OutlinedButton.styleFrom(
                                               foregroundColor:
                                                   Colors.orange[900],
@@ -804,7 +832,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 _checkEmailVerification,
                                             icon: const Icon(Icons.refresh,
                                                 size: 18),
-                                            label: const Text('I Verified'),
+                                            label: Text(loc.iVerified),
                                             style: ElevatedButton.styleFrom(
                                               backgroundColor:
                                                   Colors.orange[700],
@@ -829,9 +857,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ? ElevatedButton.icon(
                                     onPressed: () => _login(context),
                                     icon: const Icon(Icons.login),
-                                    label: const Text(
-                                      'Sign In to Save Progress',
-                                    ),
+                                    label: Text(loc.signInToSaveProgress),
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.brown,
                                       foregroundColor: Colors.white,
@@ -846,7 +872,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 : OutlinedButton.icon(
                                     onPressed: () => _logout(context),
                                     icon: const Icon(Icons.logout),
-                                    label: const Text('Sign Out'),
+                                    label: Text(loc.signOut),
                                     style: OutlinedButton.styleFrom(
                                       foregroundColor: Colors.brown,
                                       side: const BorderSide(
@@ -882,7 +908,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   const SizedBox(width: 8),
                                   Expanded(
                                     child: Text(
-                                      'Sign in to sync your progress across devices',
+                                      loc.signInToSync,
                                       style: TextStyle(
                                         fontSize: 12,
                                         color: Colors.blue[900],
@@ -918,9 +944,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      const Text(
-                                        'Sync Status',
-                                        style: TextStyle(
+                                      Text(
+                                        loc.syncStatus,
+                                        style: const TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
                                         ),
@@ -955,7 +981,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           ),
                                         )
                                       : const Icon(Icons.sync, size: 18),
-                                  label: const Text('Sync Now'),
+                                  label: Text(loc.syncNow),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.blue,
                                     foregroundColor: Colors.white,
@@ -985,7 +1011,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   const SizedBox(width: 8),
                                   Expanded(
                                     child: Text(
-                                      'Your progress syncs automatically across devices',
+                                      loc.progressSyncsAutomatically,
                                       style: TextStyle(
                                         fontSize: 12,
                                         color: Colors.blue[900],
@@ -1010,9 +1036,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                              'Storage Usage',
-                              style: TextStyle(
+                            Text(
+                              loc.storageUsage,
+                              style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -1021,15 +1047,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Text('Images:'),
-                                Text('${_storageStats!['fileCount']} files'),
+                                Text('${loc.images}:'),
+                                Text('${_storageStats!['fileCount']} ${loc.files}'),
                               ],
                             ),
                             const SizedBox(height: 4),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Text('Storage used:'),
+                                Text('${loc.storageUsed}:'),
                                 Text('${_storageStats!['totalSizeMB']} MB'),
                               ],
                             ),
@@ -1052,11 +1078,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       child: const Icon(Icons.school, color: Colors.brown),
                     ),
-                    title: const Text(
-                      'View Tutorial',
-                      style: TextStyle(fontWeight: FontWeight.w500),
+                    title: Text(
+                      loc.viewTutorial,
+                      style: const TextStyle(fontWeight: FontWeight.w500),
                     ),
-                    subtitle: const Text('Learn how to use FlashLango'),
+                    subtitle: Text(loc.learnHowToUse),
                     trailing: const Icon(Icons.play_circle_outline),
                     onTap: _replayTutorial,
                   ),
@@ -1065,9 +1091,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const Divider(),
                   const SizedBox(height: 24),
 
-                  const Text(
-                    'Data Management',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  Text(
+                    loc.dataManagement,
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 12),
 
@@ -1077,7 +1103,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: ElevatedButton.icon(
                       onPressed: _cleanupImages,
                       icon: const Icon(Icons.cleaning_services),
-                      label: const Text('Cleanup Unused Images'),
+                      label: Text(loc.cleanupUnusedImages),
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.blue[700],
                         backgroundColor: Colors.blue[50],
@@ -1091,7 +1117,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: ElevatedButton.icon(
                       onPressed: _clearImages,
                       icon: const Icon(Icons.delete_sweep),
-                      label: const Text('Clear All Images'),
+                      label: Text(loc.clearAllImages),
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.orange[700],
                         backgroundColor: Colors.orange[50],
@@ -1106,7 +1132,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: ElevatedButton.icon(
                       onPressed: _resetProgress,
                       icon: const Icon(Icons.refresh),
-                      label: const Text('Reset Learning Progress'),
+                      label: Text(loc.resetProgress),
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.red,
                         backgroundColor: Colors.red[50],
@@ -1121,7 +1147,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: ElevatedButton.icon(
                       onPressed: _resetAllData,
                       icon: const Icon(Icons.warning),
-                      label: const Text('Reset All Data'),
+                      label: Text(loc.resetAllData),
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.white,
                         backgroundColor: Colors.red[700],
@@ -1130,10 +1156,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
 
                   const SizedBox(height: 32),
-                  const Center(
+                  Center(
                     child: Text(
-                      'FlashLango',
-                      style: TextStyle(fontSize: 16, color: Colors.grey),
+                      loc.flashLango,
+                      style: const TextStyle(fontSize: 16, color: Colors.grey),
                     ),
                   ),
                   const SizedBox(height: 16),

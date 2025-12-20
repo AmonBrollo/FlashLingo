@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
+import '../services/ui_language_provider.dart';
 import 'register_screen.dart';
 import 'app_router.dart';
 
@@ -21,6 +23,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
     setState(() => _isLoading = true);
 
+    final loc = context.read<UiLanguageProvider>().loc;
+
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: _emailController.text.trim(),
@@ -34,12 +38,10 @@ class _LoginScreenState extends State<LoginScreen> {
       if (user != null && !user.emailVerified) {
         // Show info but allow them to continue
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-              'Please verify your email. Check your inbox for the verification link.',
-            ),
+          SnackBar(
+            content: Text(loc.pleaseVerifyEmail),
             backgroundColor: Colors.orange,
-            duration: Duration(seconds: 4),
+            duration: const Duration(seconds: 4),
           ),
         );
       }
@@ -48,26 +50,26 @@ class _LoginScreenState extends State<LoginScreen> {
         MaterialPageRoute(builder: (_) => const AppRouter()),
       );
     } on FirebaseAuthException catch (e) {
-      String errorMessage = 'Login failed. Please try again.';
+      String errorMessage = loc.loginFailed;
 
       switch (e.code) {
         case 'user-not-found':
-          errorMessage = 'No account found with this email.';
+          errorMessage = loc.noAccountFound;
           break;
         case 'wrong-password':
-          errorMessage = 'Incorrect password.';
+          errorMessage = loc.incorrectPassword;
           break;
         case 'invalid-email':
-          errorMessage = 'Invalid email address.';
+          errorMessage = loc.invalidEmail;
           break;
         case 'user-disabled':
-          errorMessage = 'This account has been disabled.';
+          errorMessage = loc.accountDisabled;
           break;
         case 'too-many-requests':
-          errorMessage = 'Too many failed attempts. Please try again later.';
+          errorMessage = loc.tooManyRequests;
           break;
         case 'invalid-credential':
-          errorMessage = 'Invalid email or password.';
+          errorMessage = loc.invalidCredential;
           break;
         default:
           errorMessage = e.message ?? errorMessage;
@@ -80,18 +82,19 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _resetPassword() async {
+    final loc = context.read<UiLanguageProvider>().loc;
     final email = _emailController.text.trim();
 
     // Validate email first
     if (email.isEmpty) {
-      _showError("Please enter your email address first");
+      _showError(loc.pleaseEnterEmailFirst);
       return;
     }
 
     // Basic email validation
     final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
     if (!emailRegex.hasMatch(email)) {
-      _showError("Please enter a valid email address");
+      _showError(loc.enterValidEmail);
       return;
     }
 
@@ -99,19 +102,18 @@ class _LoginScreenState extends State<LoginScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Reset Password'),
+        title: Text(loc.resetPassword),
         content: Text(
-          'A password reset link will be sent to:\n\n$email\n\n'
-          'Please check your email inbox and spam folder.',
+          '${loc.passwordResetLinkWillBeSent}\n\n$email\n\n${loc.checkEmailInboxAndSpam}',
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text(loc.cancel),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Send Reset Email'),
+            child: Text(loc.sendResetEmail),
           ),
         ],
       ),
@@ -134,26 +136,26 @@ class _LoginScreenState extends State<LoginScreen> {
       if (!mounted) return;
       Navigator.pop(context); // Close loading dialog
 
+      final dialogLoc = context.read<UiLanguageProvider>().loc;
+
       // Show success dialog
       await showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Row(
+          title: Row(
             children: [
-              Icon(Icons.check_circle, color: Colors.green, size: 28),
-              SizedBox(width: 12),
-              Text('Email Sent!'),
+              const Icon(Icons.check_circle, color: Colors.green, size: 28),
+              const SizedBox(width: 12),
+              Text(dialogLoc.emailSent),
             ],
           ),
           content: Text(
-            'Password reset email has been sent to:\n\n$email\n\n'
-            'Please check your inbox and spam folder. '
-            'The link will expire in 1 hour.',
+            '${dialogLoc.passwordResetEmailSent}\n\n$email\n\n${dialogLoc.checkInboxAndSpam}',
           ),
           actions: [
             ElevatedButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('OK'),
+              child: Text(dialogLoc.ok),
             ),
           ],
         ),
@@ -162,34 +164,38 @@ class _LoginScreenState extends State<LoginScreen> {
       if (!mounted) return;
       Navigator.pop(context); // Close loading dialog
 
-      String errorMessage = 'Error sending reset email';
+      final errorLoc = context.read<UiLanguageProvider>().loc;
+      String errorMessage = errorLoc.errorSendingResetEmail;
 
       switch (e.code) {
         case 'user-not-found':
-          errorMessage = 'No account found with this email address.';
+          errorMessage = errorLoc.noAccountFound;
           break;
         case 'invalid-email':
-          errorMessage = 'Invalid email address format.';
+          errorMessage = errorLoc.invalidEmail;
           break;
         case 'too-many-requests':
-          errorMessage = 'Too many requests. Please try again later.';
+          errorMessage = errorLoc.tooManyRequests;
           break;
         default:
           errorMessage = e.message ?? errorMessage;
       }
 
-      _showErrorDialog('Password Reset Failed', errorMessage);
+      _showErrorDialog(errorLoc.passwordResetFailed, errorMessage);
     } catch (e) {
       if (!mounted) return;
       Navigator.pop(context); // Close loading dialog
+      
+      final errorLoc = context.read<UiLanguageProvider>().loc;
       _showErrorDialog(
-        'Error',
-        'An unexpected error occurred. Please try again.',
+        errorLoc.error,
+        errorLoc.unexpectedError,
       );
     }
   }
 
   Future<void> _skipLogin() async {
+    final loc = context.read<UiLanguageProvider>().loc;
     setState(() => _isLoading = true);
 
     try {
@@ -200,7 +206,7 @@ class _LoginScreenState extends State<LoginScreen> {
         MaterialPageRoute(builder: (_) => const AppRouter()),
       );
     } on FirebaseAuthException catch (e) {
-      _showError(e.message ?? 'Anonymous sign-in failed');
+      _showError(e.message ?? loc.anonymousSignInFailed);
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
@@ -219,6 +225,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _showErrorDialog(String title, String message) {
     if (!mounted) return;
+    final loc = context.read<UiLanguageProvider>().loc;
+    
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -227,7 +235,7 @@ class _LoginScreenState extends State<LoginScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('OK'),
+            child: Text(loc.ok),
           ),
         ],
       ),
@@ -244,6 +252,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final loc = context.watch<UiLanguageProvider>().loc;
 
     return Scaffold(
       body: Center(
@@ -258,7 +267,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Icon(Icons.school, size: 64, color: theme.colorScheme.primary),
                 const SizedBox(height: 16),
                 Text(
-                  "FlashLango",
+                  loc.flashLango,
                   textAlign: TextAlign.center,
                   style: theme.textTheme.headlineMedium?.copyWith(
                     fontWeight: FontWeight.bold,
@@ -266,7 +275,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  "Welcome back!",
+                  loc.welcomeBack,
                   textAlign: TextAlign.center,
                   style: theme.textTheme.bodyLarge?.copyWith(
                     color: Colors.grey.shade600,
@@ -278,18 +287,18 @@ class _LoginScreenState extends State<LoginScreen> {
                 TextFormField(
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: "Email",
-                    prefixIcon: Icon(Icons.email),
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    labelText: loc.email,
+                    prefixIcon: const Icon(Icons.email),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return "Enter your email";
+                      return loc.enterEmail;
                     }
                     if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
                         .hasMatch(value)) {
-                      return "Enter a valid email";
+                      return loc.enterValidEmail;
                     }
                     return null;
                   },
@@ -300,14 +309,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 TextFormField(
                   controller: _passwordController,
                   obscureText: true,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: "Password",
-                    prefixIcon: Icon(Icons.lock),
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    labelText: loc.password,
+                    prefixIcon: const Icon(Icons.lock),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return "Enter your password";
+                      return loc.enterPassword;
                     }
                     return null;
                   },
@@ -319,7 +328,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   alignment: Alignment.centerRight,
                   child: TextButton(
                     onPressed: _resetPassword,
-                    child: const Text("Forgot password?"),
+                    child: Text(loc.forgotPassword),
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -332,7 +341,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: ElevatedButton.styleFrom(
                           minimumSize: const Size(double.infinity, 48),
                         ),
-                        child: const Text("Login"),
+                        child: Text(loc.login),
                       ),
                 const SizedBox(height: 16),
 
@@ -343,7 +352,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Text(
-                        "OR",
+                        loc.or,
                         style: TextStyle(color: Colors.grey.shade600),
                       ),
                     ),
@@ -362,14 +371,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   style: OutlinedButton.styleFrom(
                     minimumSize: const Size(double.infinity, 48),
                   ),
-                  child: const Text("Create New Account"),
+                  child: Text(loc.createNewAccount),
                 ),
                 const SizedBox(height: 12),
 
                 // Skip login
                 TextButton(
                   onPressed: _skipLogin,
-                  child: const Text("Continue without account"),
+                  child: Text(loc.continueWithoutAccount),
                 ),
               ],
             ),

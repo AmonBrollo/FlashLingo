@@ -331,4 +331,19 @@ class PortugueseStrings {
   // Flashcard Screen specific
   static const String left = 'restantes';
   static const String audioNotAvailableError = 'Áudio não disponível';
+
+  // Login Screen specific
+  static const String createNewAccount = 'Criar nova conta';
+  
+  // Profile Screen specific
+  static const String deleteAll = 'Deletar Tudo';
+  static const String errorStartingTutorial = 'Erro inicializando tutorial';
+  static const String errorLoggingOut = 'Err ao sair';
+  
+  // Register Screen specific
+  static const String enterAPassword = 'Coloque uma senha';
+  static const String operationNotAllowed = 'Email/senha não ativo.';
+
+  // Review Screen specific
+  static const String cardsLowercase = 'cartas';
 }

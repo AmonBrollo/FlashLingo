@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
+import '../services/ui_language_provider.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -20,10 +22,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Future<void> _register() async {
     if (!_formKey.currentState!.validate()) return;
 
+    final loc = context.read<UiLanguageProvider>().loc;
+
     // Check password match
     if (_passwordController.text.trim() !=
         _confirmPasswordController.text.trim()) {
-      _showError("Passwords do not match");
+      _showError(loc.passwordsDoNotMatch);
       return;
     }
 
@@ -44,30 +48,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
           
           if (!mounted) return;
 
+          final dialogLoc = context.read<UiLanguageProvider>().loc;
+
           // Show success dialog with verification info
           await showDialog(
             context: context,
             barrierDismissible: false,
             builder: (context) => AlertDialog(
-              title: const Row(
+              title: Row(
                 children: [
-                  Icon(Icons.check_circle, color: Colors.green, size: 28),
-                  SizedBox(width: 12),
-                  Text('Account Created!'),
+                  const Icon(Icons.check_circle, color: Colors.green, size: 28),
+                  const SizedBox(width: 12),
+                  Text(dialogLoc.accountCreated),
                 ],
               ),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Your account has been created successfully.',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                  Text(
+                    dialogLoc.accountCreatedSuccessfully,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 12),
-                  const Text(
-                    'We\'ve sent a verification email to:',
-                  ),
+                  Text(dialogLoc.verificationEmailSentTo),
                   const SizedBox(height: 8),
                   Container(
                     padding: const EdgeInsets.all(8),
@@ -84,9 +88,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
                   const SizedBox(height: 12),
-                  const Text(
-                    'Please check your inbox and spam folder to verify your email address.',
-                    style: TextStyle(fontSize: 13),
+                  Text(
+                    dialogLoc.pleaseCheckInboxToVerify,
+                    style: const TextStyle(fontSize: 13),
                   ),
                   const SizedBox(height: 8),
                   Container(
@@ -105,7 +109,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
-                            'You can start using the app now. Verification is optional but recommended.',
+                            dialogLoc.canStartUsingAppNow,
                             style: TextStyle(
                               fontSize: 12,
                               color: Colors.green[900],
@@ -123,25 +127,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     Navigator.pop(context);
                     Navigator.of(context).pop(); // Go back to login
                   },
-                  child: const Text('Continue to Login'),
+                  child: Text(dialogLoc.continueToLogin),
                 ),
               ],
             ),
           );
         } catch (e) {
           // If verification email fails, still allow registration
-          print('Failed to send verification email: $e');
+          debugPrint('Failed to send verification email: $e');
           
           if (!mounted) return;
           
+          final errorLoc = context.read<UiLanguageProvider>().loc;
+          
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text(
-                'Account created! However, verification email could not be sent. '
-                'You can resend it from your profile.',
-              ),
+            SnackBar(
+              content: Text(errorLoc.accountCreatedButEmailFailed),
               backgroundColor: Colors.orange,
-              duration: Duration(seconds: 5),
+              duration: const Duration(seconds: 5),
             ),
           );
           
@@ -149,20 +152,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
         }
       }
     } on FirebaseAuthException catch (e) {
-      String errorMessage = 'Registration failed';
+      final errorLoc = context.read<UiLanguageProvider>().loc;
+      String errorMessage = errorLoc.registrationFailed;
 
       switch (e.code) {
         case 'email-already-in-use':
-          errorMessage = 'An account already exists with this email.';
+          errorMessage = errorLoc.emailAlreadyInUse;
           break;
         case 'invalid-email':
-          errorMessage = 'Invalid email address.';
+          errorMessage = errorLoc.invalidEmail;
           break;
         case 'operation-not-allowed':
-          errorMessage = 'Email/password accounts are not enabled.';
+          errorMessage = errorLoc.operationNotAllowed;
           break;
         case 'weak-password':
-          errorMessage = 'Password is too weak. Use at least 6 characters.';
+          errorMessage = errorLoc.weakPassword;
           break;
         default:
           errorMessage = e.message ?? errorMessage;
@@ -175,35 +179,35 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Future<void> _resetPassword() async {
+    final loc = context.read<UiLanguageProvider>().loc;
     final email = _emailController.text.trim();
 
     if (email.isEmpty) {
-      _showError("Please enter your email address first");
+      _showError(loc.pleaseEnterEmailFirst);
       return;
     }
 
     final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
     if (!emailRegex.hasMatch(email)) {
-      _showError("Please enter a valid email address");
+      _showError(loc.enterValidEmail);
       return;
     }
 
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Reset Password'),
+        title: Text(loc.resetPassword),
         content: Text(
-          'A password reset link will be sent to:\n\n$email\n\n'
-          'Check your email inbox and spam folder.',
+          '${loc.passwordResetLinkWillBeSent}\n\n$email\n\n${loc.checkEmailInboxAndSpam}',
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text(loc.cancel),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Send Reset Email'),
+            child: Text(loc.sendResetEmail),
           ),
         ],
       ),
@@ -218,37 +222,39 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
       if (!mounted) return;
 
+      final successLoc = context.read<UiLanguageProvider>().loc;
+
       await showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Row(
+          title: Row(
             children: [
-              Icon(Icons.check_circle, color: Colors.green, size: 28),
-              SizedBox(width: 12),
-              Text('Email Sent!'),
+              const Icon(Icons.check_circle, color: Colors.green, size: 28),
+              const SizedBox(width: 12),
+              Text(successLoc.emailSent),
             ],
           ),
           content: Text(
-            'Password reset email sent to:\n\n$email\n\n'
-            'Check your inbox and spam folder.',
+            '${successLoc.passwordResetEmailSent}\n\n$email\n\n${successLoc.checkInboxAndSpam}',
           ),
           actions: [
             ElevatedButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('OK'),
+              child: Text(successLoc.ok),
             ),
           ],
         ),
       );
     } on FirebaseAuthException catch (e) {
-      String errorMessage = 'Error sending reset email';
+      final errorLoc = context.read<UiLanguageProvider>().loc;
+      String errorMessage = errorLoc.errorSendingResetEmail;
 
       switch (e.code) {
         case 'user-not-found':
-          errorMessage = 'No account found with this email.';
+          errorMessage = errorLoc.noAccountFound;
           break;
         case 'invalid-email':
-          errorMessage = 'Invalid email address.';
+          errorMessage = errorLoc.invalidEmail;
           break;
         default:
           errorMessage = e.message ?? errorMessage;
@@ -282,9 +288,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final loc = context.watch<UiLanguageProvider>().loc;
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Create Account")),
+      appBar: AppBar(title: Text(loc.createAccount)),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
@@ -300,7 +307,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  "Join FlashLango",
+                  loc.joinFlashLango,
                   textAlign: TextAlign.center,
                   style: theme.textTheme.headlineSmall?.copyWith(
                     fontWeight: FontWeight.bold,
@@ -308,7 +315,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  "Start learning languages today",
+                  loc.startLearning,
                   textAlign: TextAlign.center,
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: Colors.grey.shade600,
@@ -320,18 +327,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 TextFormField(
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: "Email",
-                    prefixIcon: Icon(Icons.email),
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    labelText: loc.email,
+                    prefixIcon: const Icon(Icons.email),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return "Enter your email";
+                      return loc.enterEmail;
                     }
                     if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
                         .hasMatch(value)) {
-                      return "Enter a valid email";
+                      return loc.enterValidEmail;
                     }
                     return null;
                   },
@@ -344,7 +351,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   obscureText: _obscurePassword,
                   decoration: InputDecoration(
                     border: const OutlineInputBorder(),
-                    labelText: "Password",
+                    labelText: loc.password,
                     prefixIcon: const Icon(Icons.lock),
                     suffixIcon: IconButton(
                       icon: Icon(
@@ -359,10 +366,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return "Enter a password";
+                      return loc.enterAPassword;
                     }
                     if (value.length < 6) {
-                      return "Password must be at least 6 characters";
+                      return loc.passwordTooShort;
                     }
                     return null;
                   },
@@ -375,7 +382,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   obscureText: _obscureConfirmPassword,
                   decoration: InputDecoration(
                     border: const OutlineInputBorder(),
-                    labelText: "Confirm Password",
+                    labelText: loc.confirmPassword,
                     prefixIcon: const Icon(Icons.lock_outline),
                     suffixIcon: IconButton(
                       icon: Icon(
@@ -393,10 +400,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return "Confirm your password";
+                      return loc.confirmYourPassword;
                     }
                     if (value != _passwordController.text) {
-                      return "Passwords do not match";
+                      return loc.passwordsDoNotMatch;
                     }
                     return null;
                   },
@@ -411,7 +418,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         style: ElevatedButton.styleFrom(
                           minimumSize: const Size(double.infinity, 48),
                         ),
-                        child: const Text("Create Account"),
+                        child: Text(loc.createAccount),
                       ),
                 const SizedBox(height: 16),
 
@@ -419,9 +426,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 TextButton.icon(
                   onPressed: _resetPassword,
                   icon: const Icon(Icons.help_outline, size: 20),
-                  label: const Text(
-                    "Already have an account but forgot password?",
-                  ),
+                  label: Text(loc.alreadyHaveAccountForgotPassword),
                   style: TextButton.styleFrom(
                     foregroundColor: Colors.grey.shade700,
                   ),
