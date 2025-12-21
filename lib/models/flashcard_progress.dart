@@ -9,13 +9,18 @@ class FlashcardProgress {
   bool get hasStarted => box > 0;
 
   /// Whether this card is due for review (including overdue cards).
+  /// Includes a 2-hour grace period to help users build consistent daily habits.
   bool isDue() {
     // Cards in box 0 (new/unseen) are always "due" for first study
     if (box == 0) return true;
     
-    // For cards in boxes 1-5, check if the review date has passed
-    return DateTime.now().isAfter(nextReview) || 
-           DateTime.now().isAtSameMomentAs(nextReview);
+    // For cards in boxes 1-5, check if we're within the grace period
+    // Grace period: cards become available 2 hours before their scheduled time
+    final now = DateTime.now();
+    final gracePeriod = const Duration(hours: 2);
+    final dueWithGrace = nextReview.subtract(gracePeriod);
+    
+    return now.isAfter(dueWithGrace) || now.isAtSameMomentAs(dueWithGrace);
   }
 
   /// Promote the card to the next Leitner box (swipe right - remembered)
