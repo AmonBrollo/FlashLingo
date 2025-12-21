@@ -1,9 +1,9 @@
-// flashcard_view.dart
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../models/flashcard.dart';
 import '../models/flashcard_progress.dart';
-import '../utils/ui_strings.dart';
+import '../services/ui_language_provider.dart';
 
 class FlashcardView extends StatelessWidget {
   final Flashcard flashcard;
@@ -37,12 +37,13 @@ class FlashcardView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = context.watch<UiLanguageProvider>().loc;
     final cardWidth = MediaQuery.of(context).size.width * 0.8;
     final cardHeight = MediaQuery.of(context).size.height * 0.5;
 
     final statusText = progress.hasStarted
-        ? UiStrings.reviewStatusLevel(baseLanguage, progress.box)
-        : UiStrings.newCardStatus(baseLanguage);
+        ? loc.levelName(progress.box)
+        : loc.newCard;
 
     return Stack(
       alignment: Alignment.center,
@@ -113,7 +114,7 @@ class FlashcardView extends StatelessWidget {
                 ),
 
                 // Main card content
-                Center(child: _buildCardContent()),
+                Center(child: _buildCardContent(context)),
 
                 // No image text (only shown when not flipped and no image)
                 if (!isFlipped && !flashcard.hasLocalImage)
@@ -122,7 +123,7 @@ class FlashcardView extends StatelessWidget {
                     left: 0,
                     right: 0,
                     child: Text(
-                      UiStrings.noImageText(baseLanguage),
+                      loc.noImageYet,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 14,
@@ -132,8 +133,8 @@ class FlashcardView extends StatelessWidget {
                     ),
                   ),
 
-                // Image management buttons
-                _buildImageControls(),
+                // Image management buttons (ONLY ON FRONT)
+                if (!isFlipped) _buildImageControls(context),
               ],
             ),
           ),
@@ -142,7 +143,7 @@ class FlashcardView extends StatelessWidget {
     );
   }
 
-  Widget _buildCardContent() {
+  Widget _buildCardContent(BuildContext context) {
     // Determine which translation to show
     final String cardText = isFlipped
         ? flashcard.getTranslation(targetLanguage)
@@ -228,6 +229,7 @@ class FlashcardView extends StatelessWidget {
                 File(flashcard.imagePath!),
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) {
+                  final loc = context.read<UiLanguageProvider>().loc;
                   return Container(
                     color: Colors.grey[300],
                     child: Column(
@@ -240,7 +242,7 @@ class FlashcardView extends StatelessWidget {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'Image not found',
+                          loc.imageRemoved,
                           style: TextStyle(
                             color: Colors.grey[600],
                             fontSize: 14,
@@ -290,7 +292,9 @@ class FlashcardView extends StatelessWidget {
     );
   }
 
-  Widget _buildImageControls() {
+  Widget _buildImageControls(BuildContext context) {
+    final loc = context.read<UiLanguageProvider>().loc;
+    
     if (flashcard.hasLocalImage) {
       // Show edit and delete buttons when image exists
       return Positioned(
@@ -307,7 +311,7 @@ class FlashcardView extends StatelessWidget {
               ),
               child: IconButton(
                 icon: const Icon(Icons.edit, color: Colors.white, size: 20),
-                tooltip: 'Change image',
+                tooltip: loc.edit,
                 onPressed: onAddImage,
               ),
             ),
@@ -321,7 +325,7 @@ class FlashcardView extends StatelessWidget {
                 ),
                 child: IconButton(
                   icon: const Icon(Icons.delete, color: Colors.white, size: 20),
-                  tooltip: 'Remove image',
+                  tooltip: loc.remove,
                   onPressed: onRemoveImage,
                 ),
               ),
@@ -340,7 +344,7 @@ class FlashcardView extends StatelessWidget {
           ),
           child: IconButton(
             icon: const Icon(Icons.add_a_photo, color: Colors.white),
-            tooltip: UiStrings.addFlashcardButton(baseLanguage),
+            tooltip: loc.addFlashcard,
             onPressed: onAddImage,
           ),
         ),
