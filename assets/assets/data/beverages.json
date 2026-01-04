@@ -3,7 +3,8 @@
         "translations": {
             "english": "water",
             "portuguese": "água",
-            "hungarian": "víz"
+            "hungarian": "víz",
+            "spanish": "agua"
         },
         "imagePath": null
     },
@@ -11,7 +12,8 @@
         "translations": {
             "english": "milk",
             "portuguese": "leite",
-            "hungarian": "tej"
+            "hungarian": "tej",
+            "spanish": "leche"
         },
         "imagePath": null
     },
@@ -19,7 +21,8 @@
         "translations": {
             "english": "coffee",
             "portuguese": "café",
-            "hungarian": "kávé"
+            "hungarian": "kávé",
+            "spanish": "café"
         },
         "imagePath": null
     },
@@ -27,7 +30,8 @@
         "translations": {
             "english": "tea",
             "portuguese": "chá",
-            "hungarian": "tea"
+            "hungarian": "tea",
+            "spanish": "té"
         },
         "imagePath": null
     },
@@ -35,7 +39,8 @@
         "translations": {
             "english": "wine",
             "portuguese": "vinho",
-            "hungarian": "bor"
+            "hungarian": "bor",
+            "spanish": "vino"
         },
         "imagePath": null
     },
@@ -43,7 +48,8 @@
         "translations": {
             "english": "beer",
             "portuguese": "cerveja",
-            "hungarian": "sör"
+            "hungarian": "sör",
+            "spanish": "cerveza"
         },
         "imagePath": null
     },
@@ -51,7 +57,8 @@
         "translations": {
             "english": "juice",
             "portuguese": "suco",
-            "hungarian": "gyümölcslé"
+            "hungarian": "gyümölcslé",
+            "spanish": "jugo"
         },
         "imagePath": null
     },
@@ -59,7 +66,8 @@
         "translations": {
             "english": "beverage",
             "portuguese": "bebida",
-            "hungarian": "ital"
+            "hungarian": "ital",
+            "spanish": "bebida"
         },
         "imagePath": null
     }

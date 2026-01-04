@@ -3,7 +3,8 @@
         "translations": {
             "english": "band",
             "portuguese": "banda",
-            "hungarian": "zenekar"
+            "hungarian": "zenekar",
+            "spanish": "banda"
         },
         "imagePath": null
     },
@@ -11,7 +12,8 @@
         "translations": {
             "english": "song",
             "portuguese": "música",
-            "hungarian": "dal"
+            "hungarian": "dal",
+            "spanish": "canción"
         },
         "imagePath": null
     },
@@ -19,7 +21,8 @@
         "translations": {
             "english": "instrument (musical)",
             "portuguese": "instrumento musical",
-            "hungarian": "hangszer"
+            "hungarian": "hangszer",
+            "spanish": "instrumento musical"
         },
         "imagePath": null
     },
@@ -27,7 +30,8 @@
         "translations": {
             "english": "music",
             "portuguese": "música",
-            "hungarian": "zene"
+            "hungarian": "zene",
+            "spanish": "música"
         },
         "imagePath": null
     },
@@ -35,7 +39,8 @@
         "translations": {
             "english": "movie",
             "portuguese": "filme",
-            "hungarian": "film"
+            "hungarian": "film",
+            "spanish": "película"
         },
         "imagePath": null
     },
@@ -43,7 +48,8 @@
         "translations": {
             "english": "art",
             "portuguese": "arte",
-            "hungarian": "művészet"
+            "hungarian": "művészet",
+            "spanish": "arte"
         },
         "imagePath": null
     },
@@ -51,7 +57,8 @@
         "translations": {
             "english": "red",
             "portuguese": "vermelho",
-            "hungarian": "piros"
+            "hungarian": "piros",
+            "spanish": "rojo"
         },
         "imagePath": null
     },
@@ -59,7 +66,8 @@
         "translations": {
             "english": "green",
             "portuguese": "verde",
-            "hungarian": "zöld"
+            "hungarian": "zöld",
+            "spanish": "verde"
         },
         "imagePath": null
     },
@@ -67,7 +75,8 @@
         "translations": {
             "english": "blue",
             "portuguese": "azul",
-            "hungarian": "kék"
+            "hungarian": "kék",
+            "spanish": "azul"
         },
         "imagePath": null
     },
@@ -75,7 +84,8 @@
         "translations": {
             "english": "yellow",
             "portuguese": "amarelo",
-            "hungarian": "sárga"
+            "hungarian": "sárga",
+            "spanish": "amarillo"
         },
         "imagePath": null
     },
@@ -83,7 +93,8 @@
         "translations": {
             "english": "brown",
             "portuguese": "marrom",
-            "hungarian": "barna"
+            "hungarian": "barna",
+            "spanish": "marrón"
         },
         "imagePath": null
     },
@@ -91,7 +102,8 @@
         "translations": {
             "english": "pink",
             "portuguese": "rosa",
-            "hungarian": "rózsaszín"
+            "hungarian": "rózsaszín",
+            "spanish": "rosa"
         },
         "imagePath": null
     },
@@ -99,7 +111,8 @@
         "translations": {
             "english": "orange",
             "portuguese": "laranja",
-            "hungarian": "narancs"
+            "hungarian": "narancs",
+            "spanish": "naranja"
         },
         "imagePath": null
     },
@@ -107,7 +120,8 @@
         "translations": {
             "english": "black",
             "portuguese": "preto",
-            "hungarian": "fekete"
+            "hungarian": "fekete",
+            "spanish": "negro"
         },
         "imagePath": null
     },
@@ -115,7 +129,8 @@
         "translations": {
             "english": "white",
             "portuguese": "branco",
-            "hungarian": "fehér"
+            "hungarian": "fehér",
+            "spanish": "blanco"
         },
         "imagePath": null
     },
@@ -123,7 +138,8 @@
         "translations": {
             "english": "gray",
             "portuguese": "cinza",
-            "hungarian": "szürke"
+            "hungarian": "szürke",
+            "spanish": "gris"
         },
         "imagePath": null
     },
@@ -131,7 +147,8 @@
         "translations": {
             "english": "color",
             "portuguese": "cor",
-            "hungarian": "szín"
+            "hungarian": "szín",
+            "spanish": "color"
         },
         "imagePath": null
     }

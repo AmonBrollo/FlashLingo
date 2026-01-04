@@ -3,7 +3,8 @@
         "translations": {
             "english": "meter",
             "portuguese": "metro",
-            "hungarian": "méter"
+            "hungarian": "méter",
+            "spanish": "metro"
         },
         "imagePath": null
     },
@@ -11,7 +12,8 @@
         "translations": {
             "english": "centimeter",
             "portuguese": "centímetro",
-            "hungarian": "centiméter"
+            "hungarian": "centiméter",
+            "spanish": "centímetro"
         },
         "imagePath": null
     },
@@ -19,7 +21,8 @@
         "translations": {
             "english": "kilogram",
             "portuguese": "quilograma",
-            "hungarian": "kilogramm"
+            "hungarian": "kilogramm",
+            "spanish": "kilogramo"
         },
         "imagePath": null
     },
@@ -27,7 +30,8 @@
         "translations": {
             "english": "inch",
             "portuguese": "polegada",
-            "hungarian": "hüvelyk"
+            "hungarian": "hüvelyk",
+            "spanish": "pulgada"
         },
         "imagePath": null
     },
@@ -35,7 +39,8 @@
         "translations": {
             "english": "foot",
             "portuguese": "pé",
-            "hungarian": "láb"
+            "hungarian": "láb",
+            "spanish": "pie"
         },
         "imagePath": null
     },
@@ -43,7 +48,8 @@
         "translations": {
             "english": "pound",
             "portuguese": "libra",
-            "hungarian": "font"
+            "hungarian": "font",
+            "spanish": "libra"
         },
         "imagePath": null
     },
@@ -51,7 +57,8 @@
         "translations": {
             "english": "half",
             "portuguese": "metade",
-            "hungarian": "fél"
+            "hungarian": "fél",
+            "spanish": "mitad"
         },
         "imagePath": null
     },
@@ -59,7 +66,8 @@
         "translations": {
             "english": "circle",
             "portuguese": "círculo",
-            "hungarian": "kör"
+            "hungarian": "kör",
+            "spanish": "círculo"
         },
         "imagePath": null
     },
@@ -67,7 +75,8 @@
         "translations": {
             "english": "square",
             "portuguese": "quadrado",
-            "hungarian": "négyzet"
+            "hungarian": "négyzet",
+            "spanish": "cuadrado"
         },
         "imagePath": null
     },
@@ -75,7 +84,8 @@
         "translations": {
             "english": "temperature",
             "portuguese": "temperatura",
-            "hungarian": "hőmérséklet"
+            "hungarian": "hőmérséklet",
+            "spanish": "temperatura"
         },
         "imagePath": null
     },
@@ -83,7 +93,8 @@
         "translations": {
             "english": "date",
             "portuguese": "data",
-            "hungarian": "dátum"
+            "hungarian": "dátum",
+            "spanish": "fecha"
         },
         "imagePath": null
     },
@@ -91,7 +102,8 @@
         "translations": {
             "english": "weight",
             "portuguese": "peso",
-            "hungarian": "súly"
+            "hungarian": "súly",
+            "spanish": "peso"
         },
         "imagePath": null
     },
@@ -99,7 +111,8 @@
         "translations": {
             "english": "edge",
             "portuguese": "borda",
-            "hungarian": "él"
+            "hungarian": "él",
+            "spanish": "borde"
         },
         "imagePath": null
     },
@@ -107,7 +120,8 @@
         "translations": {
             "english": "corner",
             "portuguese": "canto",
-            "hungarian": "sarok"
+            "hungarian": "sarok",
+            "spanish": "esquina"
         },
         "imagePath": null
     }

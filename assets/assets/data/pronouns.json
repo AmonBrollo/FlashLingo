@@ -3,7 +3,8 @@
         "translations": {
             "english": "I",
             "portuguese": "Eu",
-            "hungarian": "Én"
+            "hungarian": "Én",
+            "spanish": "Yo"
         },
         "imagePath": null
     },
@@ -11,7 +12,8 @@
         "translations": {
             "english": "you (singular)",
             "portuguese": "Tu",
-            "hungarian": "Te"
+            "hungarian": "Te",
+            "spanish": "Tú"
         },
         "imagePath": null
     },
@@ -19,7 +21,8 @@
         "translations": {
             "english": "he",
             "portuguese": "Ele",
-            "hungarian": "Ő"
+            "hungarian": "Ő",
+            "spanish": "Él"
         },
         "imagePath": null
     },
@@ -27,7 +30,8 @@
         "translations": {
             "english": "she",
             "portuguese": "Ela",
-            "hungarian": "Ő"
+            "hungarian": "Ő",
+            "spanish": "Ella"
         },
         "imagePath": null
     },
@@ -35,7 +39,8 @@
         "translations": {
             "english": "it",
             "portuguese": "Isso/Aquilo",
-            "hungarian": "Ez/Az"
+            "hungarian": "Ez/Az",
+            "spanish": "Eso/Aquello"
         },
         "imagePath": null
     },
@@ -43,7 +48,8 @@
         "translations": {
             "english": "we",
             "portuguese": "Nós",
-            "hungarian": "Mi"
+            "hungarian": "Mi",
+            "spanish": "Nosotros"
         },
         "imagePath": null
     },
@@ -51,7 +57,8 @@
         "translations": {
             "english": "you (plural)",
             "portuguese": "Vocês",
-            "hungarian": "Ti"
+            "hungarian": "Ti",
+            "spanish": "Vosotros"
         },
         "imagePath": null
     },
@@ -59,7 +66,8 @@
         "translations": {
             "english": "they",
             "portuguese": "Eles",
-            "hungarian": "Ők"
+            "hungarian": "Ők",
+            "spanish": "Ellos"
         },
         "imagePath": null
     }

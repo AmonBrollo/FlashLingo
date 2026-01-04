@@ -3,7 +3,8 @@
         "translations": {
             "english": "teacher",
             "portuguese": "professor",
-            "hungarian": "tanár"
+            "hungarian": "tanár",
+            "spanish": "profesor"
         },
         "imagePath": null
     },
@@ -11,7 +12,8 @@
         "translations": {
             "english": "student",
             "portuguese": "estudante",
-            "hungarian": "diák"
+            "hungarian": "diák",
+            "spanish": "estudiante"
         },
         "imagePath": null
     },
@@ -19,7 +21,8 @@
         "translations": {
             "english": "lawyer",
             "portuguese": "advogado",
-            "hungarian": "ügyvéd"
+            "hungarian": "ügyvéd",
+            "spanish": "abogado"
         },
         "imagePath": null
     },
@@ -27,7 +30,8 @@
         "translations": {
             "english": "doctor",
             "portuguese": "médico",
-            "hungarian": "orvos"
+            "hungarian": "orvos",
+            "spanish": "médico"
         },
         "imagePath": null
     },
@@ -35,7 +39,8 @@
         "translations": {
             "english": "patient",
             "portuguese": "paciente",
-            "hungarian": "beteg"
+            "hungarian": "beteg",
+            "spanish": "paciente"
         },
         "imagePath": null
     },
@@ -43,7 +48,8 @@
         "translations": {
             "english": "waiter",
             "portuguese": "garçom",
-            "hungarian": "pincér"
+            "hungarian": "pincér",
+            "spanish": "camarero"
         },
         "imagePath": null
     },
@@ -51,7 +57,8 @@
         "translations": {
             "english": "secretary",
             "portuguese": "secretário",
-            "hungarian": "titkár"
+            "hungarian": "titkár",
+            "spanish": "secretario"
         },
         "imagePath": null
     },
@@ -59,7 +66,8 @@
         "translations": {
             "english": "priest",
             "portuguese": "padre",
-            "hungarian": "pap"
+            "hungarian": "pap",
+            "spanish": "sacerdote"
         },
         "imagePath": null
     },
@@ -67,7 +75,8 @@
         "translations": {
             "english": "police",
             "portuguese": "polícia",
-            "hungarian": "rendőrség"
+            "hungarian": "rendőrség",
+            "spanish": "policía"
         },
         "imagePath": null
     },
@@ -75,7 +84,8 @@
         "translations": {
             "english": "army",
             "portuguese": "exército",
-            "hungarian": "hadsereg"
+            "hungarian": "hadsereg",
+            "spanish": "ejército"
         },
         "imagePath": null
     },
@@ -83,7 +93,8 @@
         "translations": {
             "english": "soldier",
             "portuguese": "soldado",
-            "hungarian": "katona"
+            "hungarian": "katona",
+            "spanish": "soldado"
         },
         "imagePath": null
     },
@@ -91,7 +102,8 @@
         "translations": {
             "english": "artist",
             "portuguese": "artista",
-            "hungarian": "művész"
+            "hungarian": "művész",
+            "spanish": "artista"
         },
         "imagePath": null
     },
@@ -99,7 +111,8 @@
         "translations": {
             "english": "author",
             "portuguese": "autor",
-            "hungarian": "író"
+            "hungarian": "író",
+            "spanish": "autor"
         },
         "imagePath": null
     },
@@ -107,7 +120,8 @@
         "translations": {
             "english": "manager",
             "portuguese": "gerente",
-            "hungarian": "menedzser"
+            "hungarian": "menedzser",
+            "spanish": "gerente"
         },
         "imagePath": null
     },
@@ -115,7 +129,8 @@
         "translations": {
             "english": "reporter",
             "portuguese": "repórter",
-            "hungarian": "riporter"
+            "hungarian": "riporter",
+            "spanish": "reportero"
         },
         "imagePath": null
     },
@@ -123,7 +138,8 @@
         "translations": {
             "english": "actor",
             "portuguese": "ator",
-            "hungarian": "színész"
+            "hungarian": "színész",
+            "spanish": "actor"
         },
         "imagePath": null
     },
@@ -131,7 +147,8 @@
         "translations": {
             "english": "job",
             "portuguese": "trabalho",
-            "hungarian": "munka"
+            "hungarian": "munka",
+            "spanish": "trabajo"
         },
         "imagePath": null
     }

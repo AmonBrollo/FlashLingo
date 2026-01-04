@@ -3,7 +3,8 @@
         "translations": {
             "english": "good",
             "portuguese": "Bom",
-            "hungarian": "Jó"
+            "hungarian": "Jó",
+            "spanish": "Bueno"
         },
         "imagePath": null
     },
@@ -11,7 +12,8 @@
         "translations": {
             "english": "bad",
             "portuguese": "Mau",
-            "hungarian": "Rossz"
+            "hungarian": "Rossz",
+            "spanish": "Malo"
         },
         "imagePath": null
     },
@@ -19,7 +21,8 @@
         "translations": {
             "english": "big/large",
             "portuguese": "Grande",
-            "hungarian": "Nagy"
+            "hungarian": "Nagy",
+            "spanish": "Grande"
         },
         "imagePath": null
     },
@@ -27,7 +30,8 @@
         "translations": {
             "english": "small/little",
             "portuguese": "Pequeno",
-            "hungarian": "Kicsi"
+            "hungarian": "Kicsi",
+            "spanish": "Pequeño"
         },
         "imagePath": null
     },
@@ -35,7 +39,8 @@
         "translations": {
             "english": "new",
             "portuguese": "Novo",
-            "hungarian": "Új"
+            "hungarian": "Új",
+            "spanish": "Nuevo"
         },
         "imagePath": null
     },
@@ -43,7 +48,8 @@
         "translations": {
             "english": "old (new)",
             "portuguese": "Velho",
-            "hungarian": "Régi"
+            "hungarian": "Régi",
+            "spanish": "Viejo"
         },
         "imagePath": null
     },
@@ -51,7 +57,8 @@
         "translations": {
             "english": "young",
             "portuguese": "Jovem",
-            "hungarian": "Fiatal"
+            "hungarian": "Fiatal",
+            "spanish": "Joven"
         },
         "imagePath": null
     },
@@ -59,7 +66,8 @@
         "translations": {
             "english": "old (young)",
             "portuguese": "Velho",
-            "hungarian": "Idős"
+            "hungarian": "Idős",
+            "spanish": "Anciano"
         },
         "imagePath": null
     },
@@ -67,7 +75,8 @@
         "translations": {
             "english": "happy",
             "portuguese": "Feliz",
-            "hungarian": "Boldog"
+            "hungarian": "Boldog",
+            "spanish": "Feliz"
         },
         "imagePath": null
     },
@@ -75,7 +84,8 @@
         "translations": {
             "english": "sad",
             "portuguese": "Triste",
-            "hungarian": "Szomorú"
+            "hungarian": "Szomorú",
+            "spanish": "Triste"
         },
         "imagePath": null
     },
@@ -83,7 +93,8 @@
         "translations": {
             "english": "beautiful",
             "portuguese": "Bonito",
-            "hungarian": "Szép"
+            "hungarian": "Szép",
+            "spanish": "Hermoso"
         },
         "imagePath": null
     },
@@ -91,7 +102,8 @@
         "translations": {
             "english": "ugly",
             "portuguese": "Feio",
-            "hungarian": "Csúnya"
+            "hungarian": "Csúnya",
+            "spanish": "Feo"
         },
         "imagePath": null
     },
@@ -99,7 +111,8 @@
         "translations": {
             "english": "long",
             "portuguese": "Comprido",
-            "hungarian": "Hosszú"
+            "hungarian": "Hosszú",
+            "spanish": "Largo"
         },
         "imagePath": null
     },
@@ -107,7 +120,8 @@
         "translations": {
             "english": "short (vs long)",
             "portuguese": "Curto",
-            "hungarian": "Rövid"
+            "hungarian": "Rövid",
+            "spanish": "Corto"
         },
         "imagePath": null
     },
@@ -115,7 +129,8 @@
         "translations": {
             "english": "tall",
             "portuguese": "Alto",
-            "hungarian": "Magas"
+            "hungarian": "Magas",
+            "spanish": "Alto"
         },
         "imagePath": null
     },
@@ -123,7 +138,8 @@
         "translations": {
             "english": "short (vs tall)",
             "portuguese": "Baixo",
-            "hungarian": "Alacsony"
+            "hungarian": "Alacsony",
+            "spanish": "Bajo"
         },
         "imagePath": null
     },
@@ -131,7 +147,8 @@
         "translations": {
             "english": "hot",
             "portuguese": "Quente",
-            "hungarian": "Forró"
+            "hungarian": "Forró",
+            "spanish": "Caliente"
         },
         "imagePath": null
     },
@@ -139,7 +156,8 @@
         "translations": {
             "english": "cold",
             "portuguese": "Frio",
-            "hungarian": "Hideg"
+            "hungarian": "Hideg",
+            "spanish": "Frío"
         },
         "imagePath": null
     },
@@ -147,7 +165,8 @@
         "translations": {
             "english": "warm",
             "portuguese": "Morno",
-            "hungarian": "Meleg"
+            "hungarian": "Meleg",
+            "spanish": "Templado"
         },
         "imagePath": null
     },
@@ -155,7 +174,8 @@
         "translations": {
             "english": "cool",
             "portuguese": "Fresco",
-            "hungarian": "Hűvös"
+            "hungarian": "Hűvös",
+            "spanish": "Fresco"
         },
         "imagePath": null
     },
@@ -163,7 +183,8 @@
         "translations": {
             "english": "high",
             "portuguese": "Alto",
-            "hungarian": "Magas"
+            "hungarian": "Magas",
+            "spanish": "Alto"
         },
         "imagePath": null
     },
@@ -171,7 +192,8 @@
         "translations": {
             "english": "low",
             "portuguese": "Baixo",
-            "hungarian": "Alacsony"
+            "hungarian": "Alacsony",
+            "spanish": "Bajo"
         },
         "imagePath": null
     },
@@ -179,7 +201,8 @@
         "translations": {
             "english": "fast",
             "portuguese": "Rápido",
-            "hungarian": "Gyors"
+            "hungarian": "Gyors",
+            "spanish": "Rápido"
         },
         "imagePath": null
     },
@@ -187,7 +210,8 @@
         "translations": {
             "english": "slow",
             "portuguese": "Lento",
-            "hungarian": "Lassú"
+            "hungarian": "Lassú",
+            "spanish": "Lento"
         },
         "imagePath": null
     },
@@ -195,7 +219,8 @@
         "translations": {
             "english": "hard",
             "portuguese": "Duro",
-            "hungarian": "Kemény"
+            "hungarian": "Kemény",
+            "spanish": "Duro"
         },
         "imagePath": null
     },
@@ -203,7 +228,8 @@
         "translations": {
             "english": "strong",
             "portuguese": "Forte",
-            "hungarian": "Erős"
+            "hungarian": "Erős",
+            "spanish": "Fuerte"
         },
         "imagePath": null
     },
@@ -211,7 +237,8 @@
         "translations": {
             "english": "weak",
             "portuguese": "Fraco",
-            "hungarian": "Gyenge"
+            "hungarian": "Gyenge",
+            "spanish": "Débil"
         },
         "imagePath": null
     },
@@ -219,7 +246,8 @@
         "translations": {
             "english": "clean",
             "portuguese": "Limpo",
-            "hungarian": "Tiszta"
+            "hungarian": "Tiszta",
+            "spanish": "Limpio"
         },
         "imagePath": null
     },
@@ -227,7 +255,8 @@
         "translations": {
             "english": "dirty",
             "portuguese": "Sujo",
-            "hungarian": "Piszkos"
+            "hungarian": "Piszkos",
+            "spanish": "Sucio"
         },
         "imagePath": null
     },
@@ -235,7 +264,8 @@
         "translations": {
             "english": "wet",
             "portuguese": "Molhado",
-            "hungarian": "Nedves"
+            "hungarian": "Nedves",
+            "spanish": "Mojado"
         },
         "imagePath": null
     },
@@ -243,7 +273,8 @@
         "translations": {
             "english": "dry",
             "portuguese": "Seco",
-            "hungarian": "Száraz"
+            "hungarian": "Száraz",
+            "spanish": "Seco"
         },
         "imagePath": null
     },
@@ -251,7 +282,8 @@
         "translations": {
             "english": "rich",
             "portuguese": "Rico",
-            "hungarian": "Gazdag"
+            "hungarian": "Gazdag",
+            "spanish": "Rico"
         },
         "imagePath": null
     },
@@ -259,7 +291,8 @@
         "translations": {
             "english": "poor",
             "portuguese": "Pobre",
-            "hungarian": "Szegény"
+            "hungarian": "Szegény",
+            "spanish": "Pobre"
         },
         "imagePath": null
     },
@@ -267,7 +300,8 @@
         "translations": {
             "english": "expensive",
             "portuguese": "Caro",
-            "hungarian": "Drága"
+            "hungarian": "Drága",
+            "spanish": "Caro"
         },
         "imagePath": null
     },
@@ -275,7 +309,8 @@
         "translations": {
             "english": "cheap",
             "portuguese": "Barato",
-            "hungarian": "Olcsó"
+            "hungarian": "Olcsó",
+            "spanish": "Barato"
         },
         "imagePath": null
     },
@@ -283,7 +318,8 @@
         "translations": {
             "english": "healthy",
             "portuguese": "Saudável",
-            "hungarian": "Egészséges"
+            "hungarian": "Egészséges",
+            "spanish": "Saludable"
         },
         "imagePath": null
     },
@@ -291,7 +327,8 @@
         "translations": {
             "english": "sick",
             "portuguese": "Doente",
-            "hungarian": "Beteg"
+            "hungarian": "Beteg",
+            "spanish": "Enfermo"
         },
         "imagePath": null
     },
@@ -299,7 +336,8 @@
         "translations": {
             "english": "nice",
             "portuguese": "Simpático",
-            "hungarian": "Kedves"
+            "hungarian": "Kedves",
+            "spanish": "Agradable"
         },
         "imagePath": null
     },
@@ -307,7 +345,8 @@
         "translations": {
             "english": "mean",
             "portuguese": "Mau",
-            "hungarian": "Gonosz"
+            "hungarian": "Gonosz",
+            "spanish": "Malvado"
         },
         "imagePath": null
     },
@@ -315,7 +354,8 @@
         "translations": {
             "english": "dark",
             "portuguese": "Escuro",
-            "hungarian": "Sötét"
+            "hungarian": "Sötét",
+            "spanish": "Oscuro"
         },
         "imagePath": null
     },
@@ -323,7 +363,8 @@
         "translations": {
             "english": "light (dark)",
             "portuguese": "Claro",
-            "hungarian": "Világos"
+            "hungarian": "Világos",
+            "spanish": "Claro"
         },
         "imagePath": null
     },
@@ -331,7 +372,8 @@
         "translations": {
             "english": "heavy",
             "portuguese": "Pesado",
-            "hungarian": "Nehéz"
+            "hungarian": "Nehéz",
+            "spanish": "Pesado"
         },
         "imagePath": null
     },
@@ -339,7 +381,8 @@
         "translations": {
             "english": "light (heavy)",
             "portuguese": "Leve",
-            "hungarian": "Könnyű"
+            "hungarian": "Könnyű",
+            "spanish": "Ligero"
         },
         "imagePath": null
     },
@@ -347,7 +390,8 @@
         "translations": {
             "english": "soft",
             "portuguese": "Macio",
-            "hungarian": "Puha"
+            "hungarian": "Puha",
+            "spanish": "Suave"
         },
         "imagePath": null
     },
@@ -355,7 +399,8 @@
         "translations": {
             "english": "deep",
             "portuguese": "Fundo",
-            "hungarian": "Mély"
+            "hungarian": "Mély",
+            "spanish": "Profundo"
         },
         "imagePath": null
     },
@@ -363,7 +408,8 @@
         "translations": {
             "english": "shallow",
             "portuguese": "Raso",
-            "hungarian": "Sekély"
+            "hungarian": "Sekély",
+            "spanish": "Poco profundo"
         },
         "imagePath": null
     },
@@ -371,7 +417,8 @@
         "translations": {
             "english": "thick",
             "portuguese": "Grosso",
-            "hungarian": "Vastag"
+            "hungarian": "Vastag",
+            "spanish": "Grueso"
         },
         "imagePath": null
     },
@@ -379,7 +426,8 @@
         "translations": {
             "english": "thin",
             "portuguese": "Fino",
-            "hungarian": "Vékony"
+            "hungarian": "Vékony",
+            "spanish": "Delgado"
         },
         "imagePath": null
     },
@@ -387,7 +435,8 @@
         "translations": {
             "english": "wide",
             "portuguese": "Largo",
-            "hungarian": "Széles"
+            "hungarian": "Széles",
+            "spanish": "Ancho"
         },
         "imagePath": null
     },
@@ -395,7 +444,8 @@
         "translations": {
             "english": "narrow",
             "portuguese": "Estreito",
-            "hungarian": "Keskeny"
+            "hungarian": "Keskeny",
+            "spanish": "Estrecho"
         },
         "imagePath": null
     },
@@ -403,7 +453,8 @@
         "translations": {
             "english": "tight",
             "portuguese": "Apertado",
-            "hungarian": "Szoros"
+            "hungarian": "Szoros",
+            "spanish": "Ajustado"
         },
         "imagePath": null
     },
@@ -411,7 +462,8 @@
         "translations": {
             "english": "loose",
             "portuguese": "Largo",
-            "hungarian": "Laza"
+            "hungarian": "Laza",
+            "spanish": "Flojo"
         },
         "imagePath": null
     },
@@ -419,7 +471,8 @@
         "translations": {
             "english": "flat",
             "portuguese": "Plano",
-            "hungarian": "Lapos"
+            "hungarian": "Lapos",
+            "spanish": "Plano"
         },
         "imagePath": null
     },
@@ -427,7 +480,8 @@
         "translations": {
             "english": "curved",
             "portuguese": "Curvo",
-            "hungarian": "Görbe"
+            "hungarian": "Görbe",
+            "spanish": "Curvo"
         },
         "imagePath": null
     },
@@ -435,7 +489,8 @@
         "translations": {
             "english": "alive",
             "portuguese": "Vivo",
-            "hungarian": "Élő"
+            "hungarian": "Élő",
+            "spanish": "Vivo"
         },
         "imagePath": null
     },
@@ -443,7 +498,8 @@
         "translations": {
             "english": "dead",
             "portuguese": "Morto",
-            "hungarian": "Halott"
+            "hungarian": "Halott",
+            "spanish": "Muerto"
         },
         "imagePath": null
     },
@@ -451,7 +507,8 @@
         "translations": {
             "english": "quiet",
             "portuguese": "Silencioso",
-            "hungarian": "Csendes"
+            "hungarian": "Csendes",
+            "spanish": "Silencioso"
         },
         "imagePath": null
     },
@@ -459,7 +516,8 @@
         "translations": {
             "english": "loud",
             "portuguese": "Alto (som)",
-            "hungarian": "Hangos"
+            "hungarian": "Hangos",
+            "spanish": "Ruidoso"
         },
         "imagePath": null
     },
@@ -467,7 +525,8 @@
         "translations": {
             "english": "male",
             "portuguese": "Masculino",
-            "hungarian": "Férfi"
+            "hungarian": "Férfi",
+            "spanish": "Masculino"
         },
         "imagePath": null
     },
@@ -475,7 +534,8 @@
         "translations": {
             "english": "female",
             "portuguese": "Feminino",
-            "hungarian": "Nő"
+            "hungarian": "Nő",
+            "spanish": "Femenino"
         },
         "imagePath": null
     },
@@ -483,7 +543,8 @@
         "translations": {
             "english": "famous",
             "portuguese": "Famoso",
-            "hungarian": "Híres"
+            "hungarian": "Híres",
+            "spanish": "Famoso"
         },
         "imagePath": null
     },
@@ -491,7 +552,8 @@
         "translations": {
             "english": "blind",
             "portuguese": "Cego",
-            "hungarian": "Vakul"
+            "hungarian": "Vakul",
+            "spanish": "Ciego"
         },
         "imagePath": null
     },
@@ -499,7 +561,8 @@
         "translations": {
             "english": "deaf",
             "portuguese": "Surdo",
-            "hungarian": "Süket"
+            "hungarian": "Süket",
+            "spanish": "Sordo"
         },
         "imagePath": null
     },
@@ -507,7 +570,8 @@
         "translations": {
             "english": "nuclear",
             "portuguese": "Nuclear",
-            "hungarian": "Nukleáris"
+            "hungarian": "Nukleáris",
+            "spanish": "Nuclear"
         },
         "imagePath": null
     }

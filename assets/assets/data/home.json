@@ -3,7 +3,8 @@
         "translations": {
             "english": "door",
             "portuguese": "porta",
-            "hungarian": "ajtó"
+            "hungarian": "ajtó",
+            "spanish": "puerta"
         },
         "imagePath": null
     },
@@ -11,7 +12,8 @@
         "translations": {
             "english": "table",
             "portuguese": "mesa",
-            "hungarian": "asztal"
+            "hungarian": "asztal",
+            "spanish": "mesa"
         },
         "imagePath": null
     },
@@ -19,7 +21,8 @@
         "translations": {
             "english": "bed",
             "portuguese": "cama",
-            "hungarian": "ágy"
+            "hungarian": "ágy",
+            "spanish": "cama"
         },
         "imagePath": null
     },
@@ -27,7 +30,8 @@
         "translations": {
             "english": "chair",
             "portuguese": "cadeira",
-            "hungarian": "szék"
+            "hungarian": "szék",
+            "spanish": "silla"
         },
         "imagePath": null
     },
@@ -35,7 +39,8 @@
         "translations": {
             "english": "window",
             "portuguese": "janela",
-            "hungarian": "ablak"
+            "hungarian": "ablak",
+            "spanish": "ventana"
         },
         "imagePath": null
     },
@@ -43,7 +48,8 @@
         "translations": {
             "english": "floor",
             "portuguese": "chão",
-            "hungarian": "padló"
+            "hungarian": "padló",
+            "spanish": "suelo"
         },
         "imagePath": null
     },
@@ -51,7 +57,8 @@
         "translations": {
             "english": "wall",
             "portuguese": "parede",
-            "hungarian": "fal"
+            "hungarian": "fal",
+            "spanish": "pared"
         },
         "imagePath": null
     },
@@ -59,7 +66,8 @@
         "translations": {
             "english": "kitchen",
             "portuguese": "cozinha",
-            "hungarian": "konyha"
+            "hungarian": "konyha",
+            "spanish": "cocina"
         },
         "imagePath": null
     },
@@ -67,7 +75,8 @@
         "translations": {
             "english": "bathroom",
             "portuguese": "banheiro",
-            "hungarian": "fürdőszoba"
+            "hungarian": "fürdőszoba",
+            "spanish": "baño"
         },
         "imagePath": null
     },
@@ -75,7 +84,8 @@
         "translations": {
             "english": "bedroom",
             "portuguese": "quarto",
-            "hungarian": "hálószoba"
+            "hungarian": "hálószoba",
+            "spanish": "dormitorio"
         },
         "imagePath": null
     },
@@ -83,7 +93,8 @@
         "translations": {
             "english": "telephone",
             "portuguese": "telefone",
-            "hungarian": "telefon"
+            "hungarian": "telefon",
+            "spanish": "teléfono"
         },
         "imagePath": null
     },
@@ -91,7 +102,8 @@
         "translations": {
             "english": "book",
             "portuguese": "livro",
-            "hungarian": "könyv"
+            "hungarian": "könyv",
+            "spanish": "libro"
         },
         "imagePath": null
     },
@@ -99,7 +111,8 @@
         "translations": {
             "english": "key",
             "portuguese": "chave",
-            "hungarian": "kulcs"
+            "hungarian": "kulcs",
+            "spanish": "llave"
         },
         "imagePath": null
     },
@@ -107,7 +120,8 @@
         "translations": {
             "english": "bag",
             "portuguese": "bolsa",
-            "hungarian": "táska"
+            "hungarian": "táska",
+            "spanish": "bolsa"
         },
         "imagePath": null
     },
@@ -115,7 +129,8 @@
         "translations": {
             "english": "paper",
             "portuguese": "papel",
-            "hungarian": "papír"
+            "hungarian": "papír",
+            "spanish": "papel"
         },
         "imagePath": null
     },
@@ -123,7 +138,8 @@
         "translations": {
             "english": "pen",
             "portuguese": "caneta",
-            "hungarian": "toll"
+            "hungarian": "toll",
+            "spanish": "bolígrafo"
         },
         "imagePath": null
     },
@@ -131,7 +147,8 @@
         "translations": {
             "english": "box",
             "portuguese": "caixa",
-            "hungarian": "doboz"
+            "hungarian": "doboz",
+            "spanish": "caja"
         },
         "imagePath": null
     },
@@ -139,7 +156,8 @@
         "translations": {
             "english": "card",
             "portuguese": "cartão",
-            "hungarian": "kártya"
+            "hungarian": "kártya",
+            "spanish": "tarjeta"
         },
         "imagePath": null
     },
@@ -147,7 +165,8 @@
         "translations": {
             "english": "letter",
             "portuguese": "carta",
-            "hungarian": "levél"
+            "hungarian": "levél",
+            "spanish": "carta"
         },
         "imagePath": null
     },
@@ -155,7 +174,8 @@
         "translations": {
             "english": "photograph",
             "portuguese": "fotografia",
-            "hungarian": "fénykép"
+            "hungarian": "fénykép",
+            "spanish": "fotografía"
         },
         "imagePath": null
     },
@@ -163,7 +183,8 @@
         "translations": {
             "english": "garden",
             "portuguese": "jardim",
-            "hungarian": "kert"
+            "hungarian": "kert",
+            "spanish": "jardín"
         },
         "imagePath": null
     },
@@ -171,7 +192,8 @@
         "translations": {
             "english": "ceiling",
             "portuguese": "teto",
-            "hungarian": "mennyezet"
+            "hungarian": "mennyezet",
+            "spanish": "techo"
         },
         "imagePath": null
     },
@@ -179,7 +201,8 @@
         "translations": {
             "english": "roof",
             "portuguese": "telhado",
-            "hungarian": "tető"
+            "hungarian": "tető",
+            "spanish": "tejado"
         },
         "imagePath": null
     },
@@ -187,7 +210,8 @@
         "translations": {
             "english": "page",
             "portuguese": "página",
-            "hungarian": "oldal"
+            "hungarian": "oldal",
+            "spanish": "página"
         },
         "imagePath": null
     },
@@ -195,7 +219,8 @@
         "translations": {
             "english": "lock",
             "portuguese": "fechadura",
-            "hungarian": "zár"
+            "hungarian": "zár",
+            "spanish": "cerradura"
         },
         "imagePath": null
     },
@@ -203,7 +228,8 @@
         "translations": {
             "english": "gift",
             "portuguese": "presente",
-            "hungarian": "ajándék"
+            "hungarian": "ajándék",
+            "spanish": "regalo"
         },
         "imagePath": null
     },
@@ -211,7 +237,8 @@
         "translations": {
             "english": "soap",
             "portuguese": "sabão",
-            "hungarian": "szappan"
+            "hungarian": "szappan",
+            "spanish": "jabón"
         },
         "imagePath": null
     },
@@ -219,7 +246,8 @@
         "translations": {
             "english": "pencil",
             "portuguese": "lápis",
-            "hungarian": "ceruza"
+            "hungarian": "ceruza",
+            "spanish": "lápiz"
         },
         "imagePath": null
     },
@@ -227,7 +255,8 @@
         "translations": {
             "english": "note",
             "portuguese": "nota",
-            "hungarian": "jegyzet"
+            "hungarian": "jegyzet",
+            "spanish": "nota"
         },
         "imagePath": null
     },
@@ -235,7 +264,8 @@
         "translations": {
             "english": "dream",
             "portuguese": "sonho",
-            "hungarian": "álom"
+            "hungarian": "álom",
+            "spanish": "sueño"
         },
         "imagePath": null
     },
@@ -243,7 +273,8 @@
         "translations": {
             "english": "tool",
             "portuguese": "ferramenta",
-            "hungarian": "szerszám"
+            "hungarian": "szerszám",
+            "spanish": "herramienta"
         },
         "imagePath": null
     },
@@ -251,7 +282,8 @@
         "translations": {
             "english": "ring",
             "portuguese": "anel",
-            "hungarian": "gyűrű"
+            "hungarian": "gyűrű",
+            "spanish": "anillo"
         },
         "imagePath": null
     },
@@ -259,7 +291,8 @@
         "translations": {
             "english": "yard",
             "portuguese": "quintal",
-            "hungarian": "udvar"
+            "hungarian": "udvar",
+            "spanish": "patio"
         },
         "imagePath": null
     },
@@ -267,7 +300,8 @@
         "translations": {
             "english": "paint",
             "portuguese": "tinta",
-            "hungarian": "festék"
+            "hungarian": "festék",
+            "spanish": "pintura"
         },
         "imagePath": null
     },
@@ -275,7 +309,8 @@
         "translations": {
             "english": "pool",
             "portuguese": "piscina",
-            "hungarian": "medence"
+            "hungarian": "medence",
+            "spanish": "piscina"
         },
         "imagePath": null
     },
@@ -283,7 +318,8 @@
         "translations": {
             "english": "needle",
             "portuguese": "agulha",
-            "hungarian": "tű"
+            "hungarian": "tű",
+            "spanish": "aguja"
         },
         "imagePath": null
     }

@@ -3,7 +3,8 @@
         "translations": {
             "english": "son",
             "portuguese": "filho",
-            "hungarian": "fiú"
+            "hungarian": "fiú",
+            "spanish": "hijo"
         },
         "imagePath": null
     },
@@ -11,7 +12,8 @@
         "translations": {
             "english": "daughter",
             "portuguese": "filha",
-            "hungarian": "lány"
+            "hungarian": "lány",
+            "spanish": "hija"
         },
         "imagePath": null
     },
@@ -19,7 +21,8 @@
         "translations": {
             "english": "mother",
             "portuguese": "mãe",
-            "hungarian": "anya"
+            "hungarian": "anya",
+            "spanish": "madre"
         },
         "imagePath": null
     },
@@ -27,7 +30,8 @@
         "translations": {
             "english": "father",
             "portuguese": "pai",
-            "hungarian": "apa"
+            "hungarian": "apa",
+            "spanish": "padre"
         },
         "imagePath": null
     },
@@ -35,7 +39,8 @@
         "translations": {
             "english": "parent",
             "portuguese": "pai/mãe",
-            "hungarian": "szülő"
+            "hungarian": "szülő",
+            "spanish": "padre/madre"
         },
         "imagePath": null
     },
@@ -43,7 +48,8 @@
         "translations": {
             "english": "baby",
             "portuguese": "bebê",
-            "hungarian": "baba"
+            "hungarian": "baba",
+            "spanish": "bebé"
         },
         "imagePath": null
     },
@@ -51,7 +57,8 @@
         "translations": {
             "english": "man",
             "portuguese": "homem",
-            "hungarian": "férfi"
+            "hungarian": "férfi",
+            "spanish": "hombre"
         },
         "imagePath": null
     },
@@ -59,7 +66,8 @@
         "translations": {
             "english": "woman",
             "portuguese": "mulher",
-            "hungarian": "nő"
+            "hungarian": "nő",
+            "spanish": "mujer"
         },
         "imagePath": null
     },
@@ -67,7 +75,8 @@
         "translations": {
             "english": "brother",
             "portuguese": "irmão",
-            "hungarian": "testvér"
+            "hungarian": "testvér",
+            "spanish": "hermano"
         },
         "imagePath": null
     },
@@ -75,7 +84,8 @@
         "translations": {
             "english": "sister",
             "portuguese": "irmã",
-            "hungarian": "nővér"
+            "hungarian": "nővér",
+            "spanish": "hermana"
         },
         "imagePath": null
     },
@@ -83,7 +93,8 @@
         "translations": {
             "english": "family",
             "portuguese": "família",
-            "hungarian": "család"
+            "hungarian": "család",
+            "spanish": "familia"
         },
         "imagePath": null
     },
@@ -91,7 +102,8 @@
         "translations": {
             "english": "grandfather",
             "portuguese": "avô",
-            "hungarian": "nagyapa"
+            "hungarian": "nagyapa",
+            "spanish": "abuelo"
         },
         "imagePath": null
     },
@@ -99,7 +111,8 @@
         "translations": {
             "english": "grandmother",
             "portuguese": "avó",
-            "hungarian": "nagyanya"
+            "hungarian": "nagyanya",
+            "spanish": "abuela"
         },
         "imagePath": null
     },
@@ -107,7 +120,8 @@
         "translations": {
             "english": "husband",
             "portuguese": "marido",
-            "hungarian": "férj"
+            "hungarian": "férj",
+            "spanish": "esposo"
         },
         "imagePath": null
     },
@@ -115,7 +129,8 @@
         "translations": {
             "english": "wife",
             "portuguese": "esposa",
-            "hungarian": "feleség"
+            "hungarian": "feleség",
+            "spanish": "esposa"
         },
         "imagePath": null
     },
@@ -123,7 +138,8 @@
         "translations": {
             "english": "king",
             "portuguese": "rei",
-            "hungarian": "király"
+            "hungarian": "király",
+            "spanish": "rey"
         },
         "imagePath": null
     },
@@ -131,7 +147,8 @@
         "translations": {
             "english": "queen",
             "portuguese": "rainha",
-            "hungarian": "királynő"
+            "hungarian": "királynő",
+            "spanish": "reina"
         },
         "imagePath": null
     },
@@ -139,7 +156,8 @@
         "translations": {
             "english": "president",
             "portuguese": "presidente",
-            "hungarian": "elnök"
+            "hungarian": "elnök",
+            "spanish": "presidente"
         },
         "imagePath": null
     },
@@ -147,7 +165,8 @@
         "translations": {
             "english": "neighbor",
             "portuguese": "vizinho",
-            "hungarian": "szomszéd"
+            "hungarian": "szomszéd",
+            "spanish": "vecino"
         },
         "imagePath": null
     },
@@ -155,7 +174,8 @@
         "translations": {
             "english": "boy",
             "portuguese": "menino",
-            "hungarian": "fiú"
+            "hungarian": "fiú",
+            "spanish": "niño"
         },
         "imagePath": null
     },
@@ -163,7 +183,8 @@
         "translations": {
             "english": "girl",
             "portuguese": "menina",
-            "hungarian": "lány"
+            "hungarian": "lány",
+            "spanish": "niña"
         },
         "imagePath": null
     },
@@ -171,7 +192,8 @@
         "translations": {
             "english": "child",
             "portuguese": "criança",
-            "hungarian": "gyerek"
+            "hungarian": "gyerek",
+            "spanish": "niño"
         },
         "imagePath": null
     },
@@ -179,7 +201,8 @@
         "translations": {
             "english": "adult",
             "portuguese": "adulto",
-            "hungarian": "felnőtt"
+            "hungarian": "felnőtt",
+            "spanish": "adulto"
         },
         "imagePath": null
     },
@@ -187,7 +210,8 @@
         "translations": {
             "english": "human",
             "portuguese": "humano",
-            "hungarian": "ember"
+            "hungarian": "ember",
+            "spanish": "humano"
         },
         "imagePath": null
     },
@@ -195,7 +219,8 @@
         "translations": {
             "english": "friend",
             "portuguese": "amigo",
-            "hungarian": "barát"
+            "hungarian": "barát",
+            "spanish": "amigo"
         },
         "imagePath": null
     },
@@ -203,7 +228,8 @@
         "translations": {
             "english": "victim",
             "portuguese": "vítima",
-            "hungarian": "áldozat"
+            "hungarian": "áldozat",
+            "spanish": "víctima"
         },
         "imagePath": null
     },
@@ -211,7 +237,8 @@
         "translations": {
             "english": "player",
             "portuguese": "jogador",
-            "hungarian": "játékos"
+            "hungarian": "játékos",
+            "spanish": "jugador"
         },
         "imagePath": null
     },
@@ -219,7 +246,8 @@
         "translations": {
             "english": "fan",
             "portuguese": "fã",
-            "hungarian": "rajongó"
+            "hungarian": "rajongó",
+            "spanish": "aficionado"
         },
         "imagePath": null
     },
@@ -227,7 +255,8 @@
         "translations": {
             "english": "crowd",
             "portuguese": "multidão",
-            "hungarian": "tömeg"
+            "hungarian": "tömeg",
+            "spanish": "multitud"
         },
         "imagePath": null
     },
@@ -235,7 +264,8 @@
         "translations": {
             "english": "person",
             "portuguese": "pessoa",
-            "hungarian": "személy"
+            "hungarian": "személy",
+            "spanish": "persona"
         },
         "imagePath": null
     }
