@@ -3,7 +3,8 @@
         "translations": {
             "english": "train",
             "portuguese": "trem",
-            "hungarian": "vonat"
+            "hungarian": "vonat",
+            "spanish": "tren"
         },
         "imagePath": null
     },
@@ -11,7 +12,8 @@
         "translations": {
             "english": "plane",
             "portuguese": "avião",
-            "hungarian": "repülőgép"
+            "hungarian": "repülőgép",
+            "spanish": "avión"
         },
         "imagePath": null
     },
@@ -19,7 +21,8 @@
         "translations": {
             "english": "car",
             "portuguese": "carro",
-            "hungarian": "autó"
+            "hungarian": "autó",
+            "spanish": "coche"
         },
         "imagePath": null
     },
@@ -27,7 +30,8 @@
         "translations": {
             "english": "truck",
             "portuguese": "caminhão",
-            "hungarian": "kamion"
+            "hungarian": "kamion",
+            "spanish": "camión"
         },
         "imagePath": null
     },
@@ -35,7 +39,8 @@
         "translations": {
             "english": "bicycle",
             "portuguese": "bicicleta",
-            "hungarian": "kerékpár"
+            "hungarian": "kerékpár",
+            "spanish": "bicicleta"
         },
         "imagePath": null
     },
@@ -43,7 +48,8 @@
         "translations": {
             "english": "bus",
             "portuguese": "ônibus",
-            "hungarian": "busz"
+            "hungarian": "busz",
+            "spanish": "autobús"
         },
         "imagePath": null
     },
@@ -51,7 +57,8 @@
         "translations": {
             "english": "boat",
             "portuguese": "barco",
-            "hungarian": "hajó"
+            "hungarian": "hajó",
+            "spanish": "barco"
         },
         "imagePath": null
     },
@@ -59,7 +66,8 @@
         "translations": {
             "english": "ship",
             "portuguese": "navio",
-            "hungarian": "hajó"
+            "hungarian": "hajó",
+            "spanish": "barco"
         },
         "imagePath": null
     },
@@ -67,7 +75,8 @@
         "translations": {
             "english": "tire",
             "portuguese": "pneu",
-            "hungarian": "gumi"
+            "hungarian": "gumi",
+            "spanish": "neumático"
         },
         "imagePath": null
     },
@@ -75,7 +84,8 @@
         "translations": {
             "english": "gasoline",
             "portuguese": "gasolina",
-            "hungarian": "benzin"
+            "hungarian": "benzin",
+            "spanish": "gasolina"
         },
         "imagePath": null
     },
@@ -83,7 +93,8 @@
         "translations": {
             "english": "engine",
             "portuguese": "motor",
-            "hungarian": "motor"
+            "hungarian": "motor",
+            "spanish": "motor"
         },
         "imagePath": null
     },
@@ -91,7 +102,8 @@
         "translations": {
             "english": "ticket",
             "portuguese": "bilhete",
-            "hungarian": "jegy"
+            "hungarian": "jegy",
+            "spanish": "billete"
         },
         "imagePath": null
     },
@@ -99,7 +111,8 @@
         "translations": {
             "english": "transportation",
             "portuguese": "transporte",
-            "hungarian": "közlekedés"
+            "hungarian": "közlekedés",
+            "spanish": "transporte"
         },
         "imagePath": null
     }

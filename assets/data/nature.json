@@ -3,231 +3,264 @@
         "translations": {
             "english": "sea",
             "portuguese": "mar",
-            "hungarian": "tenger"
+            "hungarian": "tenger",
+            "spanish": "mar"
         }
     },
     {
         "translations": {
             "english": "ocean",
             "portuguese": "oceano",
-            "hungarian": "óceán"
+            "hungarian": "óceán",
+            "spanish": "océano"
         }
     },
     {
         "translations": {
             "english": "river",
             "portuguese": "rio",
-            "hungarian": "folyó"
+            "hungarian": "folyó",
+            "spanish": "río"
         }
     },
     {
         "translations": {
             "english": "mountain",
             "portuguese": "montanha",
-            "hungarian": "hegy"
+            "hungarian": "hegy",
+            "spanish": "montaña"
         }
     },
     {
         "translations": {
             "english": "rain",
             "portuguese": "chuva",
-            "hungarian": "eső"
+            "hungarian": "eső",
+            "spanish": "lluvia"
         }
     },
     {
         "translations": {
             "english": "snow",
             "portuguese": "neve",
-            "hungarian": "hó"
+            "hungarian": "hó",
+            "spanish": "nieve"
         }
     },
     {
         "translations": {
             "english": "tree",
             "portuguese": "árvore",
-            "hungarian": "fa"
+            "hungarian": "fa",
+            "spanish": "árbol"
         }
     },
     {
         "translations": {
             "english": "sun",
             "portuguese": "sol",
-            "hungarian": "nap"
+            "hungarian": "nap",
+            "spanish": "sol"
         }
     },
     {
         "translations": {
             "english": "moon",
             "portuguese": "lua",
-            "hungarian": "hold"
+            "hungarian": "hold",
+            "spanish": "luna"
         }
     },
     {
         "translations": {
             "english": "world",
             "portuguese": "mundo",
-            "hungarian": "világ"
+            "hungarian": "világ",
+            "spanish": "mundo"
         }
     },
     {
         "translations": {
             "english": "Earth",
             "portuguese": "Terra",
-            "hungarian": "Föld"
+            "hungarian": "Föld",
+            "spanish": "Tierra"
         }
     },
     {
         "translations": {
             "english": "forest",
             "portuguese": "floresta",
-            "hungarian": "erdő"
+            "hungarian": "erdő",
+            "spanish": "bosque"
         }
     },
     {
         "translations": {
             "english": "sky",
             "portuguese": "céu",
-            "hungarian": "ég"
+            "hungarian": "ég",
+            "spanish": "cielo"
         }
     },
     {
         "translations": {
             "english": "plant",
             "portuguese": "planta",
-            "hungarian": "növény"
+            "hungarian": "növény",
+            "spanish": "planta"
         }
     },
     {
         "translations": {
             "english": "wind",
             "portuguese": "vento",
-            "hungarian": "szél"
+            "hungarian": "szél",
+            "spanish": "viento"
         }
     },
     {
         "translations": {
             "english": "soil/earth",
             "portuguese": "solo/terra",
-            "hungarian": "talaj/föld"
+            "hungarian": "talaj/föld",
+            "spanish": "suelo/tierra"
         }
     },
     {
         "translations": {
             "english": "flower",
             "portuguese": "flor",
-            "hungarian": "virág"
+            "hungarian": "virág",
+            "spanish": "flor"
         }
     },
     {
         "translations": {
             "english": "valley",
             "portuguese": "vale",
-            "hungarian": "völgy"
+            "hungarian": "völgy",
+            "spanish": "valle"
         }
     },
     {
         "translations": {
             "english": "root",
             "portuguese": "raiz",
-            "hungarian": "gyökér"
+            "hungarian": "gyökér",
+            "spanish": "raíz"
         }
     },
     {
         "translations": {
             "english": "lake",
             "portuguese": "lago",
-            "hungarian": "tó"
+            "hungarian": "tó",
+            "spanish": "lago"
         }
     },
     {
         "translations": {
             "english": "star",
             "portuguese": "estrela",
-            "hungarian": "csillag"
+            "hungarian": "csillag",
+            "spanish": "estrella"
         }
     },
     {
         "translations": {
             "english": "grass",
             "portuguese": "grama",
-            "hungarian": "fű"
+            "hungarian": "fű",
+            "spanish": "hierba"
         }
     },
     {
         "translations": {
             "english": "leaf",
             "portuguese": "folha",
-            "hungarian": "levél"
+            "hungarian": "levél",
+            "spanish": "hoja"
         }
     },
     {
         "translations": {
             "english": "air",
             "portuguese": "ar",
-            "hungarian": "levegő"
+            "hungarian": "levegő",
+            "spanish": "aire"
         }
     },
     {
         "translations": {
             "english": "sand",
             "portuguese": "areia",
-            "hungarian": "homok"
+            "hungarian": "homok",
+            "spanish": "arena"
         }
     },
     {
         "translations": {
             "english": "beach",
             "portuguese": "praia",
-            "hungarian": "strand"
+            "hungarian": "strand",
+            "spanish": "playa"
         }
     },
     {
         "translations": {
             "english": "wave",
             "portuguese": "onda",
-            "hungarian": "hullám"
+            "hungarian": "hullám",
+            "spanish": "ola"
         }
     },
     {
         "translations": {
             "english": "fire",
             "portuguese": "fogo",
-            "hungarian": "tűz"
+            "hungarian": "tűz",
+            "spanish": "fuego"
         }
     },
     {
         "translations": {
             "english": "ice",
             "portuguese": "gelo",
-            "hungarian": "jég"
+            "hungarian": "jég",
+            "spanish": "hielo"
         }
     },
     {
         "translations": {
             "english": "island",
             "portuguese": "ilha",
-            "hungarian": "sziget"
+            "hungarian": "sziget",
+            "spanish": "isla"
         }
     },
     {
         "translations": {
             "english": "hill",
             "portuguese": "colina",
-            "hungarian": "domb"
+            "hungarian": "domb",
+            "spanish": "colina"
         }
     },
     {
         "translations": {
             "english": "heat",
             "portuguese": "calor",
-            "hungarian": "hőség"
+            "hungarian": "hőség",
+            "spanish": "calor"
         }
     },
     {
         "translations": {
             "english": "nature",
             "portuguese": "natureza",
-            "hungarian": "természet"
+            "hungarian": "természet",
+            "spanish": "naturaleza"
         }
     }
 ]

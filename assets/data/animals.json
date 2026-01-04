@@ -3,7 +3,8 @@
         "translations": {
             "english": "dog",
             "portuguese": "cachorro",
-            "hungarian": "kutya"
+            "hungarian": "kutya",
+            "spanish": "perro"
         },
         "imagePath": null
     },
@@ -11,7 +12,8 @@
         "translations": {
             "english": "cat",
             "portuguese": "gato",
-            "hungarian": "macska"
+            "hungarian": "macska",
+            "spanish": "gato"
         },
         "imagePath": null
     },
@@ -19,7 +21,8 @@
         "translations": {
             "english": "fish",
             "portuguese": "peixe",
-            "hungarian": "hal"
+            "hungarian": "hal",
+            "spanish": "pez"
         },
         "imagePath": null
     },
@@ -27,7 +30,8 @@
         "translations": {
             "english": "bird",
             "portuguese": "pássaro",
-            "hungarian": "madár"
+            "hungarian": "madár",
+            "spanish": "pájaro"
         },
         "imagePath": null
     },
@@ -35,7 +39,8 @@
         "translations": {
             "english": "cow",
             "portuguese": "vaca",
-            "hungarian": "tehén"
+            "hungarian": "tehén",
+            "spanish": "vaca"
         },
         "imagePath": null
     },
@@ -43,7 +48,8 @@
         "translations": {
             "english": "pig",
             "portuguese": "porco",
-            "hungarian": "disznó"
+            "hungarian": "disznó",
+            "spanish": "cerdo"
         },
         "imagePath": null
     },
@@ -51,7 +57,8 @@
         "translations": {
             "english": "mouse",
             "portuguese": "rato",
-            "hungarian": "egér"
+            "hungarian": "egér",
+            "spanish": "ratón"
         },
         "imagePath": null
     },
@@ -59,7 +66,8 @@
         "translations": {
             "english": "horse",
             "portuguese": "cavalo",
-            "hungarian": "ló"
+            "hungarian": "ló",
+            "spanish": "caballo"
         },
         "imagePath": null
     },
@@ -67,7 +75,8 @@
         "translations": {
             "english": "wing",
             "portuguese": "asa",
-            "hungarian": "szárny"
+            "hungarian": "szárny",
+            "spanish": "ala"
         },
         "imagePath": null
     },
@@ -75,7 +84,8 @@
         "translations": {
             "english": "animal",
             "portuguese": "animal",
-            "hungarian": "állat"
+            "hungarian": "állat",
+            "spanish": "animal"
         },
         "imagePath": null
     }

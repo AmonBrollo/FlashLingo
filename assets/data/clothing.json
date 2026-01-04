@@ -3,7 +3,8 @@
         "translations": {
             "english": "hat",
             "portuguese": "chapéu",
-            "hungarian": "kalap"
+            "hungarian": "kalap",
+            "spanish": "sombrero"
         },
         "imagePath": null
     },
@@ -11,7 +12,8 @@
         "translations": {
             "english": "dress",
             "portuguese": "vestido",
-            "hungarian": "ruha"
+            "hungarian": "ruha",
+            "spanish": "vestido"
         },
         "imagePath": null
     },
@@ -19,7 +21,8 @@
         "translations": {
             "english": "suit",
             "portuguese": "terno",
-            "hungarian": "öltöny"
+            "hungarian": "öltöny",
+            "spanish": "traje"
         },
         "imagePath": null
     },
@@ -27,7 +30,8 @@
         "translations": {
             "english": "skirt",
             "portuguese": "saia",
-            "hungarian": "szoknya"
+            "hungarian": "szoknya",
+            "spanish": "falda"
         },
         "imagePath": null
     },
@@ -35,7 +39,8 @@
         "translations": {
             "english": "shirt",
             "portuguese": "camisa",
-            "hungarian": "ing"
+            "hungarian": "ing",
+            "spanish": "camisa"
         },
         "imagePath": null
     },
@@ -43,7 +48,8 @@
         "translations": {
             "english": "T-shirt",
             "portuguese": "camiseta",
-            "hungarian": "póló"
+            "hungarian": "póló",
+            "spanish": "camiseta"
         },
         "imagePath": null
     },
@@ -51,7 +57,8 @@
         "translations": {
             "english": "pants",
             "portuguese": "calça",
-            "hungarian": "nadrág"
+            "hungarian": "nadrág",
+            "spanish": "pantalones"
         },
         "imagePath": null
     },
@@ -59,7 +66,8 @@
         "translations": {
             "english": "shoes",
             "portuguese": "sapatos",
-            "hungarian": "cipő"
+            "hungarian": "cipő",
+            "spanish": "zapatos"
         },
         "imagePath": null
     },
@@ -67,7 +75,8 @@
         "translations": {
             "english": "pocket",
             "portuguese": "bolso",
-            "hungarian": "zseb"
+            "hungarian": "zseb",
+            "spanish": "bolsillo"
         },
         "imagePath": null
     },
@@ -75,7 +84,8 @@
         "translations": {
             "english": "coat",
             "portuguese": "casaco",
-            "hungarian": "kabát"
+            "hungarian": "kabát",
+            "spanish": "abrigo"
         },
         "imagePath": null
     },
@@ -83,7 +93,8 @@
         "translations": {
             "english": "stain",
             "portuguese": "mancha",
-            "hungarian": "folt"
+            "hungarian": "folt",
+            "spanish": "mancha"
         },
         "imagePath": null
     },
@@ -91,7 +102,8 @@
         "translations": {
             "english": "clothing",
             "portuguese": "roupa",
-            "hungarian": "ruházat"
+            "hungarian": "ruházat",
+            "spanish": "ropa"
         },
         "imagePath": null
     }

@@ -3,7 +3,8 @@
         "translations": {
             "english": "Monday",
             "portuguese": "Segunda-feira",
-            "hungarian": "Hétfő"
+            "hungarian": "Hétfő",
+            "spanish": "Lunes"
         },
         "imagePath": null
     },
@@ -11,7 +12,8 @@
         "translations": {
             "english": "Tuesday",
             "portuguese": "Terça-feira",
-            "hungarian": "Kedd"
+            "hungarian": "Kedd",
+            "spanish": "Martes"
         },
         "imagePath": null
     },
@@ -19,7 +21,8 @@
         "translations": {
             "english": "Wednesday",
             "portuguese": "Quarta-feira",
-            "hungarian": "Szerda"
+            "hungarian": "Szerda",
+            "spanish": "Miércoles"
         },
         "imagePath": null
     },
@@ -27,7 +30,8 @@
         "translations": {
             "english": "Thursday",
             "portuguese": "Quinta-feira",
-            "hungarian": "Csütörtök"
+            "hungarian": "Csütörtök",
+            "spanish": "Jueves"
         },
         "imagePath": null
     },
@@ -35,7 +39,8 @@
         "translations": {
             "english": "Friday",
             "portuguese": "Sexta-feira",
-            "hungarian": "Péntek"
+            "hungarian": "Péntek",
+            "spanish": "Viernes"
         },
         "imagePath": null
     },
@@ -43,7 +48,8 @@
         "translations": {
             "english": "Saturday",
             "portuguese": "Sábado",
-            "hungarian": "Szombat"
+            "hungarian": "Szombat",
+            "spanish": "Sábado"
         },
         "imagePath": null
     },
@@ -51,7 +57,8 @@
         "translations": {
             "english": "Sunday",
             "portuguese": "Domingo",
-            "hungarian": "Vasárnap"
+            "hungarian": "Vasárnap",
+            "spanish": "Domingo"
         },
         "imagePath": null
     }

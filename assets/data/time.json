@@ -3,7 +3,8 @@
         "translations": {
             "english": "year",
             "portuguese": "Ano",
-            "hungarian": "Év"
+            "hungarian": "Év",
+            "spanish": "Año"
         },
         "imagePath": null
     },
@@ -11,7 +12,8 @@
         "translations": {
             "english": "month",
             "portuguese": "Mês",
-            "hungarian": "Hónap"
+            "hungarian": "Hónap",
+            "spanish": "Mes"
         },
         "imagePath": null
     },
@@ -19,7 +21,8 @@
         "translations": {
             "english": "week",
             "portuguese": "Semana",
-            "hungarian": "Hét"
+            "hungarian": "Hét",
+            "spanish": "Semana"
         },
         "imagePath": null
     },
@@ -27,7 +30,8 @@
         "translations": {
             "english": "day",
             "portuguese": "Dia",
-            "hungarian": "Nap"
+            "hungarian": "Nap",
+            "spanish": "Día"
         },
         "imagePath": null
     },
@@ -35,7 +39,8 @@
         "translations": {
             "english": "hour",
             "portuguese": "Hora",
-            "hungarian": "Óra"
+            "hungarian": "Óra",
+            "spanish": "Hora"
         },
         "imagePath": null
     },
@@ -43,7 +48,8 @@
         "translations": {
             "english": "minute",
             "portuguese": "Minuto",
-            "hungarian": "Perc"
+            "hungarian": "Perc",
+            "spanish": "Minuto"
         },
         "imagePath": null
     },
@@ -51,7 +57,8 @@
         "translations": {
             "english": "second",
             "portuguese": "Segundo",
-            "hungarian": "Másodperc"
+            "hungarian": "Másodperc",
+            "spanish": "Segundo"
         },
         "imagePath": null
     },
@@ -59,7 +66,8 @@
         "translations": {
             "english": "morning",
             "portuguese": "Manhã",
-            "hungarian": "Reggel"
+            "hungarian": "Reggel",
+            "spanish": "Mañana"
         },
         "imagePath": null
     },
@@ -67,7 +75,8 @@
         "translations": {
             "english": "afternoon",
             "portuguese": "Tarde",
-            "hungarian": "Délután"
+            "hungarian": "Délután",
+            "spanish": "Tarde"
         },
         "imagePath": null
     },
@@ -75,7 +84,8 @@
         "translations": {
             "english": "evening",
             "portuguese": "Noite (início)",
-            "hungarian": "Este"
+            "hungarian": "Este",
+            "spanish": "Tarde (noche)"
         },
         "imagePath": null
     },
@@ -83,7 +93,8 @@
         "translations": {
             "english": "night",
             "portuguese": "Noite",
-            "hungarian": "Éjszaka"
+            "hungarian": "Éjszaka",
+            "spanish": "Noche"
         },
         "imagePath": null
     },
@@ -91,7 +102,8 @@
         "translations": {
             "english": "time",
             "portuguese": "Tempo",
-            "hungarian": "Idő"
+            "hungarian": "Idő",
+            "spanish": "Tiempo"
         },
         "imagePath": null
     },
@@ -99,7 +111,8 @@
         "translations": {
             "english": "summer",
             "portuguese": "verão",
-            "hungarian": "nyár"
+            "hungarian": "nyár",
+            "spanish": "verano"
         },
         "imagePath": null
     },
@@ -107,7 +120,8 @@
         "translations": {
             "english": "spring",
             "portuguese": "primavera",
-            "hungarian": "tavasz"
+            "hungarian": "tavasz",
+            "spanish": "primavera"
         },
         "imagePath": null
     },
@@ -115,7 +129,8 @@
         "translations": {
             "english": "winter",
             "portuguese": "inverno",
-            "hungarian": "tél"
+            "hungarian": "tél",
+            "spanish": "invierno"
         },
         "imagePath": null
     },
@@ -123,7 +138,8 @@
         "translations": {
             "english": "fall",
             "portuguese": "outono",
-            "hungarian": "ősz"
+            "hungarian": "ősz",
+            "spanish": "otoño"
         },
         "imagePath": null
     },
@@ -131,7 +147,8 @@
         "translations": {
             "english": "season",
             "portuguese": "estação",
-            "hungarian": "évszak"
+            "hungarian": "évszak",
+            "spanish": "estación"
         },
         "imagePath": null
     }

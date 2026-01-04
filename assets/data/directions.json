@@ -3,7 +3,8 @@
         "translations": {
             "english": "left",
             "portuguese": "esquerda",
-            "hungarian": "bal"
+            "hungarian": "bal",
+            "spanish": "izquierda"
         },
         "imagePath": null
     },
@@ -11,7 +12,8 @@
         "translations": {
             "english": "right",
             "portuguese": "direita",
-            "hungarian": "jobb"
+            "hungarian": "jobb",
+            "spanish": "derecha"
         },
         "imagePath": null
     },
@@ -19,7 +21,8 @@
         "translations": {
             "english": "up",
             "portuguese": "cima",
-            "hungarian": "fel"
+            "hungarian": "fel",
+            "spanish": "arriba"
         },
         "imagePath": null
     },
@@ -27,7 +30,8 @@
         "translations": {
             "english": "down",
             "portuguese": "baixo",
-            "hungarian": "le"
+            "hungarian": "le",
+            "spanish": "abajo"
         },
         "imagePath": null
     },
@@ -35,7 +39,8 @@
         "translations": {
             "english": "front",
             "portuguese": "frente",
-            "hungarian": "eleje"
+            "hungarian": "eleje",
+            "spanish": "frente"
         },
         "imagePath": null
     },
@@ -43,7 +48,8 @@
         "translations": {
             "english": "back",
             "portuguese": "costas",
-            "hungarian": "hátulja"
+            "hungarian": "hátulja",
+            "spanish": "atrás"
         },
         "imagePath": null
     },
@@ -51,7 +57,8 @@
         "translations": {
             "english": "top",
             "portuguese": "topo",
-            "hungarian": "teteje"
+            "hungarian": "teteje",
+            "spanish": "arriba"
         },
         "imagePath": null
     },
@@ -59,7 +66,8 @@
         "translations": {
             "english": "bottom",
             "portuguese": "fundo",
-            "hungarian": "alja"
+            "hungarian": "alja",
+            "spanish": "abajo"
         },
         "imagePath": null
     },
@@ -67,7 +75,8 @@
         "translations": {
             "english": "side",
             "portuguese": "lado",
-            "hungarian": "oldal"
+            "hungarian": "oldal",
+            "spanish": "lado"
         },
         "imagePath": null
     },
@@ -75,7 +84,8 @@
         "translations": {
             "english": "inside",
             "portuguese": "dentro",
-            "hungarian": "belül"
+            "hungarian": "belül",
+            "spanish": "dentro"
         },
         "imagePath": null
     },
@@ -83,7 +93,8 @@
         "translations": {
             "english": "outside",
             "portuguese": "fora",
-            "hungarian": "kívül"
+            "hungarian": "kívül",
+            "spanish": "fuera"
         },
         "imagePath": null
     },
@@ -91,7 +102,8 @@
         "translations": {
             "english": "straight",
             "portuguese": "reto",
-            "hungarian": "egyenes"
+            "hungarian": "egyenes",
+            "spanish": "recto"
         },
         "imagePath": null
     },
@@ -99,7 +111,8 @@
         "translations": {
             "english": "direction",
             "portuguese": "direção",
-            "hungarian": "irány"
+            "hungarian": "irány",
+            "spanish": "dirección"
         },
         "imagePath": null
     },
@@ -107,7 +120,8 @@
         "translations": {
             "english": "north",
             "portuguese": "norte",
-            "hungarian": "észak"
+            "hungarian": "észak",
+            "spanish": "norte"
         },
         "imagePath": null
     },
@@ -115,7 +129,8 @@
         "translations": {
             "english": "south",
             "portuguese": "sul",
-            "hungarian": "dél"
+            "hungarian": "dél",
+            "spanish": "sur"
         },
         "imagePath": null
     },
@@ -123,7 +138,8 @@
         "translations": {
             "english": "east",
             "portuguese": "leste",
-            "hungarian": "kelet"
+            "hungarian": "kelet",
+            "spanish": "este"
         },
         "imagePath": null
     },
@@ -131,7 +147,8 @@
         "translations": {
             "english": "west",
             "portuguese": "oeste",
-            "hungarian": "nyugat"
+            "hungarian": "nyugat",
+            "spanish": "oeste"
         },
         "imagePath": null
     }

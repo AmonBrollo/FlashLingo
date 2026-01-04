@@ -1,102 +1,127 @@
 {
     "adjectives": {
         "english": "Adjectives",
-        "portuguese": "Adjetivos"
+        "portuguese": "Adjetivos",
+        "spanish": "Adjetivos"
     },
     "animals": {
         "english": "Animals",
-        "portuguese": "Animais"
+        "portuguese": "Animais",
+        "spanish": "Animales"
     },
     "art": {
         "english": "Art",
-        "portuguese": "Arte"
+        "portuguese": "Arte",
+        "spanish": "Arte"
     },
     "beverages": {
         "english": "Beverages",
-        "portuguese": "Bebidas"
+        "portuguese": "Bebidas",
+        "spanish": "Bebidas"
     },
     "body": {
         "english": "Body",
-        "portuguese": "Corpo"
+        "portuguese": "Corpo",
+        "spanish": "Cuerpo"
     },
     "clothing": {
         "english": "Clothing",
-        "portuguese": "Roupas"
+        "portuguese": "Roupas",
+        "spanish": "Ropa"
     },
     "days": {
         "english": "Days",
-        "portuguese": "Dias"
+        "portuguese": "Dias",
+        "spanish": "Días"
     },
     "directions": {
         "english": "Directions",
-        "portuguese": "Direções"
+        "portuguese": "Direções",
+        "spanish": "Direcciones"
     },
     "electronics": {
         "english": "Electronics",
-        "portuguese": "Eletrônicos"
+        "portuguese": "Eletrônicos",
+        "spanish": "Electrónicos"
     },
     "food": {
         "english": "Food",
-        "portuguese": "Comida"
+        "portuguese": "Comida",
+        "spanish": "Comida"
     },
     "home": {
         "english": "Home",
-        "portuguese": "Casa"
+        "portuguese": "Casa",
+        "spanish": "Casa"
     },
     "jobs": {
         "english": "Jobs",
-        "portuguese": "Profissões"
+        "portuguese": "Profissões",
+        "spanish": "Profesiones"
     },
     "locations": {
         "english": "Locations",
-        "portuguese": "Localizações"
+        "portuguese": "Localizações",
+        "spanish": "Ubicaciones"
     },
     "materials": {
         "english": "Materials",
-        "portuguese": "Materiais"
+        "portuguese": "Materiais",
+        "spanish": "Materiales"
     },
     "math": {
         "english": "Math",
-        "portuguese": "Matemática"
+        "portuguese": "Matemática",
+        "spanish": "Matemáticas"
     },
     "miscellaneous": {
         "english": "Miscellaneous",
-        "portuguese": "Diversos"
+        "portuguese": "Diversos",
+        "spanish": "Varios"
     },
     "months": {
         "english": "Months",
-        "portuguese": "Meses"
+        "portuguese": "Meses",
+        "spanish": "Meses"
     },
     "nature": {
         "english": "Nature",
-        "portuguese": "Natureza"
+        "portuguese": "Natureza",
+        "spanish": "Naturaleza"
     },
     "numbers": {
         "english": "Numbers",
-        "portuguese": "Números"
+        "portuguese": "Números",
+        "spanish": "Números"
     },
     "people": {
         "english": "People",
-        "portuguese": "Pessoas"
+        "portuguese": "Pessoas",
+        "spanish": "Personas"
     },
     "pronouns": {
         "english": "Pronouns",
-        "portuguese": "Pronomes"
+        "portuguese": "Pronomes",
+        "spanish": "Pronombres"
     },
     "society": {
         "english": "Society",
-        "portuguese": "Sociedade"
+        "portuguese": "Sociedade",
+        "spanish": "Sociedad"
     },
     "time": {
         "english": "Time",
-        "portuguese": "Tempo"
+        "portuguese": "Tempo",
+        "spanish": "Tiempo"
     },
     "transportation": {
         "english": "Transportation",
-        "portuguese": "Transporte"
+        "portuguese": "Transporte",
+        "spanish": "Transporte"
     },
     "verbs": {
         "english": "Verbs",
-        "portuguese": "Verbos"
+        "portuguese": "Verbos",
+        "spanish": "Verbos"
     }
 }
