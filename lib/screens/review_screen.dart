@@ -28,16 +28,25 @@ class _ReviewScreenState extends State<ReviewScreen> {
   @override
   void initState() {
     super.initState();
+    // Set language context for repetition service
+    _repetitionService.setLanguageContext(widget.baseLanguage, widget.targetLanguage);
     _loadProgressData();
   }
 
   Future<void> _loadProgressData() async {
     try {
-      // Initialize repetition service
-      await _repetitionService.initialize();
+      // Initialize repetition service with language context
+      await _repetitionService.initialize(
+        baseLanguage: widget.baseLanguage,
+        targetLanguage: widget.targetLanguage,
+      );
 
       // Preload progress for all cards
-      await _repetitionService.preloadProgress(widget.cards);
+      await _repetitionService.preloadProgress(
+        widget.cards,
+        baseLanguage: widget.baseLanguage,
+        targetLanguage: widget.targetLanguage,
+      );
 
       // Group cards by their current box level
       final grouped = _groupByLevel(widget.cards);
@@ -62,7 +71,11 @@ class _ReviewScreenState extends State<ReviewScreen> {
     final Map<int, List<Flashcard>> grouped = {};
 
     for (final card in cards) {
-      final progress = _repetitionService.getProgress(card);
+      final progress = _repetitionService.getProgress(
+        card,
+        baseLanguage: widget.baseLanguage,
+        targetLanguage: widget.targetLanguage,
+      );
       final box = progress.box;
       grouped.putIfAbsent(box, () => []).add(card);
     }
@@ -89,7 +102,11 @@ class _ReviewScreenState extends State<ReviewScreen> {
 
   String _getNextReviewText(Flashcard card) {
     final loc = context.read<UiLanguageProvider>().loc;
-    final progress = _repetitionService.getProgress(card);
+    final progress = _repetitionService.getProgress(
+      card,
+      baseLanguage: widget.baseLanguage,
+      targetLanguage: widget.targetLanguage,
+    );
     final nextReview = progress.nextReview;
     final now = DateTime.now();
     final difference = nextReview.difference(now);

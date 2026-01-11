@@ -61,6 +61,10 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
   void initState() {
     super.initState();
     _confettiController = ConfettiController(duration: const Duration(seconds: 2));
+    
+    // Set language context for repetition service
+    _repetitionService.setLanguageContext(widget.baseLanguage, widget.targetLanguage);
+    
     _initializeProgressData();
   }
 
@@ -89,7 +93,10 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
 
       // Load progress data (this happens in background)
       if (!_repetitionService.isCacheLoaded) {
-        await _repetitionService.initialize().timeout(
+        await _repetitionService.initialize(
+          baseLanguage: widget.baseLanguage,
+          targetLanguage: widget.targetLanguage,
+        ).timeout(
           const Duration(seconds: 3),
           onTimeout: () {
             debugPrint('Progress initialization timed out - using defaults');
@@ -98,17 +105,37 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
       }
 
       // Calculate DUE box stats (only cards that are due for review TODAY)
-      final dueBoxStats = _repetitionService.getDueBoxStats(allCards);
-      final dueBoxCards = _repetitionService.getDueBoxCards(allCards);
+      final dueBoxStats = _repetitionService.getDueBoxStats(
+        allCards,
+        baseLanguage: widget.baseLanguage,
+        targetLanguage: widget.targetLanguage,
+      );
+      final dueBoxCards = _repetitionService.getDueBoxCards(
+        allCards,
+        baseLanguage: widget.baseLanguage,
+        targetLanguage: widget.targetLanguage,
+      );
       
       // Get ALL box stats to show upcoming cards
-      final allBoxStats = _repetitionService.getQuickBoxStats(allCards);
-      final allBoxCards = _repetitionService.getQuickBoxCards(allCards);
+      final allBoxStats = _repetitionService.getQuickBoxStats(
+        allCards,
+        baseLanguage: widget.baseLanguage,
+        targetLanguage: widget.targetLanguage,
+      );
+      final allBoxCards = _repetitionService.getQuickBoxCards(
+        allCards,
+        baseLanguage: widget.baseLanguage,
+        targetLanguage: widget.targetLanguage,
+      );
 
       // Get stats for original topic decks
       final stats = <String, Map<String, int>>{};
       for (final deck in widget.decks) {
-        stats[deck.topicKey] = _repetitionService.getStudyStats(deck.cards);
+        stats[deck.topicKey] = _repetitionService.getStudyStats(
+          deck.cards,
+          baseLanguage: widget.baseLanguage,
+          targetLanguage: widget.targetLanguage,
+        );
       }
 
       if (mounted) {
@@ -268,7 +295,11 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
     if (!isDue && totalCards > 0) {
       final allCards = _allBoxCards[level] ?? [];
       for (final card in allCards) {
-        final nextReview = _repetitionService.getNextReviewDate(card);
+        final nextReview = _repetitionService.getNextReviewDate(
+          card,
+          baseLanguage: widget.baseLanguage,
+          targetLanguage: widget.targetLanguage,
+        );
         if (nextReview != null) {
           if (earliestReview == null || nextReview.isBefore(earliestReview)) {
             earliestReview = nextReview;

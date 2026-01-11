@@ -66,6 +66,9 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
     _flashcards = List.from(widget.flashcards);
     _audioPlayer = AudioPlayer();
     
+    // Set language context for repetition service
+    _repetitionService.setLanguageContext(widget.baseLanguage, widget.targetLanguage);
+    
     // Initialize flip animation
     _flipController = AnimationController(
       duration: const Duration(milliseconds: 200),
@@ -88,10 +91,17 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
   Future<void> _initializeScreen() async {
     try {
       if (!_repetitionService.isCacheLoaded) {
-        await _repetitionService.initialize();
+        await _repetitionService.initialize(
+          baseLanguage: widget.baseLanguage,
+          targetLanguage: widget.targetLanguage,
+        );
       }
       
-      await _repetitionService.preloadProgress(_flashcards);
+      await _repetitionService.preloadProgress(
+        _flashcards,
+        baseLanguage: widget.baseLanguage,
+        targetLanguage: widget.targetLanguage,
+      );
       await _loadLocalImages();
 
       if (mounted) {
@@ -137,13 +147,21 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
   }
 
   void _selectOptimalStartingCard() {
-    final dueCards = _repetitionService.dueCards(_flashcards);
+    final dueCards = _repetitionService.dueCards(
+      _flashcards,
+      baseLanguage: widget.baseLanguage,
+      targetLanguage: widget.targetLanguage,
+    );
     if (dueCards.isNotEmpty) {
       _currentIndex = _flashcards.indexOf(dueCards.first);
       return;
     }
 
-    final newCards = _repetitionService.newCards(_flashcards);
+    final newCards = _repetitionService.newCards(
+      _flashcards,
+      baseLanguage: widget.baseLanguage,
+      targetLanguage: widget.targetLanguage,
+    );
     if (newCards.isNotEmpty) {
       _currentIndex = _flashcards.indexOf(newCards.first);
       return;
@@ -170,7 +188,11 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
     setState(() {
       _flashcards = jsonData.map((item) => Flashcard.fromJson(item)).toList();
       for (final card in _flashcards) {
-        _repetitionService.getProgress(card);
+        _repetitionService.getProgress(
+          card,
+          baseLanguage: widget.baseLanguage,
+          targetLanguage: widget.targetLanguage,
+        );
       }
     });
 
@@ -197,11 +219,19 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
           .toList();
 
       if (remainingCards.isNotEmpty) {
-        final dueCards = _repetitionService.dueCards(remainingCards);
+        final dueCards = _repetitionService.dueCards(
+          remainingCards,
+          baseLanguage: widget.baseLanguage,
+          targetLanguage: widget.targetLanguage,
+        );
         if (dueCards.isNotEmpty) {
           _currentIndex = _flashcards.indexOf(dueCards.first);
         } else {
-          final newCards = _repetitionService.newCards(remainingCards);
+          final newCards = _repetitionService.newCards(
+            remainingCards,
+            baseLanguage: widget.baseLanguage,
+            targetLanguage: widget.targetLanguage,
+          );
           if (newCards.isNotEmpty) {
             _currentIndex = _flashcards.indexOf(newCards.first);
           } else {
@@ -451,7 +481,11 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
   void _handleSwipe(Flashcard card, bool remembered) {
     _swipedThisSession.add(card);
     if (remembered) {
-      _repetitionService.markRemembered(card);
+      _repetitionService.markRemembered(
+        card,
+        baseLanguage: widget.baseLanguage,
+        targetLanguage: widget.targetLanguage,
+      );
       final reviewState = context.read<ReviewState>();
       reviewState.addCard(card);
 
@@ -459,7 +493,11 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
         reviewState.removeForgottenCard(card);
       }
     } else {
-      _repetitionService.markForgotten(card);
+      _repetitionService.markForgotten(
+        card,
+        baseLanguage: widget.baseLanguage,
+        targetLanguage: widget.targetLanguage,
+      );
       context.read<ReviewState>().addForgottenCard(card);
     }
 
@@ -756,7 +794,11 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
         key: _flashcardKey,
         child: FlashcardView(
           flashcard: currentCard,
-          progress: _repetitionService.getProgress(currentCard),
+          progress: _repetitionService.getProgress(
+            currentCard,
+            baseLanguage: widget.baseLanguage,
+            targetLanguage: widget.targetLanguage,
+          ),
           isFlipped: _isFlipped,
           baseLanguage: widget.baseLanguage,
           targetLanguage: widget.targetLanguage,

@@ -10,7 +10,8 @@ class FirebaseProgressService {
   static final FirebaseAuth _auth = FirebaseAuth.instance;
   
   // Single key for all progress data (FAST!)
-  static const String _allProgressKey = 'all_progress_v2';
+  static const String _allProgressKey = 'all_progress_v3'; // Bumped version for language support
+  static const String _migrationKey = 'progress_migrated_v3';
   
   // In-memory cache for ultra-fast access
   static Map<String, FlashcardProgress>? _memoryCache;
@@ -23,17 +24,24 @@ class FirebaseProgressService {
     return _firestore.collection('users').doc(user.uid).collection('progress');
   }
 
-  /// Generate a unique key for a flashcard (consistent with RepetitionService)
-  static String _generateCardKey(Flashcard card) {
-    return card.translations['id'] ?? card.translations.values.first;
+  /// Generate a unique key for a flashcard WITH language context
+  static String _generateCardKey(
+    Flashcard card,
+    String baseLanguage,
+    String targetLanguage,
+  ) {
+    final cardId = card.translations['id'] ?? card.translations.values.first;
+    return '${baseLanguage}_${targetLanguage}_$cardId';
   }
 
   /// Save flashcard progress to Firebase and local storage
   static Future<void> saveProgress(
     Flashcard card,
     FlashcardProgress progress,
+    String baseLanguage,
+    String targetLanguage,
   ) async {
-    final cardKey = _generateCardKey(card);
+    final cardKey = _generateCardKey(card, baseLanguage, targetLanguage);
 
     // Update memory cache (instant!)
     _memoryCache ??= {};
@@ -69,8 +77,12 @@ class FirebaseProgressService {
   }
 
   /// Load flashcard progress from cache/local/firebase
-  static Future<FlashcardProgress> loadProgress(Flashcard card) async {
-    final cardKey = _generateCardKey(card);
+  static Future<FlashcardProgress> loadProgress(
+    Flashcard card,
+    String baseLanguage,
+    String targetLanguage,
+  ) async {
+    final cardKey = _generateCardKey(card, baseLanguage, targetLanguage);
     
     // Check memory cache first (instant!)
     if (_memoryCache != null && _memoryCache!.containsKey(cardKey)) {
@@ -91,6 +103,9 @@ class FirebaseProgressService {
     }
 
     final Map<String, FlashcardProgress> allProgress = {};
+
+    // Check if we need to clear old format data
+    await _clearOldProgressIfNeeded();
 
     // Load from local storage first (FAST - single key read)
     try {
@@ -115,9 +130,6 @@ class FirebaseProgressService {
     } catch (e) {
       print('Error loading from local storage: $e');
     }
-
-    // Check if we need to migrate old format
-    await _migrateOldFormatIfNeeded();
 
     final progressCollection = _getProgressCollection();
 
@@ -160,8 +172,12 @@ class FirebaseProgressService {
   }
 
   /// Delete progress for a specific flashcard
-  static Future<void> deleteProgress(Flashcard card) async {
-    final cardKey = _generateCardKey(card);
+  static Future<void> deleteProgress(
+    Flashcard card,
+    String baseLanguage,
+    String targetLanguage,
+  ) async {
+    final cardKey = _generateCardKey(card, baseLanguage, targetLanguage);
 
     // Remove from memory cache
     _memoryCache?.remove(cardKey);
@@ -194,6 +210,8 @@ class FirebaseProgressService {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.remove(_allProgressKey);
+      await prefs.remove('all_progress_v2'); // Clear old version
+      await prefs.remove(_migrationKey);
       
       // Also clear old format keys
       final keysToRemove = prefs
@@ -316,55 +334,37 @@ class FirebaseProgressService {
     }
   }
 
-  /// Migrate old format (progress_card_X) to new format (single key)
-  static Future<void> _migrateOldFormatIfNeeded() async {
+  /// Clear old progress format on first launch with new system
+  static Future<void> _clearOldProgressIfNeeded() async {
     try {
       final prefs = await SharedPreferences.getInstance();
       
-      // Check if new format already exists
-      if (prefs.containsKey(_allProgressKey)) {
-        return; // Already migrated
+      // Check if we've already migrated
+      if (prefs.getBool(_migrationKey) == true) {
+        return; // Already cleared
       }
       
-      // Find old format keys
+      print('Clearing old progress format (language-agnostic)...');
+      
+      // Remove old version key
+      await prefs.remove('all_progress_v2');
+      
+      // Remove old individual keys
       final oldKeys = prefs
           .getKeys()
           .where((key) => key.startsWith('progress_'))
           .toList();
       
-      if (oldKeys.isEmpty) {
-        return; // Nothing to migrate
-      }
-      
-      print('Migrating ${oldKeys.length} cards from old format...');
-      
-      final Map<String, dynamic> allProgress = {};
-      
-      for (final key in oldKeys) {
-        final cardKey = key.substring('progress_'.length);
-        final progressJson = prefs.getString(key);
-        
-        if (progressJson != null) {
-          try {
-            final progressData = json.decode(progressJson);
-            allProgress[cardKey] = progressData;
-          } catch (e) {
-            print('Error migrating $cardKey: $e');
-          }
-        }
-      }
-      
-      // Save in new format
-      await prefs.setString(_allProgressKey, json.encode(allProgress));
-      
-      // Delete old keys
       for (final key in oldKeys) {
         await prefs.remove(key);
       }
       
-      print('Migration complete: ${allProgress.length} cards');
+      // Mark as migrated
+      await prefs.setBool(_migrationKey, true);
+      
+      print('Old progress cleared. Users start fresh with language-specific progress.');
     } catch (e) {
-      print('Error during migration: $e');
+      print('Error clearing old progress: $e');
     }
   }
 
