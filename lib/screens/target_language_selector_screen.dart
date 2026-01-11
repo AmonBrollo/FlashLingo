@@ -48,6 +48,9 @@ class TargetLanguageSelectorScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final loc = context.watch<UiLanguageProvider>().loc;
     
+    // Get available target languages based on the base language
+    final availableTargets = AppLanguages.getAvailableTargetLanguages(baseLanguage);
+    
     return Scaffold(
       backgroundColor: Colors.brown[50],
       appBar: AppBar(
@@ -57,14 +60,33 @@ class TargetLanguageSelectorScreen extends StatelessWidget {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            LanguageOptionButton(
-              text: AppLanguages.hungarian.name,
-              color: Colors.red.shade700,
-              emoji: AppLanguages.hungarian.flag,
-              onTap: () => _selectTargetLanguage(context, "hungarian"),
-            ),
-          ],
+          children: availableTargets.map((language) {
+            // Choose a color based on the language
+            Color color;
+            switch (language.code) {
+              case 'hu':
+                color = Colors.red.shade700;
+                break;
+              case 'es':
+                color = Colors.amber.shade700;
+                break;
+              case 'en':
+                color = Colors.blue.shade700;
+                break;
+              case 'pt':
+                color = Colors.green.shade700;
+                break;
+              default:
+                color = Colors.grey.shade700;
+            }
+            
+            return LanguageOptionButton(
+              text: language.name,
+              color: color,
+              emoji: language.flag,
+              onTap: () => _selectTargetLanguage(context, language.legacyCode),
+            );
+          }).toList(),
         ),
       ),
     );

@@ -1,10 +1,10 @@
 /// Represents a language in the app
 class Language {
-  final String code; // ISO 639-1 code (pt, en, hu)
+  final String code; // ISO 639-1 code (pt, en, hu, es)
   final String name; // Display name in the language itself
   final String englishName; // English name
   final String flag; // Emoji flag
-  final String legacyCode; // For backward compatibility (portuguese, english)
+  final String legacyCode; // For backward compatibility (portuguese, english, hungarian, spanish)
 
   const Language({
     required this.code,
@@ -55,6 +55,14 @@ class AppLanguages {
     legacyCode: 'hungarian',
   );
 
+  static const Language spanish = Language(
+    code: 'es',
+    name: 'Español',
+    englishName: 'Spanish',
+    flag: '🇪🇸',
+    legacyCode: 'spanish',
+  );
+
   // List of all supported base languages (UI languages)
   static const List<Language> baseLanguages = [
     portuguese,
@@ -64,6 +72,7 @@ class AppLanguages {
   // List of all supported target languages (learning languages)
   static const List<Language> targetLanguages = [
     hungarian,
+    spanish,
     english,
     portuguese,
   ];
@@ -73,6 +82,7 @@ class AppLanguages {
     portuguese,
     english,
     hungarian,
+    spanish,
   ];
 
   /// Get language by code (supports both ISO and legacy codes)

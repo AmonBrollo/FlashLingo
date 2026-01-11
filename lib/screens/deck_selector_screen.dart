@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:confetti/confetti.dart';
 import 'flashcard_screen.dart';
+import 'target_language_selector_screen.dart';
 import '../models/flashcard_deck.dart';
 import '../models/flashcard.dart';
 import '../services/review_state.dart';
@@ -11,6 +12,7 @@ import '../services/tutorial_service.dart';
 import '../services/ui_language_provider.dart';
 import '../utils/topic_names.dart';
 import '../widgets/email_verification_banner.dart';
+import '../l10n/language.dart';
 import 'profile_screen.dart';
 import 'review_screen.dart';
 
@@ -181,6 +183,17 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
     });
   }
 
+  void _changeTargetLanguage() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (_) => TargetLanguageSelectorScreen(
+          baseLanguage: widget.baseLanguage,
+        ),
+      ),
+    );
+  }
+
   void _onMenuSelected(String value) async {
     switch (value) {
       case 'review':
@@ -201,6 +214,9 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
           context,
           MaterialPageRoute(builder: (_) => const ProfileScreen()),
         );
+        break;
+      case 'change_language':
+        _changeTargetLanguage();
         break;
     }
   }
@@ -500,16 +516,70 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
   Widget build(BuildContext context) {
     final loc = context.watch<UiLanguageProvider>().loc;
     final reviewState = context.watch<ReviewState>();
+    
+    // Get the current target language info
+    final targetLang = AppLanguages.getLanguage(widget.targetLanguage);
+    final targetLanguageName = targetLang?.name ?? widget.targetLanguage;
 
     return Scaffold(
       appBar: AppBar(
         title: Text(loc.selectDeck),
         backgroundColor: Colors.brown,
         actions: [
+          // Language toggle button
+          Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: InkWell(
+              onTap: _changeTargetLanguage,
+              borderRadius: BorderRadius.circular(20),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: Colors.white.withOpacity(0.3)),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      targetLang?.flag ?? '🌐',
+                      style: const TextStyle(fontSize: 18),
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      targetLanguageName,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    const Icon(
+                      Icons.arrow_drop_down,
+                      color: Colors.white,
+                      size: 20,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
           PopupMenuButton<String>(
             icon: const Icon(Icons.more_horiz),
             onSelected: _onMenuSelected,
             itemBuilder: (context) => [
+              PopupMenuItem(
+                value: 'change_language',
+                child: Row(
+                  children: [
+                    const Icon(Icons.language, size: 20),
+                    const SizedBox(width: 8),
+                    Text(loc.selectTargetLanguage),
+                  ],
+                ),
+              ),
               PopupMenuItem(
                 value: 'review',
                 child: Row(

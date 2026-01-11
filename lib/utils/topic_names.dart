@@ -1,31 +1,131 @@
 class TopicNames {
   // Map of topics → language → display name
   static final Map<String, Map<String, String>> names = {
-    "adjectives": {"english": "Adjectives", "portuguese": "Adjetivos"},
-    "animals": {"english": "Animals", "portuguese": "Animais"},
-    "art": {"english": "Art", "portuguese": "Arte"},
-    "beverages": {"english": "Beverages", "portuguese": "Bebidas"},
-    "body": {"english": "Body", "portuguese": "Corpo"},
-    "clothing": {"english": "Clothing", "portuguese": "Roupas"},
-    "days": {"english": "Days", "portuguese": "Dias"},
-    "directions": {"english": "Directions", "portuguese": "Direções"},
-    "electronics": {"english": "Electronics", "portuguese": "Eletrônicos"},
-    "food": {"english": "Food", "portuguese": "Comida"},
-    "home": {"english": "Home", "portuguese": "Casa"},
-    "jobs": {"english": "Jobs", "portuguese": "Profissões"},
-    "locations": {"english": "Locations", "portuguese": "Localizações"},
-    "materials": {"english": "Materials", "portuguese": "Materiais"},
-    "math": {"english": "Math", "portuguese": "Matemática"},
-    "miscellaneous": {"english": "Miscellaneous", "portuguese": "Diversos"},
-    "months": {"english": "Months", "portuguese": "Meses"},
-    "nature": {"english": "Nature", "portuguese": "Natureza"},
-    "numbers": {"english": "Numbers", "portuguese": "Números"},
-    "people": {"english": "People", "portuguese": "Pessoas"},
-    "pronouns": {"english": "Pronouns", "portuguese": "Pronomes"},
-    "society": {"english": "Society", "portuguese": "Sociedade"},
-    "time": {"english": "Time", "portuguese": "Tempo"},
-    "transportation": {"english": "Transportation", "portuguese": "Transporte"},
-    "verbs": {"english": "Verbs", "portuguese": "Verbos"},
+    "adjectives": {
+      "english": "Adjectives",
+      "portuguese": "Adjetivos",
+      "spanish": "Adjetivos",
+    },
+    "animals": {
+      "english": "Animals",
+      "portuguese": "Animais",
+      "spanish": "Animales",
+    },
+    "art": {
+      "english": "Art",
+      "portuguese": "Arte",
+      "spanish": "Arte",
+    },
+    "beverages": {
+      "english": "Beverages",
+      "portuguese": "Bebidas",
+      "spanish": "Bebidas",
+    },
+    "body": {
+      "english": "Body",
+      "portuguese": "Corpo",
+      "spanish": "Cuerpo",
+    },
+    "clothing": {
+      "english": "Clothing",
+      "portuguese": "Roupas",
+      "spanish": "Ropa",
+    },
+    "days": {
+      "english": "Days",
+      "portuguese": "Dias",
+      "spanish": "Días",
+    },
+    "directions": {
+      "english": "Directions",
+      "portuguese": "Direções",
+      "spanish": "Direcciones",
+    },
+    "electronics": {
+      "english": "Electronics",
+      "portuguese": "Eletrônicos",
+      "spanish": "Electrónicos",
+    },
+    "food": {
+      "english": "Food",
+      "portuguese": "Comida",
+      "spanish": "Comida",
+    },
+    "home": {
+      "english": "Home",
+      "portuguese": "Casa",
+      "spanish": "Casa",
+    },
+    "jobs": {
+      "english": "Jobs",
+      "portuguese": "Profissões",
+      "spanish": "Profesiones",
+    },
+    "locations": {
+      "english": "Locations",
+      "portuguese": "Localizações",
+      "spanish": "Ubicaciones",
+    },
+    "materials": {
+      "english": "Materials",
+      "portuguese": "Materiais",
+      "spanish": "Materiales",
+    },
+    "math": {
+      "english": "Math",
+      "portuguese": "Matemática",
+      "spanish": "Matemáticas",
+    },
+    "miscellaneous": {
+      "english": "Miscellaneous",
+      "portuguese": "Diversos",
+      "spanish": "Varios",
+    },
+    "months": {
+      "english": "Months",
+      "portuguese": "Meses",
+      "spanish": "Meses",
+    },
+    "nature": {
+      "english": "Nature",
+      "portuguese": "Natureza",
+      "spanish": "Naturaleza",
+    },
+    "numbers": {
+      "english": "Numbers",
+      "portuguese": "Números",
+      "spanish": "Números",
+    },
+    "people": {
+      "english": "People",
+      "portuguese": "Pessoas",
+      "spanish": "Personas",
+    },
+    "pronouns": {
+      "english": "Pronouns",
+      "portuguese": "Pronomes",
+      "spanish": "Pronombres",
+    },
+    "society": {
+      "english": "Society",
+      "portuguese": "Sociedade",
+      "spanish": "Sociedad",
+    },
+    "time": {
+      "english": "Time",
+      "portuguese": "Tempo",
+      "spanish": "Tiempo",
+    },
+    "transportation": {
+      "english": "Transportation",
+      "portuguese": "Transporte",
+      "spanish": "Transporte",
+    },
+    "verbs": {
+      "english": "Verbs",
+      "portuguese": "Verbos",
+      "spanish": "Verbos",
+    },
   };
 
   // Optional: list of all topic keys
