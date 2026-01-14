@@ -218,28 +218,34 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
           .where((card) => !_swipedThisSession.contains(card))
           .toList();
 
-      if (remainingCards.isNotEmpty) {
+      if (remainingCards.isEmpty) {
+        // No cards left - deck is finished
+        _finishedDeck = true;
+      } else {
+        // Check for due cards first
         final dueCards = _repetitionService.dueCards(
           remainingCards,
           baseLanguage: widget.baseLanguage,
           targetLanguage: widget.targetLanguage,
         );
+        
         if (dueCards.isNotEmpty) {
           _currentIndex = _flashcards.indexOf(dueCards.first);
         } else {
+          // Check for new cards
           final newCards = _repetitionService.newCards(
             remainingCards,
             baseLanguage: widget.baseLanguage,
             targetLanguage: widget.targetLanguage,
           );
+          
           if (newCards.isNotEmpty) {
             _currentIndex = _flashcards.indexOf(newCards.first);
           } else {
-            _currentIndex = _flashcards.indexOf(remainingCards.first);
+            // No due cards and no new cards - deck is finished
+            _finishedDeck = true;
           }
         }
-      } else {
-        _finishedDeck = true;
       }
 
       _isFlipped = false;
@@ -573,10 +579,13 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
     return Scaffold(
       backgroundColor: Colors.brown[50],
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: _goToDeckSelector,
-        ),
+        leading: _finishedDeck || _limitReached
+            ? null
+            : IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: _goToDeckSelector,
+              ),
+        automaticallyImplyLeading: !_finishedDeck && !_limitReached,
         title: Row(
           children: [
             Text(loc.flashLango),
@@ -787,6 +796,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
     } else if (_finishedDeck) {
       return FinishedDeckCard(
         message: context.read<UiLanguageProvider>().loc.finishedDeck,
+        onBackToDeck: _goToDeckSelector,
       );
     } else {
       final currentCard = _flashcards[_currentIndex];

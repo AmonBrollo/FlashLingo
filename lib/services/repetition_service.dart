@@ -77,10 +77,10 @@ class RepetitionService {
     
     if (base == null || target == null) {
       print('Warning: Language context not set for getDueBoxStats');
-      return {1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
+      return {-1: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
     }
     
-    final stats = <int, int>{1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
+    final stats = <int, int>{-1: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
     
     for (final card in cards) {
       final key = _generateCardKey(card, base, target);
@@ -88,7 +88,7 @@ class RepetitionService {
       
       if (progress != null && progress.hasStarted && progress.isDue()) {
         final box = progress.box;
-        if (box >= 1 && box <= 5) {
+        if ((box >= 1 && box <= 5) || box == -1) {
           stats[box] = (stats[box] ?? 0) + 1;
         }
       }
@@ -108,10 +108,11 @@ class RepetitionService {
     
     if (base == null || target == null) {
       print('Warning: Language context not set for getDueBoxCards');
-      return {1: [], 2: [], 3: [], 4: [], 5: []};
+      return {-1: [], 1: [], 2: [], 3: [], 4: [], 5: []};
     }
     
     final boxCards = <int, List<Flashcard>>{
+      -1: [],
       1: [],
       2: [],
       3: [],
@@ -126,7 +127,7 @@ class RepetitionService {
       // Only include cards that are due for review
       if (progress != null && progress.hasStarted && progress.isDue()) {
         final box = progress.box;
-        if (box >= 1 && box <= 5) {
+        if ((box >= 1 && box <= 5) || box == -1) {
           boxCards[box]!.add(card);
         }
       }
@@ -146,10 +147,10 @@ class RepetitionService {
     
     if (base == null || target == null) {
       print('Warning: Language context not set for getQuickBoxStats');
-      return {0: cards.length, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
+      return {-1: 0, 0: cards.length, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
     }
     
-    final stats = <int, int>{0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
+    final stats = <int, int>{-1: 0, 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
     
     for (final card in cards) {
       final key = _generateCardKey(card, base, target);
@@ -178,10 +179,11 @@ class RepetitionService {
     
     if (base == null || target == null) {
       print('Warning: Language context not set for getQuickBoxCards');
-      return {0: cards, 1: [], 2: [], 3: [], 4: [], 5: []};
+      return {-1: [], 0: cards, 1: [], 2: [], 3: [], 4: [], 5: []};
     }
     
     final boxCards = <int, List<Flashcard>>{
+      -1: [],
       0: [],
       1: [],
       2: [],

@@ -41,12 +41,12 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
   String? _errorMessage;
   
   // Box level stats - global across all topics (excluding box 0 - unseen cards)
-  Map<int, int> _globalBoxStats = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
-  Map<int, List<Flashcard>> _globalBoxCards = {1: [], 2: [], 3: [], 4: [], 5: []};
+  Map<int, int> _globalBoxStats = {-1: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
+  Map<int, List<Flashcard>> _globalBoxCards = {-1: [], 1: [], 2: [], 3: [], 4: [], 5: []};
   
   // All box stats (including not due cards)
-  Map<int, int> _allBoxStats = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
-  Map<int, List<Flashcard>> _allBoxCards = {1: [], 2: [], 3: [], 4: [], 5: []};
+  Map<int, int> _allBoxStats = {-1: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
+  Map<int, List<Flashcard>> _allBoxCards = {-1: [], 1: [], 2: [], 3: [], 4: [], 5: []};
   
   // Original topic deck stats
   Map<String, Map<String, int>> _deckStats = {};
@@ -250,6 +250,8 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
 
   Color _getLevelColor(int level) {
     switch (level) {
+      case -1:
+        return Colors.deepOrange;
       case 1:
         return Colors.blue;
       case 2:
@@ -267,6 +269,8 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
 
   IconData _getLevelIcon(int level) {
     switch (level) {
+      case -1:
+        return Icons.refresh;
       case 1:
         return Icons.fiber_new;
       case 2:
@@ -737,6 +741,18 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
 
     // Build list of all decks (level decks + topic decks)
     final List<Widget> allDecks = [];
+
+    // Add trouble cards deck if it has cards
+    final troubleCount = _globalBoxStats[-1] ?? 0;
+    final troubleCards = _globalBoxCards[-1] ?? [];
+    if (troubleCount > 0) {
+      allDecks.add(_buildLevelDeckCard(
+        -1,
+        troubleCount,
+        troubleCards,
+        key: allDecks.isEmpty ? _firstLevelDeckKey : null,
+      ));
+    }
 
     // Add level decks that have cards due
     for (int level = 5; level >= 1; level--) {
