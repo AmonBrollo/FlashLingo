@@ -66,6 +66,9 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
     _flashcards = List.from(widget.flashcards);
     _audioPlayer = AudioPlayer();
     
+    // Validate topic key on initialization
+    _validateTopicKey();
+    
     // Set language context for repetition service
     _repetitionService.setLanguageContext(widget.baseLanguage, widget.targetLanguage);
     
@@ -79,6 +82,14 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
     );
     
     _initializeScreen();
+  }
+
+  /// Validates that the topic key is a recognized topic
+  void _validateTopicKey() {
+    if (!TopicNames.allTopics.contains(widget.topicKey)) {
+      debugPrint('WARNING: Invalid topic key "${widget.topicKey}". Valid topics are: ${TopicNames.allTopics.join(", ")}');
+      debugPrint('Audio playback may not work correctly.');
+    }
   }
 
   @override
@@ -253,27 +264,77 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
     });
   }
 
+  /// Plays audio for the current flashcard
+  /// Now with improved error handling and validation
   Future<void> _playAudio() async {
     final loc = context.read<UiLanguageProvider>().loc;
     
     try {
       final currentCard = _flashcards[_currentIndex];
       
-      final englishWord = currentCard.getTranslation('english');
-      final audioFilename = Flashcard.getAudioFilename(widget.topicKey, englishWord);
-      final audioPath = 'audio/$audioFilename.mp3';
+      // Get the audio path from the card (card uses its stored topicKey)
+      // We pass widget.topicKey as fallback in case card doesn't have one stored
+      final audioPath = currentCard.getAudioPath(widget.topicKey);
       
-      debugPrint('Attempting to play audio: $audioPath');
-      debugPrint('English word: $englishWord');
-      debugPrint('Topic: ${widget.topicKey}');
+      // Check if audio path is available
+      if (audioPath == null) {
+        debugPrint('Audio not available: No audio for this card');
+        debugPrint('Card topic: ${currentCard.topicKey}');
+        debugPrint('Screen topic: ${widget.topicKey}');
+        debugPrint('English word: ${currentCard.getTranslation('english')}');
+        
+        // Only show error if we're on a regular topic deck (not level decks)
+        if (!widget.topicKey.startsWith('level_') && widget.topicKey != 'forgotten') {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(loc.audioNotAvailableError),
+                duration: const Duration(seconds: 2),
+              ),
+            );
+          }
+        }
+        return;
+      }
       
+      // Extract just the audio filename for AssetSource (remove 'assets/' prefix)
+      final assetPath = audioPath.replaceFirst('assets/', '');
+      
+      debugPrint('Attempting to play audio: $assetPath');
+      debugPrint('Card topic: ${currentCard.topicKey ?? "none"}');
+      debugPrint('Screen topic: ${widget.topicKey}');
+      debugPrint('English word: ${currentCard.getTranslation('english')}');
+      
+      // Check if the asset exists before trying to play
+      try {
+        await rootBundle.load(audioPath);
+      } catch (e) {
+        debugPrint('Audio file not found: $audioPath');
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('${loc.audioNotAvailableError}: Unable to load asset "$assetPath"'),
+              duration: const Duration(seconds: 3),
+            ),
+          );
+        }
+        return;
+      }
+      
+      // Stop any currently playing audio
       await _audioPlayer.stop();
-      await _audioPlayer.play(AssetSource(audioPath));
+      
+      // Play the audio
+      await _audioPlayer.play(AssetSource(assetPath));
+      
     } catch (e) {
       debugPrint('Error playing audio: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('${loc.audioNotAvailableError}: $e')),
+          SnackBar(
+            content: Text('${loc.audioNotAvailableError}: $e'),
+            duration: const Duration(seconds: 3),
+          ),
         );
       }
     }

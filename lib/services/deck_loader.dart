@@ -23,12 +23,16 @@ class DeckLoader {
           continue;
         }
 
+        // IMPORTANT: Pass the topic key when creating flashcards
+        // so each card knows its original topic for audio playback
         decks.add(
           FlashcardDeck(
             topicKey: topic, // unique identifier
             topicEnglish: translation["english"]!,
             topicPortuguese: translation["portuguese"]!,
-            cards: jsonData.map((item) => Flashcard.fromJson(item)).toList(),
+            cards: jsonData
+                .map((item) => Flashcard.fromJson(item, topicKey: topic))
+                .toList(),
           ),
         );
       } catch (e) {
