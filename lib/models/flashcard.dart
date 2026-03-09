@@ -87,9 +87,13 @@ class Flashcard {
   /// Falls back to the provided topicKey parameter if card doesn't have one
   /// Returns null if the audio file doesn't exist or if required data is missing
   /// 
-  /// Format: assets/audio/{topic}_{sanitized_english_word}.mp3
-  /// Example: assets/audio/adjectives_good.mp3
-  String? getAudioPath([String? fallbackTopicKey]) {
+  /// Parameters:
+  /// - fallbackTopicKey: Optional topic key to use if card doesn't have one stored
+  /// - language: The language code for the audio (e.g., 'es', 'hu'). Defaults to 'es' for Spanish
+  /// 
+  /// Format: assets/audio/{topic}_{sanitized_english_word}_{language}.mp3
+  /// Example: assets/audio/adjectives_good_es.mp3
+  String? getAudioPath([String? fallbackTopicKey, String language = 'es']) {
     final englishWord = translations['english'];
     
     // Return null if no English translation exists
@@ -113,8 +117,8 @@ class Flashcard {
     // Sanitize the English word to match audio filename format
     final sanitizedWord = _sanitizeForAudioFilename(englishWord);
     
-    // Construct the full audio path
-    return 'assets/audio/${topic}_$sanitizedWord.mp3';
+    // Construct the full audio path with language code
+    return 'assets/audio/${topic}_${sanitizedWord}_$language.mp3';
   }
   
   /// Sanitizes an English word to match the audio filename convention
@@ -145,12 +149,18 @@ class Flashcard {
     return sanitized;
   }
 
-  /// Legacy method - kept for backwards compatibility
-  /// Use getAudioPath() instead for better null safety
-  @Deprecated('Use getAudioPath() instead')
-  static String getAudioFilename(String topic, String englishWord) {
+  /// Generates the audio filename for a flashcard
+  /// 
+  /// Parameters:
+  /// - topic: The topic key (e.g., 'adjectives', 'verbs')
+  /// - englishWord: The English word/phrase
+  /// - language: The language code (e.g., 'es' for Spanish, 'hu' for Hungarian)
+  /// 
+  /// Returns: Filename in format: {topic}_{sanitized_word}_{language}.mp3
+  /// Example: "adjectives_good_es.mp3"
+  static String getAudioFilename(String topic, String englishWord, String language) {
     final sanitized = _sanitizeForAudioFilename(englishWord);
-    return '${topic}_$sanitized';
+    return '${topic}_${sanitized}_$language.mp3';
   }
 
   @override
