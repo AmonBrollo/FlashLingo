@@ -69,15 +69,14 @@ Future<void> main() async {
       final card = Flashcard.fromJson(item);
       
       final englishText = card.getTranslation('english');
-      final spanishText = card.getTranslation('spanish'); // Ensure case matches JSON
 
-      if (spanishText.isEmpty) {
-        print('⚠️  Skipping "${englishText}": No spanish translation found.');
+      if (englishText.isEmpty) {
+        print('⚠️  Skipping: No English translation found.');
         continue;
       }
 
       // Use the SHARED logic to determine filename with language code
-      final audioFilename = Flashcard.getAudioFilename(topicName, englishText, 'es');
+      final audioFilename = Flashcard.getAudioFilename(topicName, englishText, 'en');
       final savePath = '$outputDirectory/$audioFilename';
       final saveFile = File(savePath);
 
@@ -89,7 +88,7 @@ Future<void> main() async {
 
       // Generate Audio
       try {
-        await _generateAudio(tts, spanishText, saveFile);
+        await _generateAudio(tts, englishText, saveFile);
         stdout.write('✓'); // Check indicates success
         totalGenerated++;
       } catch (e) {
@@ -113,8 +112,8 @@ Future<void> _generateAudio(
   final input = SynthesisInput(text: text);
   
   final voice = VoiceSelectionParams(
-    languageCode: 'es-ES',
-    name: 'es-ES-Neural2-A', // Wavenet is higher quality, usually costs a tiny bit
+    languageCode: 'en-US',
+    name: 'en-US-Neural2-C', // Neural2 is highest quality, Female voice
     ssmlGender: 'FEMALE',
   );
 

@@ -272,9 +272,27 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
     try {
       final currentCard = _flashcards[_currentIndex];
       
-      // Get the audio path from the card (card uses its stored topicKey)
+      // Map the target language to the correct language code for audio files
+      String languageCode;
+      switch (widget.targetLanguage.toLowerCase()) {
+        case 'spanish':
+          languageCode = 'es';
+          break;
+        case 'hungarian':
+          languageCode = 'hu';
+          break;
+        case 'english':
+          languageCode = 'en';
+          break;
+        // Add more languages as needed
+        default:
+          debugPrint('Unknown target language: ${widget.targetLanguage}, defaulting to Spanish');
+          languageCode = 'es';
+      }
+      
+      // Get the audio path from the card with the correct language code
       // We pass widget.topicKey as fallback in case card doesn't have one stored
-      final audioPath = currentCard.getAudioPath(widget.topicKey);
+      final audioPath = currentCard.getAudioPath(widget.topicKey, languageCode);
       
       // Check if audio path is available
       if (audioPath == null) {
