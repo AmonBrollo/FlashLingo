@@ -48,6 +48,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
   double _dragDx = 0.0;
   late List<Flashcard> _flashcards;
   bool _isInitializing = true;
+  bool _hasFlippedCurrentCard = false; // NEW: Track if current card has been flipped
   
   late AnimationController _flipController;
   late Animation<double> _flipAnimation;
@@ -261,6 +262,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
 
       _isFlipped = false;
       _dragDx = 0.0;
+      _hasFlippedCurrentCard = false; // NEW: Reset flip tracking for new card
     });
   }
 
@@ -564,6 +566,31 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
   }
 
   void _handleSwipe(Flashcard card, bool remembered) {
+    // Check if this is a new card that hasn't been flipped yet
+    final currentCard = _flashcards[_currentIndex];
+    final progress = _repetitionService.getProgress(
+      currentCard,
+      baseLanguage: widget.baseLanguage,
+      targetLanguage: widget.targetLanguage,
+    );
+    
+    // Block swipe if it's a new card and hasn't been flipped
+    if (!progress.hasStarted && !_hasFlippedCurrentCard) {
+      final loc = context.read<UiLanguageProvider>().loc;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(loc.flipCardFirst),
+          duration: const Duration(seconds: 2),
+          backgroundColor: Colors.orange,
+        ),
+      );
+      // Reset drag position
+      setState(() {
+        _dragDx = 0.0;
+      });
+      return;
+    }
+    
     _swipedThisSession.add(card);
     if (remembered) {
       _repetitionService.markRemembered(
@@ -620,6 +647,10 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
     if (mounted) {
       setState(() {
         _isFlipped = !_isFlipped;
+        // Mark that the user has flipped this card
+        if (_isFlipped) {
+          _hasFlippedCurrentCard = true;
+        }
       });
     }
   }
@@ -791,12 +822,26 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    _buildActionButton(
-                      icon: Icons.close,
-                      label: loc.forgot,
-                      color: Colors.red,
-                      onPressed: () {
-                        _handleButtonPress(false);
+                    Builder(
+                      builder: (context) {
+                        // Check if current card is new and hasn't been flipped
+                        final currentCard = _flashcards[_currentIndex];
+                        final progress = _repetitionService.getProgress(
+                          currentCard,
+                          baseLanguage: widget.baseLanguage,
+                          targetLanguage: widget.targetLanguage,
+                        );
+                        final canProgress = progress.hasStarted || _hasFlippedCurrentCard;
+                        
+                        return _buildActionButton(
+                          icon: Icons.close,
+                          label: loc.forgot,
+                          color: Colors.red,
+                          enabled: canProgress,
+                          onPressed: () {
+                            _handleButtonPress(false);
+                          },
+                        );
                       },
                     ),
                     _buildActionButton(
@@ -807,12 +852,26 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
                         _handleFlip();
                       },
                     ),
-                    _buildActionButton(
-                      icon: Icons.check,
-                      label: loc.remember,
-                      color: Colors.green,
-                      onPressed: () {
-                        _handleButtonPress(true);
+                    Builder(
+                      builder: (context) {
+                        // Check if current card is new and hasn't been flipped
+                        final currentCard = _flashcards[_currentIndex];
+                        final progress = _repetitionService.getProgress(
+                          currentCard,
+                          baseLanguage: widget.baseLanguage,
+                          targetLanguage: widget.targetLanguage,
+                        );
+                        final canProgress = progress.hasStarted || _hasFlippedCurrentCard;
+                        
+                        return _buildActionButton(
+                          icon: Icons.check,
+                          label: loc.remember,
+                          color: Colors.green,
+                          enabled: canProgress,
+                          onPressed: () {
+                            _handleButtonPress(true);
+                          },
+                        );
                       },
                     ),
                   ],
@@ -830,18 +889,23 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
     required String label,
     required Color color,
     required VoidCallback onPressed,
+    bool enabled = true, // NEW: Add enabled parameter
   }) {
+    final effectiveColor = enabled ? color : Colors.grey.shade400;
+    
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         ElevatedButton(
-          onPressed: onPressed,
+          onPressed: enabled ? onPressed : null, // Disable button if not enabled
           style: ElevatedButton.styleFrom(
-            backgroundColor: color,
+            backgroundColor: effectiveColor,
             foregroundColor: Colors.white,
+            disabledBackgroundColor: Colors.grey.shade300,
+            disabledForegroundColor: Colors.grey.shade500,
             shape: const CircleBorder(),
             padding: const EdgeInsets.all(20),
-            elevation: 4,
+            elevation: enabled ? 4 : 1,
           ),
           child: Icon(icon, size: 28),
         ),
@@ -851,7 +915,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
           style: TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w600,
-            color: color,
+            color: effectiveColor,
           ),
         ),
       ],

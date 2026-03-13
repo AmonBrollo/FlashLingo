@@ -905,6 +905,11 @@ class AppLocalizations {
         en: EnglishStrings.flip,
       );
 
+  String get flipCardFirst => _getString(
+        pt: PortugueseStrings.flipCardFirst,
+        en: EnglishStrings.flipCardFirst,
+      );
+
   // Password Reset
   String get passwordResetLinkWillBeSent => _getString(
         pt: PortugueseStrings.passwordResetLinkWillBeSent,

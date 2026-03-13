@@ -260,6 +260,7 @@ class PortugueseStrings {
   static const String forgot = 'Esqueci';
   static const String remember = 'Lembrei';
   static const String flip = 'Virar';
+  static const String flipCardFirst = 'Por favor, vire o cartão primeiro para ver a tradução';
   
   // Password Reset Dialog
   static const String passwordResetLinkWillBeSent = 'Um link de redefinição de senha será enviado para:';

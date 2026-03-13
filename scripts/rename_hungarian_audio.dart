@@ -43,7 +43,6 @@ Future<void> main() async {
     // This is a Hungarian file without suffix - rename it
     final newFileName = fileName.replaceAll('.mp3', '_hu.mp3');
     final newPath = '${dir.path}/$newFileName';
-    final newFile = File(newPath);
     
     try {
       await file.rename(newPath);

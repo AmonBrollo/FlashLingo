@@ -260,6 +260,7 @@ class EnglishStrings {
   static const String forgot = 'Forgot';
   static const String remember = 'Remember';
   static const String flip = 'Flip';
+  static const String flipCardFirst = 'Please flip the card first to see the translation';
   
   // Password Reset Dialog
   static const String passwordResetLinkWillBeSent = 'A password reset link will be sent to:';
