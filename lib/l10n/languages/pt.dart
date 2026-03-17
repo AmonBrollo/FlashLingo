@@ -221,7 +221,20 @@ class PortugueseStrings {
   
   // Level Names & Descriptions
   static String levelName(int level) {
-    return 'Nível $level';
+    switch (level) {
+      case 1:
+        return 'Novo';
+      case 2:
+        return 'Aprendendo';
+      case 3:
+        return 'Familiar';
+      case 4:
+        return 'Conhecido';
+      case 5:
+        return 'Dominado';
+      default:
+        return 'Nível $level';
+    }
   }
   
   static String levelDescription(int level) {
