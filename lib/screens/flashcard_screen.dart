@@ -50,6 +50,11 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
   bool _isInitializing = true;
   bool _hasFlippedCurrentCard = false; // NEW: Track if current card has been flipped
   
+  // Back button state
+  Flashcard? _previousCard;
+  int? _previousIndex;
+  bool? _previousWasRemembered; // true = remembered, false = forgot, null = no previous action
+  
   late AnimationController _flipController;
   late Animation<double> _flipAnimation;
   late AudioPlayer _audioPlayer;
@@ -591,6 +596,11 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
       return;
     }
     
+    // Save current card as previous before progressing
+    _previousCard = currentCard;
+    _previousIndex = _currentIndex;
+    _previousWasRemembered = remembered;
+    
     _swipedThisSession.add(card);
     if (remembered) {
       _repetitionService.markRemembered(
@@ -653,6 +663,51 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
         }
       });
     }
+  }
+
+  void _handleBack() {
+    if (_previousCard == null || _previousIndex == null || _previousWasRemembered == null) {
+      return; // No previous card to go back to
+    }
+
+    // Undo the action on the previous card
+    final reviewState = context.read<ReviewState>();
+    
+    if (_previousWasRemembered!) {
+      // Was marked as remembered, now mark as forgotten
+      _repetitionService.markForgotten(
+        _previousCard!,
+        baseLanguage: widget.baseLanguage,
+        targetLanguage: widget.targetLanguage,
+      );
+      reviewState.removeCard(_previousCard!);
+      reviewState.addForgottenCard(_previousCard!);
+    } else {
+      // Was marked as forgotten, now mark as remembered  
+      _repetitionService.markRemembered(
+        _previousCard!,
+        baseLanguage: widget.baseLanguage,
+        targetLanguage: widget.targetLanguage,
+      );
+      reviewState.removeForgottenCard(_previousCard!);
+      reviewState.addCard(_previousCard!);
+    }
+
+    // Remove from swiped this session
+    _swipedThisSession.remove(_previousCard!);
+
+    // Go back to the previous card
+    setState(() {
+      _currentIndex = _previousIndex!;
+      _isFlipped = false;
+      _dragDx = 0.0;
+      _hasFlippedCurrentCard = false;
+      
+      // Clear previous card data (can only go back once)
+      _previousCard = null;
+      _previousIndex = null;
+      _previousWasRemembered = null;
+    });
   }
 
   @override
@@ -769,51 +824,53 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
           ),
         ],
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (!_limitReached && !_finishedDeck)
-              GestureDetector(
-                onPanUpdate: (details) {
-                  setState(() => _dragDx += details.delta.dx);
-                },
-                onPanEnd: (details) {
-                  final currentCard = _flashcards[_currentIndex];
-                  if (_dragDx > 100) {
-                    _handleSwipe(currentCard, true);
-                  } else if (_dragDx < -100) {
-                    _handleSwipe(currentCard, false);
-                  }
-                  setState(() => _dragDx = 0.0);
-                },
-                onTap: () {
-                  _handleFlip();
-                },
-                child: AnimatedBuilder(
-                  animation: _flipAnimation,
-                  builder: (context, child) {
-                    final angle = _flipAnimation.value * 3.14159;
-                    final isHalfway = _flipAnimation.value > 0.5;
-                    
-                    return Transform(
-                      transform: Matrix4.identity()
-                        ..setEntry(3, 2, 0.001)
-                        ..rotateY(angle),
-                      alignment: Alignment.center,
-                      child: isHalfway
-                          ? Transform(
-                              transform: Matrix4.identity()..rotateY(3.14159),
-                              alignment: Alignment.center,
-                              child: _buildCardContent(displayName),
-                            )
-                          : _buildCardContent(displayName),
-                    );
-                  },
-                ),
-              )
-            else
-              _buildCardContent(displayName),
+      body: Stack(
+        children: [
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (!_limitReached && !_finishedDeck)
+                  GestureDetector(
+                    onPanUpdate: (details) {
+                      setState(() => _dragDx += details.delta.dx);
+                    },
+                    onPanEnd: (details) {
+                      final currentCard = _flashcards[_currentIndex];
+                      if (_dragDx > 100) {
+                        _handleSwipe(currentCard, true);
+                      } else if (_dragDx < -100) {
+                        _handleSwipe(currentCard, false);
+                      }
+                      setState(() => _dragDx = 0.0);
+                    },
+                    onTap: () {
+                      _handleFlip();
+                    },
+                    child: AnimatedBuilder(
+                      animation: _flipAnimation,
+                      builder: (context, child) {
+                        final angle = _flipAnimation.value * 3.14159;
+                        final isHalfway = _flipAnimation.value > 0.5;
+                        
+                        return Transform(
+                          transform: Matrix4.identity()
+                            ..setEntry(3, 2, 0.001)
+                            ..rotateY(angle),
+                          alignment: Alignment.center,
+                          child: isHalfway
+                              ? Transform(
+                                  transform: Matrix4.identity()..rotateY(3.14159),
+                                  alignment: Alignment.center,
+                                  child: _buildCardContent(displayName),
+                                )
+                              : _buildCardContent(displayName),
+                        );
+                      },
+                    ),
+                  )
+                else
+                  _buildCardContent(displayName),
             
             if (!_limitReached && !_finishedDeck) ...[
               const SizedBox(height: 24),
@@ -880,6 +937,40 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
             ],
           ],
         ),
+      ),
+      // Back button positioned at top-right corner (outside the card)
+      if (!_limitReached && !_finishedDeck && _previousCard != null)
+        Positioned(
+          top: 16,
+          right: 16,
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: _handleBack,
+              borderRadius: BorderRadius.circular(24),
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.brown.withOpacity(0.9),
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: const Icon(
+                  Icons.undo,
+                  color: Colors.white,
+                  size: 28,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
       ),
     );
   }

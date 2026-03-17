@@ -27,6 +27,12 @@ class ReviewState extends ChangeNotifier {
     }
   }
 
+  void removeCard(Flashcard card) {
+    if (_remembered.remove(card)) {
+      notifyListeners();
+    }
+  }
+
   void addForgottenCard(Flashcard card) {
     if (!_forgotten.contains(card)) {
       _forgotten.add(card);
