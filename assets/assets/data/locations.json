@@ -28,10 +28,19 @@
     },
     {
         "translations": {
-            "english": "street/road",
-            "portuguese": "rua/estrada",
-            "hungarian": "utca/út",
-            "spanish": "calle/carretera"
+            "english": "street",
+            "portuguese": "rua",
+            "hungarian": "utca",
+            "spanish": "calle"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "road",
+            "portuguese": "estrada",
+            "hungarian": "út",
+            "spanish": "carretera"
         },
         "imagePath": null
     },
