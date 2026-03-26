@@ -39,7 +39,7 @@
         "translations": {
             "english": "front",
             "portuguese": "frente",
-            "hungarian": "eleje",
+            "hungarian": "előtt",
             "spanish": "frente"
         },
         "imagePath": null
@@ -48,7 +48,7 @@
         "translations": {
             "english": "back",
             "portuguese": "atrás",
-            "hungarian": "hátulja",
+            "hungarian": "mögött",
             "spanish": "atrás"
         },
         "imagePath": null
@@ -57,8 +57,8 @@
         "translations": {
             "english": "top",
             "portuguese": "topo",
-            "hungarian": "teteje",
-            "spanish": "arriba"
+            "hungarian": "tető",
+            "spanish": "cima"
         },
         "imagePath": null
     },
@@ -66,8 +66,8 @@
         "translations": {
             "english": "bottom",
             "portuguese": "fundo",
-            "hungarian": "alja",
-            "spanish": "abajo"
+            "hungarian": "mély",
+            "spanish": "fondo"
         },
         "imagePath": null
     },

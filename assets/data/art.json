@@ -1,60 +1,6 @@
 [
     {
         "translations": {
-            "english": "band",
-            "portuguese": "banda",
-            "hungarian": "zenekar",
-            "spanish": "banda"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "song",
-            "portuguese": "música",
-            "hungarian": "dal",
-            "spanish": "canción"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "instrument (musical)",
-            "portuguese": "instrumento musical",
-            "hungarian": "hangszer",
-            "spanish": "instrumento musical"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "music",
-            "portuguese": "música",
-            "hungarian": "zene",
-            "spanish": "música"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "movie",
-            "portuguese": "filme",
-            "hungarian": "film",
-            "spanish": "película"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "art",
-            "portuguese": "arte",
-            "hungarian": "művészet",
-            "spanish": "arte"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
             "english": "red",
             "portuguese": "vermelho",
             "hungarian": "piros",
@@ -149,6 +95,60 @@
             "portuguese": "cor",
             "hungarian": "szín",
             "spanish": "color"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "movie",
+            "portuguese": "filme",
+            "hungarian": "film",
+            "spanish": "película"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "music",
+            "portuguese": "música",
+            "hungarian": "zene",
+            "spanish": "música"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "song",
+            "portuguese": "canção",
+            "hungarian": "dal",
+            "spanish": "canción"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "instrument (musical)",
+            "portuguese": "instrumento musical",
+            "hungarian": "hangszer",
+            "spanish": "instrumento musical"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "band",
+            "portuguese": "banda",
+            "hungarian": "zenekar",
+            "spanish": "banda"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "art",
+            "portuguese": "arte",
+            "hungarian": "művészet",
+            "spanish": "arte"
         },
         "imagePath": null
     }

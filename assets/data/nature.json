@@ -121,10 +121,18 @@
     },
     {
         "translations": {
-            "english": "soil/earth",
-            "portuguese": "solo/terra",
-            "hungarian": "talaj/föld",
-            "spanish": "suelo/tierra"
+            "english": "soil",
+            "portuguese": "solo",
+            "hungarian": "talaj",
+            "spanish": "suelo"
+        }
+    },
+    {
+        "translations": {
+            "english": "earth",
+            "portuguese": "terra",
+            "hungarian": "föld",
+            "spanish": "tierra"
         }
     },
     {

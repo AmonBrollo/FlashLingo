@@ -28,7 +28,7 @@
     },
     {
         "translations": {
-            "english": "small/little",
+            "english": "small",
             "portuguese": "Pequeno",
             "hungarian": "Kicsi",
             "spanish": "Pequeño"
@@ -47,7 +47,7 @@
     {
         "translations": {
             "english": "old (new)",
-            "portuguese": "Velho",
+            "portuguese": "Velho (novo)",
             "hungarian": "Régi",
             "spanish": "Viejo"
         },
@@ -65,7 +65,7 @@
     {
         "translations": {
             "english": "old (young)",
-            "portuguese": "Velho",
+            "portuguese": "Velho (joven)",
             "hungarian": "Idős",
             "spanish": "Anciano"
         },
