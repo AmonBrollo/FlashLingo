@@ -76,58 +76,71 @@ class Flashcard {
         .where((key) => translations[key]!.isNotEmpty)
         .toList();
   }
-  
+
   /// Get a unique identifier for this card
   String get id {
     return translations['id'] ?? translations.values.first;
   }
-  
+
+  /// Maps a language code (e.g. 'es') to the full key used in the translations map (e.g. 'spanish')
+  static String _languageCodeToKey(String code) {
+    switch (code) {
+      case 'es': return 'spanish';
+      case 'hu': return 'hungarian';
+      case 'en': return 'english';
+      case 'pt': return 'portuguese';
+      default: return code;
+    }
+  }
+
   /// Generates the audio file path for this flashcard
   /// Uses the card's original topic (stored in topicKey) for audio lookup
   /// Falls back to the provided topicKey parameter if card doesn't have one
   /// Returns null if the audio file doesn't exist or if required data is missing
-  /// 
+  ///
   /// Parameters:
   /// - fallbackTopicKey: Optional topic key to use if card doesn't have one stored
   /// - language: The language code for the audio (e.g., 'es', 'hu'). Defaults to 'es' for Spanish
-  /// 
-  /// Format: assets/audio/{topic}_{sanitized_english_word}_{language}.mp3
-  /// Example: assets/audio/adjectives_good_es.mp3
+  ///
+  /// Format: assets/audio/{topic}_{sanitized_word_in_target_language}_{language}.mp3
+  /// Example: assets/audio/body_cabeza_es.mp3
   String? getAudioPath([String? fallbackTopicKey, String language = 'es']) {
-    final englishWord = translations['english'];
-    
-    // Return null if no English translation exists
-    if (englishWord == null || englishWord.isEmpty) {
+    // Look up the word using the full language name key (e.g. 'spanish', not 'es')
+    final languageKey = _languageCodeToKey(language);
+    final word = translations[languageKey];
+
+    // Return null if no translation exists for the target language
+    if (word == null || word.isEmpty) {
       return null;
     }
-    
+
     // Use card's topicKey if available, otherwise use fallback
     final topic = topicKey ?? fallbackTopicKey;
-    
+
     // Return null if no topic is available
     if (topic == null || topic.isEmpty) {
       return null;
     }
-    
+
     // Don't try to get audio for level-based topics
     if (topic.startsWith('level_') || topic == 'forgotten') {
       return null;
     }
-    
-    // Sanitize the English word to match audio filename format
-    final sanitizedWord = _sanitizeForAudioFilename(englishWord);
-    
+
+    // Sanitize the word to match audio filename format
+    final sanitizedWord = _sanitizeForAudioFilename(word);
+
     // Construct the full audio path with language code
     return 'assets/audio/${topic}_${sanitizedWord}_$language.mp3';
   }
-  
-  /// Sanitizes an English word to match the audio filename convention
-  /// 
+
+  /// Sanitizes a word to match the audio filename convention
+  ///
   /// Rules:
   /// 1. Convert to lowercase
   /// 2. Replace spaces, slashes, and parentheses with underscores
   /// 3. Remove other non-alphanumeric characters (except underscores and hyphens)
-  /// 
+  ///
   /// Examples:
   /// - "good" -> "good"
   /// - "big/large" -> "big_large"
@@ -136,30 +149,30 @@ class Flashcard {
   static String _sanitizeForAudioFilename(String word) {
     // 1. Convert to lowercase
     String sanitized = word.toLowerCase();
-    
+
     // 2. Replace spaces, slashes, and parentheses with underscores
     sanitized = sanitized.replaceAll(RegExp(r'[/\s()]+'), '_');
-    
+
     // 3. Remove any other non-alphanumeric characters (except underscores and hyphens)
     sanitized = sanitized.replaceAll(RegExp(r'[^a-z0-9_-]+'), '');
-    
+
     // 4. Remove leading/trailing underscores
     sanitized = sanitized.replaceAll(RegExp(r'^_+|_+$'), '');
-    
+
     return sanitized;
   }
 
   /// Generates the audio filename for a flashcard
-  /// 
+  ///
   /// Parameters:
   /// - topic: The topic key (e.g., 'adjectives', 'verbs')
-  /// - englishWord: The English word/phrase
+  /// - word: The word/phrase in the target language
   /// - language: The language code (e.g., 'es' for Spanish, 'hu' for Hungarian)
-  /// 
+  ///
   /// Returns: Filename in format: {topic}_{sanitized_word}_{language}.mp3
-  /// Example: "adjectives_good_es.mp3"
-  static String getAudioFilename(String topic, String englishWord, String language) {
-    final sanitized = _sanitizeForAudioFilename(englishWord);
+  /// Example: "body_cabeza_es.mp3"
+  static String getAudioFilename(String topic, String word, String language) {
+    final sanitized = _sanitizeForAudioFilename(word);
     return '${topic}_${sanitized}_$language.mp3';
   }
 
