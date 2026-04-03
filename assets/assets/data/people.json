@@ -37,10 +37,10 @@
     },
     {
         "translations": {
-            "english": "parent",
-            "portuguese": "pai/mãe",
-            "hungarian": "szülő",
-            "spanish": "padre/madre"
+            "english": "parents",
+            "portuguese": "pais",
+            "hungarian": "szülők",
+            "spanish": "padres"
         },
         "imagePath": null
     },
@@ -136,42 +136,6 @@
     },
     {
         "translations": {
-            "english": "king",
-            "portuguese": "rei",
-            "hungarian": "király",
-            "spanish": "rey"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "queen",
-            "portuguese": "rainha",
-            "hungarian": "királynő",
-            "spanish": "reina"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "president",
-            "portuguese": "presidente",
-            "hungarian": "elnök",
-            "spanish": "presidente"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
-            "english": "neighbor",
-            "portuguese": "vizinho",
-            "hungarian": "szomszéd",
-            "spanish": "vecino"
-        },
-        "imagePath": null
-    },
-    {
-        "translations": {
             "english": "boy",
             "portuguese": "menino",
             "hungarian": "fiú",
@@ -226,10 +190,37 @@
     },
     {
         "translations": {
-            "english": "victim",
-            "portuguese": "vítima",
-            "hungarian": "áldozat",
-            "spanish": "víctima"
+            "english": "neighbor",
+            "portuguese": "vizinho",
+            "hungarian": "szomszéd",
+            "spanish": "vecino"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "king",
+            "portuguese": "rei",
+            "hungarian": "király",
+            "spanish": "rey"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "queen",
+            "portuguese": "rainha",
+            "hungarian": "királynő",
+            "spanish": "reina"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "president",
+            "portuguese": "presidente",
+            "hungarian": "elnök",
+            "spanish": "presidente"
         },
         "imagePath": null
     },
@@ -266,6 +257,15 @@
             "portuguese": "pessoa",
             "hungarian": "személy",
             "spanish": "persona"
+        },
+        "imagePath": null
+    },
+    {
+        "translations": {
+            "english": "victim",
+            "portuguese": "vítima",
+            "hungarian": "áldozat",
+            "spanish": "víctima"
         },
         "imagePath": null
     }
