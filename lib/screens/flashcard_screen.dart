@@ -40,7 +40,8 @@ class FlashcardScreen extends StatefulWidget {
   State<FlashcardScreen> createState() => _FlashcardScreenState();
 }
 
-class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProviderStateMixin {
+class _FlashcardScreenState extends State<FlashcardScreen>
+    with TickerProviderStateMixin {
   bool _isFlipped = false;
   bool _finishedDeck = false;
   bool _limitReached = false;
@@ -48,15 +49,20 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
   double _dragDx = 0.0;
   late List<Flashcard> _flashcards;
   bool _isInitializing = true;
-  bool _hasFlippedCurrentCard = false; // NEW: Track if current card has been flipped
-  
+  bool _hasFlippedCurrentCard = false;
+
   // Back button state
   Flashcard? _previousCard;
   int? _previousIndex;
-  bool? _previousWasRemembered; // true = remembered, false = forgot, null = no previous action
-  
+  bool? _previousWasRemembered;
+
   late AnimationController _flipController;
   late Animation<double> _flipAnimation;
+
+  // Bounce animation for blocked swipes on unflipped new cards
+  late AnimationController _bounceController;
+  late Animation<double> _bounceAnimation;
+
   late AudioPlayer _audioPlayer;
 
   final UsageLimiter _limiter = UsageLimiter();
@@ -71,14 +77,11 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
     super.initState();
     _flashcards = List.from(widget.flashcards);
     _audioPlayer = AudioPlayer();
-    
-    // Validate topic key on initialization
+
     _validateTopicKey();
-    
-    // Set language context for repetition service
     _repetitionService.setLanguageContext(widget.baseLanguage, widget.targetLanguage);
-    
-    // Initialize flip animation
+
+    // Flip animation
     _flipController = AnimationController(
       duration: const Duration(milliseconds: 200),
       vsync: this,
@@ -86,14 +89,33 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
     _flipAnimation = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(parent: _flipController, curve: Curves.easeInOut),
     );
-    
+
+    // Bounce animation: push out → snap back, snappy feel
+    _bounceController = AnimationController(
+      duration: const Duration(milliseconds: 350),
+      vsync: this,
+    );
+    // Value goes 0 → 1 → 0; caller multiplies by direction & magnitude
+    _bounceAnimation = TweenSequence<double>([
+      TweenSequenceItem(
+        tween: Tween<double>(begin: 0.0, end: 1.0)
+            .chain(CurveTween(curve: Curves.easeOut)),
+        weight: 35,
+      ),
+      TweenSequenceItem(
+        tween: Tween<double>(begin: 1.0, end: 0.0)
+            .chain(CurveTween(curve: Curves.elasticOut)),
+        weight: 65,
+      ),
+    ]).animate(_bounceController);
+
     _initializeScreen();
   }
 
-  /// Validates that the topic key is a recognized topic
   void _validateTopicKey() {
     if (!TopicNames.allTopics.contains(widget.topicKey)) {
-      debugPrint('WARNING: Invalid topic key "${widget.topicKey}". Valid topics are: ${TopicNames.allTopics.join(", ")}');
+      debugPrint(
+          'WARNING: Invalid topic key "${widget.topicKey}". Valid topics are: ${TopicNames.allTopics.join(", ")}');
       debugPrint('Audio playback may not work correctly.');
     }
   }
@@ -102,6 +124,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
   void dispose() {
     _audioPlayer.dispose();
     _flipController.dispose();
+    _bounceController.dispose();
     super.dispose();
   }
 
@@ -113,7 +136,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
           targetLanguage: widget.targetLanguage,
         );
       }
-      
+
       await _repetitionService.preloadProgress(
         _flashcards,
         baseLanguage: widget.baseLanguage,
@@ -236,30 +259,26 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
           .toList();
 
       if (remainingCards.isEmpty) {
-        // No cards left - deck is finished
         _finishedDeck = true;
       } else {
-        // Check for due cards first
         final dueCards = _repetitionService.dueCards(
           remainingCards,
           baseLanguage: widget.baseLanguage,
           targetLanguage: widget.targetLanguage,
         );
-        
+
         if (dueCards.isNotEmpty) {
           _currentIndex = _flashcards.indexOf(dueCards.first);
         } else {
-          // Check for new cards
           final newCards = _repetitionService.newCards(
             remainingCards,
             baseLanguage: widget.baseLanguage,
             targetLanguage: widget.targetLanguage,
           );
-          
+
           if (newCards.isNotEmpty) {
             _currentIndex = _flashcards.indexOf(newCards.first);
           } else {
-            // No due cards and no new cards - deck is finished
             _finishedDeck = true;
           }
         }
@@ -267,19 +286,17 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
 
       _isFlipped = false;
       _dragDx = 0.0;
-      _hasFlippedCurrentCard = false; // NEW: Reset flip tracking for new card
+      _hasFlippedCurrentCard = false;
     });
   }
 
   /// Plays audio for the current flashcard
-  /// Now with improved error handling and validation
   Future<void> _playAudio() async {
     final loc = context.read<UiLanguageProvider>().loc;
-    
+
     try {
       final currentCard = _flashcards[_currentIndex];
-      
-      // Map the target language to the correct language code for audio files
+
       String languageCode;
       switch (widget.targetLanguage.toLowerCase()) {
         case 'spanish':
@@ -291,25 +308,22 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
         case 'english':
           languageCode = 'en';
           break;
-        // Add more languages as needed
         default:
-          debugPrint('Unknown target language: ${widget.targetLanguage}, defaulting to Spanish');
+          debugPrint(
+              'Unknown target language: ${widget.targetLanguage}, defaulting to Spanish');
           languageCode = 'es';
       }
-      
-      // Get the audio path from the card with the correct language code
-      // We pass widget.topicKey as fallback in case card doesn't have one stored
+
       final audioPath = currentCard.getAudioPath(widget.topicKey, languageCode);
-      
-      // Check if audio path is available
+
       if (audioPath == null) {
         debugPrint('Audio not available: No audio for this card');
         debugPrint('Card topic: ${currentCard.topicKey}');
         debugPrint('Screen topic: ${widget.topicKey}');
         debugPrint('English word: ${currentCard.getTranslation('english')}');
-        
-        // Only show error if we're on a regular topic deck (not level decks)
-        if (!widget.topicKey.startsWith('level_') && widget.topicKey != 'forgotten') {
+
+        if (!widget.topicKey.startsWith('level_') &&
+            widget.topicKey != 'forgotten') {
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -321,16 +335,14 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
         }
         return;
       }
-      
-      // Extract just the audio filename for AssetSource (remove 'assets/' prefix)
+
       final assetPath = audioPath.replaceFirst('assets/', '');
-      
+
       debugPrint('Attempting to play audio: $assetPath');
       debugPrint('Card topic: ${currentCard.topicKey ?? "none"}');
       debugPrint('Screen topic: ${widget.topicKey}');
       debugPrint('English word: ${currentCard.getTranslation('english')}');
-      
-      // Check if the asset exists before trying to play
+
       try {
         await rootBundle.load(audioPath);
       } catch (e) {
@@ -338,20 +350,17 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('${loc.audioNotAvailableError}: Unable to load asset "$assetPath"'),
+              content: Text(
+                  '${loc.audioNotAvailableError}: Unable to load asset "$assetPath"'),
               duration: const Duration(seconds: 3),
             ),
           );
         }
         return;
       }
-      
-      // Stop any currently playing audio
+
       await _audioPlayer.stop();
-      
-      // Play the audio
       await _audioPlayer.play(AssetSource(assetPath));
-      
     } catch (e) {
       debugPrint('Error playing audio: $e');
       if (mounted) {
@@ -445,7 +454,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
 
   Future<ImageSource?> _showImageSourceDialog() async {
     final loc = context.read<UiLanguageProvider>().loc;
-    
+
     return await showDialog<ImageSource>(
       context: context,
       builder: (context) => AlertDialog(
@@ -515,7 +524,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
 
   Future<void> _goToDeckSelector() async {
     final loc = context.read<UiLanguageProvider>().loc;
-    
+
     try {
       final decks = await DeckLoader.loadDecks();
 
@@ -570,37 +579,54 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
     }
   }
 
-  void _handleSwipe(Flashcard card, bool remembered) {
-    // Check if this is a new card that hasn't been flipped yet
+  /// Returns true if the current card is a new card that hasn't been flipped yet.
+  bool _isBlockedByFlipRequirement() {
     final currentCard = _flashcards[_currentIndex];
     final progress = _repetitionService.getProgress(
       currentCard,
       baseLanguage: widget.baseLanguage,
       targetLanguage: widget.targetLanguage,
     );
-    
-    // Block swipe if it's a new card and hasn't been flipped
-    if (!progress.hasStarted && !_hasFlippedCurrentCard) {
-      final loc = context.read<UiLanguageProvider>().loc;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(loc.flipCardFirst),
-          duration: const Duration(seconds: 2),
-          backgroundColor: Colors.orange,
-        ),
-      );
-      // Reset drag position
-      setState(() {
-        _dragDx = 0.0;
-      });
+    return !progress.hasStarted && !_hasFlippedCurrentCard;
+  }
+
+  /// Plays the bounce-back animation in the given direction.
+  /// [direction] should be 1.0 (right/remembered) or -1.0 (left/forgotten).
+  void _playBounce(double direction) {
+    if (_bounceController.isAnimating) return;
+
+    // Drive _dragDx from the bounce animation value
+    void listener() {
+      if (mounted) {
+        setState(() {
+          _dragDx = _bounceAnimation.value * direction * 48.0;
+        });
+      }
+    }
+
+    _bounceController.addListener(listener);
+    _bounceController.forward(from: 0.0).then((_) {
+      _bounceController.removeListener(listener);
+      if (mounted) {
+        setState(() => _dragDx = 0.0);
+      }
+      _bounceController.reset();
+    });
+  }
+
+  void _handleSwipe(Flashcard card, bool remembered) {
+    if (_isBlockedByFlipRequirement()) {
+      // Bounce in the attempted swipe direction then snap back
+      _playBounce(remembered ? 1.0 : -1.0);
       return;
     }
-    
+
     // Save current card as previous before progressing
+    final currentCard = _flashcards[_currentIndex];
     _previousCard = currentCard;
     _previousIndex = _currentIndex;
     _previousWasRemembered = remembered;
-    
+
     _swipedThisSession.add(card);
     if (remembered) {
       _repetitionService.markRemembered(
@@ -627,12 +653,18 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
   }
 
   void _handleButtonPress(bool remembered) async {
+    if (_isBlockedByFlipRequirement()) {
+      _playBounce(remembered ? 1.0 : -1.0);
+      return;
+    }
+
     final currentCard = _flashcards[_currentIndex];
-    
-    final targetDx = remembered ? 400.0 : -400.0;
-    final frames = 10;
-    final increment = targetDx / frames;
-    
+
+    const targetDx = 400.0;
+    final direction = remembered ? 1.0 : -1.0;
+    const frames = 10;
+    final increment = (targetDx / frames) * direction;
+
     for (int i = 0; i < frames; i++) {
       await Future.delayed(const Duration(milliseconds: 20));
       if (mounted) {
@@ -641,23 +673,22 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
         });
       }
     }
-    
+
     await Future.delayed(const Duration(milliseconds: 100));
     _handleSwipe(currentCard, remembered);
   }
 
   void _handleFlip() async {
     if (_flipController.isAnimating) return;
-    
+
     _flipController.forward(from: 0.0).then((_) {
       _flipController.reset();
     });
-    
+
     await Future.delayed(const Duration(milliseconds: 100));
     if (mounted) {
       setState(() {
         _isFlipped = !_isFlipped;
-        // Mark that the user has flipped this card
         if (_isFlipped) {
           _hasFlippedCurrentCard = true;
         }
@@ -666,15 +697,15 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
   }
 
   void _handleBack() {
-    if (_previousCard == null || _previousIndex == null || _previousWasRemembered == null) {
-      return; // No previous card to go back to
+    if (_previousCard == null ||
+        _previousIndex == null ||
+        _previousWasRemembered == null) {
+      return;
     }
 
-    // Undo the action on the previous card
     final reviewState = context.read<ReviewState>();
-    
+
     if (_previousWasRemembered!) {
-      // Was marked as remembered, now mark as forgotten
       _repetitionService.markForgotten(
         _previousCard!,
         baseLanguage: widget.baseLanguage,
@@ -683,7 +714,6 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
       reviewState.removeCard(_previousCard!);
       reviewState.addForgottenCard(_previousCard!);
     } else {
-      // Was marked as forgotten, now mark as remembered  
       _repetitionService.markRemembered(
         _previousCard!,
         baseLanguage: widget.baseLanguage,
@@ -693,17 +723,14 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
       reviewState.addCard(_previousCard!);
     }
 
-    // Remove from swiped this session
     _swipedThisSession.remove(_previousCard!);
 
-    // Go back to the previous card
     setState(() {
       _currentIndex = _previousIndex!;
       _isFlipped = false;
       _dragDx = 0.0;
       _hasFlippedCurrentCard = false;
-      
-      // Clear previous card data (can only go back once)
+
       _previousCard = null;
       _previousIndex = null;
       _previousWasRemembered = null;
@@ -713,7 +740,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
   @override
   Widget build(BuildContext context) {
     final loc = context.watch<UiLanguageProvider>().loc;
-    
+
     if (_isInitializing) {
       return Scaffold(
         backgroundColor: Colors.brown[50],
@@ -760,7 +787,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
                 final revealed = reviewState.getRevealedCount(widget.topicKey);
                 final total = _flashcards.length;
                 final cardsLeft = total - revealed;
-                
+
                 return Container(
                   key: _progressKey,
                   padding: const EdgeInsets.symmetric(
@@ -833,7 +860,10 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
                 if (!_limitReached && !_finishedDeck)
                   GestureDetector(
                     onPanUpdate: (details) {
-                      setState(() => _dragDx += details.delta.dx);
+                      // Don't update dragDx while bounce is playing
+                      if (!_bounceController.isAnimating) {
+                        setState(() => _dragDx += details.delta.dx);
+                      }
                     },
                     onPanEnd: (details) {
                       final currentCard = _flashcards[_currentIndex];
@@ -842,7 +872,10 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
                       } else if (_dragDx < -100) {
                         _handleSwipe(currentCard, false);
                       }
-                      setState(() => _dragDx = 0.0);
+                      // Only reset dragDx if bounce isn't about to take over
+                      if (!_bounceController.isAnimating) {
+                        setState(() => _dragDx = 0.0);
+                      }
                     },
                     onTap: () {
                       _handleFlip();
@@ -852,7 +885,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
                       builder: (context, child) {
                         final angle = _flipAnimation.value * 3.14159;
                         final isHalfway = _flipAnimation.value > 0.5;
-                        
+
                         return Transform(
                           transform: Matrix4.identity()
                             ..setEntry(3, 2, 0.001)
@@ -860,7 +893,8 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
                           alignment: Alignment.center,
                           child: isHalfway
                               ? Transform(
-                                  transform: Matrix4.identity()..rotateY(3.14159),
+                                  transform: Matrix4.identity()
+                                    ..rotateY(3.14159),
                                   alignment: Alignment.center,
                                   child: _buildCardContent(displayName),
                                 )
@@ -871,106 +905,106 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
                   )
                 else
                   _buildCardContent(displayName),
-            
-            if (!_limitReached && !_finishedDeck) ...[
-              const SizedBox(height: 24),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 32),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Builder(
-                      builder: (context) {
-                        // Check if current card is new and hasn't been flipped
-                        final currentCard = _flashcards[_currentIndex];
-                        final progress = _repetitionService.getProgress(
-                          currentCard,
-                          baseLanguage: widget.baseLanguage,
-                          targetLanguage: widget.targetLanguage,
-                        );
-                        final canProgress = progress.hasStarted || _hasFlippedCurrentCard;
-                        
-                        return _buildActionButton(
-                          icon: Icons.close,
-                          label: loc.forgot,
-                          color: Colors.red,
-                          enabled: canProgress,
-                          onPressed: () {
-                            _handleButtonPress(false);
+
+                if (!_limitReached && !_finishedDeck) ...[
+                  const SizedBox(height: 24),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 32),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Builder(
+                          builder: (context) {
+                            final currentCard = _flashcards[_currentIndex];
+                            final progress = _repetitionService.getProgress(
+                              currentCard,
+                              baseLanguage: widget.baseLanguage,
+                              targetLanguage: widget.targetLanguage,
+                            );
+                            final canProgress =
+                                progress.hasStarted || _hasFlippedCurrentCard;
+
+                            return _buildActionButton(
+                              icon: Icons.close,
+                              label: loc.forgot,
+                              color: Colors.red,
+                              enabled: canProgress,
+                              onPressed: () {
+                                _handleButtonPress(false);
+                              },
+                            );
                           },
-                        );
-                      },
-                    ),
-                    _buildActionButton(
-                      icon: Icons.sync,
-                      label: loc.flip,
-                      color: Colors.grey,
-                      onPressed: () {
-                        _handleFlip();
-                      },
-                    ),
-                    Builder(
-                      builder: (context) {
-                        // Check if current card is new and hasn't been flipped
-                        final currentCard = _flashcards[_currentIndex];
-                        final progress = _repetitionService.getProgress(
-                          currentCard,
-                          baseLanguage: widget.baseLanguage,
-                          targetLanguage: widget.targetLanguage,
-                        );
-                        final canProgress = progress.hasStarted || _hasFlippedCurrentCard;
-                        
-                        return _buildActionButton(
-                          icon: Icons.check,
-                          label: loc.remember,
-                          color: Colors.green,
-                          enabled: canProgress,
+                        ),
+                        _buildActionButton(
+                          icon: Icons.sync,
+                          label: loc.flip,
+                          color: Colors.grey,
                           onPressed: () {
-                            _handleButtonPress(true);
+                            _handleFlip();
                           },
-                        );
-                      },
+                        ),
+                        Builder(
+                          builder: (context) {
+                            final currentCard = _flashcards[_currentIndex];
+                            final progress = _repetitionService.getProgress(
+                              currentCard,
+                              baseLanguage: widget.baseLanguage,
+                              targetLanguage: widget.targetLanguage,
+                            );
+                            final canProgress =
+                                progress.hasStarted || _hasFlippedCurrentCard;
+
+                            return _buildActionButton(
+                              icon: Icons.check,
+                              label: loc.remember,
+                              color: Colors.green,
+                              enabled: canProgress,
+                              onPressed: () {
+                                _handleButtonPress(true);
+                              },
+                            );
+                          },
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
-            ],
-          ],
-        ),
-      ),
-      // Back button positioned at top-right corner (outside the card)
-      if (!_limitReached && !_finishedDeck && _previousCard != null)
-        Positioned(
-          top: 16,
-          right: 16,
-          child: Material(
-            color: Colors.transparent,
-            child: InkWell(
-              onTap: _handleBack,
-              borderRadius: BorderRadius.circular(24),
-              child: Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.brown.withOpacity(0.9),
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
+                  ),
+                ],
+              ],
+            ),
+          ),
+          // Back button
+          if (!_limitReached && !_finishedDeck && _previousCard != null)
+            Positioned(
+              top: 16,
+              right: 16,
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  onTap: _handleBack,
+                  borderRadius: BorderRadius.circular(24),
+                  child: Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.brown.withOpacity(0.9),
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                child: const Icon(
-                  Icons.undo,
-                  color: Colors.white,
-                  size: 28,
+                    child: const Icon(
+                      Icons.undo,
+                      color: Colors.white,
+                      size: 28,
+                    ),
+                  ),
                 ),
               ),
             ),
-          ),
-        ),
-      ],
+        ],
       ),
     );
   }
@@ -980,15 +1014,15 @@ class _FlashcardScreenState extends State<FlashcardScreen> with SingleTickerProv
     required String label,
     required Color color,
     required VoidCallback onPressed,
-    bool enabled = true, // NEW: Add enabled parameter
+    bool enabled = true,
   }) {
     final effectiveColor = enabled ? color : Colors.grey.shade400;
-    
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         ElevatedButton(
-          onPressed: enabled ? onPressed : null, // Disable button if not enabled
+          onPressed: onPressed, // Always tappable — bounce handles the block
           style: ElevatedButton.styleFrom(
             backgroundColor: effectiveColor,
             foregroundColor: Colors.white,
