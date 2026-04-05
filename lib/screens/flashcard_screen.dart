@@ -56,12 +56,25 @@ class _FlashcardScreenState extends State<FlashcardScreen>
   int? _previousIndex;
   bool? _previousWasRemembered;
 
+  // During the back animation: the card sliding back in and the direction
+  // it enters from (positive = from right, negative = from left).
+  Flashcard? _returningCard;
+  double _returnDirection = 1.0;
+  // Pixel position of the main card in the body Stack, captured just before
+  // the return animation starts so the overlay aligns exactly with it.
+  Offset _cardOffset = Offset.zero;
+  Size _cardSize = Size.zero;
+
   late AnimationController _flipController;
   late Animation<double> _flipAnimation;
 
-  // Bounce animation for blocked swipes on unflipped new cards
+  // Bounce animation: blocked swipe on unflipped new card
   late AnimationController _bounceController;
   late Animation<double> _bounceAnimation;
+
+  // Return animation: previous card slides back in over the current card
+  late AnimationController _returnController;
+  late Animation<double> _returnAnimation;
 
   late AudioPlayer _audioPlayer;
 
@@ -90,12 +103,11 @@ class _FlashcardScreenState extends State<FlashcardScreen>
       CurvedAnimation(parent: _flipController, curve: Curves.easeInOut),
     );
 
-    // Bounce animation: push out → snap back, snappy feel
+    // Bounce animation: push out → snap back
     _bounceController = AnimationController(
       duration: const Duration(milliseconds: 350),
       vsync: this,
     );
-    // Value goes 0 → 1 → 0; caller multiplies by direction & magnitude
     _bounceAnimation = TweenSequence<double>([
       TweenSequenceItem(
         tween: Tween<double>(begin: 0.0, end: 1.0)
@@ -108,6 +120,16 @@ class _FlashcardScreenState extends State<FlashcardScreen>
         weight: 65,
       ),
     ]).animate(_bounceController);
+
+    // Return animation: off-screen edge → center, gentle deceleration
+    _returnController = AnimationController(
+      duration: const Duration(milliseconds: 380),
+      vsync: this,
+    );
+    // Goes 1.0 → 0.0; multiplied by screenWidth × direction in the builder
+    _returnAnimation = Tween<double>(begin: 1.0, end: 0.0).animate(
+      CurvedAnimation(parent: _returnController, curve: Curves.easeOutCubic),
+    );
 
     _initializeScreen();
   }
@@ -125,6 +147,7 @@ class _FlashcardScreenState extends State<FlashcardScreen>
     _audioPlayer.dispose();
     _flipController.dispose();
     _bounceController.dispose();
+    _returnController.dispose();
     super.dispose();
   }
 
@@ -290,7 +313,6 @@ class _FlashcardScreenState extends State<FlashcardScreen>
     });
   }
 
-  /// Plays audio for the current flashcard
   Future<void> _playAudio() async {
     final loc = context.read<UiLanguageProvider>().loc;
 
@@ -579,7 +601,7 @@ class _FlashcardScreenState extends State<FlashcardScreen>
     }
   }
 
-  /// Returns true if the current card is a new card that hasn't been flipped yet.
+  /// Returns true if the current card requires a flip before it can be swiped.
   bool _isBlockedByFlipRequirement() {
     final currentCard = _flashcards[_currentIndex];
     final progress = _repetitionService.getProgress(
@@ -590,12 +612,11 @@ class _FlashcardScreenState extends State<FlashcardScreen>
     return !progress.hasStarted && !_hasFlippedCurrentCard;
   }
 
-  /// Plays the bounce-back animation in the given direction.
-  /// [direction] should be 1.0 (right/remembered) or -1.0 (left/forgotten).
+  /// Bounce-back animation for blocked swipes/button presses.
+  /// [direction]: 1.0 = right, -1.0 = left.
   void _playBounce(double direction) {
     if (_bounceController.isAnimating) return;
 
-    // Drive _dragDx from the bounce animation value
     void listener() {
       if (mounted) {
         setState(() {
@@ -616,12 +637,10 @@ class _FlashcardScreenState extends State<FlashcardScreen>
 
   void _handleSwipe(Flashcard card, bool remembered) {
     if (_isBlockedByFlipRequirement()) {
-      // Bounce in the attempted swipe direction then snap back
       _playBounce(remembered ? 1.0 : -1.0);
       return;
     }
 
-    // Save current card as previous before progressing
     final currentCard = _flashcards[_currentIndex];
     _previousCard = currentCard;
     _previousIndex = _currentIndex;
@@ -703,37 +722,74 @@ class _FlashcardScreenState extends State<FlashcardScreen>
       return;
     }
 
-    final reviewState = context.read<ReviewState>();
+    // Prevent double-tapping the undo button mid-animation
+    if (_returnController.isAnimating) return;
 
-    if (_previousWasRemembered!) {
+    final returningCard = _previousCard!;
+    final returningIndex = _previousIndex!;
+    final wasRemembered = _previousWasRemembered!;
+
+    // Undo the score for the returning card
+    final reviewState = context.read<ReviewState>();
+    if (wasRemembered) {
       _repetitionService.markForgotten(
-        _previousCard!,
+        returningCard,
         baseLanguage: widget.baseLanguage,
         targetLanguage: widget.targetLanguage,
       );
-      reviewState.removeCard(_previousCard!);
-      reviewState.addForgottenCard(_previousCard!);
+      reviewState.removeCard(returningCard);
+      reviewState.addForgottenCard(returningCard);
     } else {
       _repetitionService.markRemembered(
-        _previousCard!,
+        returningCard,
         baseLanguage: widget.baseLanguage,
         targetLanguage: widget.targetLanguage,
       );
-      reviewState.removeForgottenCard(_previousCard!);
-      reviewState.addCard(_previousCard!);
+      reviewState.removeForgottenCard(returningCard);
+      reviewState.addCard(returningCard);
     }
 
-    _swipedThisSession.remove(_previousCard!);
+    _swipedThisSession.remove(returningCard);
+
+    // The card left right if remembered, left if forgotten.
+    // "Pulled back" = retraces its exit path, so it re-enters from the
+    // same side it left from.
+    final returnDir = wasRemembered ? 1.0 : -1.0;
+
+    // Capture the exact position and size of the current card in the Stack
+    // so the returning overlay aligns pixel-perfectly with it.
+    final renderBox =
+        _flashcardKey.currentContext?.findRenderObject() as RenderBox?;
+    if (renderBox != null) {
+      final bodyBox = context.findRenderObject() as RenderBox?;
+      _cardOffset = renderBox.localToGlobal(Offset.zero, ancestor: bodyBox);
+      _cardSize = renderBox.size;
+    }
 
     setState(() {
-      _currentIndex = _previousIndex!;
+      // Switch to the returning card's index immediately so whatever card
+      // is currently on screen stays visible underneath as the deck.
+      _currentIndex = returningIndex;
+      _returningCard = returningCard;
+      _returnDirection = returnDir;
       _isFlipped = false;
       _dragDx = 0.0;
       _hasFlippedCurrentCard = false;
 
+      // Clear undo state — only one undo step is supported
       _previousCard = null;
       _previousIndex = null;
       _previousWasRemembered = null;
+    });
+
+    // Animate in, then promote the returning card to the normal current card
+    _returnController.forward(from: 0.0).then((_) {
+      if (mounted) {
+        setState(() {
+          _returningCard = null;
+        });
+        _returnController.reset();
+      }
     });
   }
 
@@ -767,6 +823,9 @@ class _FlashcardScreenState extends State<FlashcardScreen>
       widget.topicKey,
       widget.baseLanguage,
     );
+
+    // Used to push the returning card fully off-screen at animation start
+    final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       backgroundColor: Colors.brown[50],
@@ -859,27 +918,28 @@ class _FlashcardScreenState extends State<FlashcardScreen>
               children: [
                 if (!_limitReached && !_finishedDeck)
                   GestureDetector(
-                    onPanUpdate: (details) {
-                      // Don't update dragDx while bounce is playing
-                      if (!_bounceController.isAnimating) {
-                        setState(() => _dragDx += details.delta.dx);
-                      }
-                    },
-                    onPanEnd: (details) {
-                      final currentCard = _flashcards[_currentIndex];
-                      if (_dragDx > 100) {
-                        _handleSwipe(currentCard, true);
-                      } else if (_dragDx < -100) {
-                        _handleSwipe(currentCard, false);
-                      }
-                      // Only reset dragDx if bounce isn't about to take over
-                      if (!_bounceController.isAnimating) {
-                        setState(() => _dragDx = 0.0);
-                      }
-                    },
-                    onTap: () {
-                      _handleFlip();
-                    },
+                    // Lock out all gestures while the return animation plays
+                    onPanUpdate: _returningCard != null
+                        ? null
+                        : (details) {
+                            if (!_bounceController.isAnimating) {
+                              setState(() => _dragDx += details.delta.dx);
+                            }
+                          },
+                    onPanEnd: _returningCard != null
+                        ? null
+                        : (details) {
+                            final currentCard = _flashcards[_currentIndex];
+                            if (_dragDx > 100) {
+                              _handleSwipe(currentCard, true);
+                            } else if (_dragDx < -100) {
+                              _handleSwipe(currentCard, false);
+                            }
+                            if (!_bounceController.isAnimating) {
+                              setState(() => _dragDx = 0.0);
+                            }
+                          },
+                    onTap: _returningCard != null ? null : _handleFlip,
                     child: AnimatedBuilder(
                       animation: _flipAnimation,
                       builder: (context, child) {
@@ -929,9 +989,7 @@ class _FlashcardScreenState extends State<FlashcardScreen>
                               label: loc.forgot,
                               color: Colors.red,
                               enabled: canProgress,
-                              onPressed: () {
-                                _handleButtonPress(false);
-                              },
+                              onPressed: () => _handleButtonPress(false),
                             );
                           },
                         ),
@@ -939,9 +997,7 @@ class _FlashcardScreenState extends State<FlashcardScreen>
                           icon: Icons.sync,
                           label: loc.flip,
                           color: Colors.grey,
-                          onPressed: () {
-                            _handleFlip();
-                          },
+                          onPressed: _handleFlip,
                         ),
                         Builder(
                           builder: (context) {
@@ -959,9 +1015,7 @@ class _FlashcardScreenState extends State<FlashcardScreen>
                               label: loc.remember,
                               color: Colors.green,
                               enabled: canProgress,
-                              onPressed: () {
-                                _handleButtonPress(true);
-                              },
+                              onPressed: () => _handleButtonPress(true),
                             );
                           },
                         ),
@@ -972,8 +1026,34 @@ class _FlashcardScreenState extends State<FlashcardScreen>
               ],
             ),
           ),
-          // Back button
-          if (!_limitReached && !_finishedDeck && _previousCard != null)
+
+          // ── Returning card overlay ──────────────────────────────────────
+          // Positioned at exactly the same top/left as the main card so the
+          // two cards are pixel-aligned. The child slides in horizontally
+          // from the edge the card originally left from.
+          if (_returningCard != null)
+            AnimatedBuilder(
+              animation: _returnAnimation,
+              builder: (context, child) {
+                final offsetX =
+                    _returnAnimation.value * screenWidth * _returnDirection;
+                return Positioned(
+                  left: _cardOffset.dx + offsetX,
+                  top: _cardOffset.dy,
+                  width: _cardSize.width,
+                  height: _cardSize.height,
+                  child: child!,
+                );
+              },
+              child: _buildReturningCardView(_returningCard!),
+            ),
+
+          // ── Undo button ─────────────────────────────────────────────────
+          // Hidden while the return animation is playing to avoid re-tapping
+          if (!_limitReached &&
+              !_finishedDeck &&
+              _previousCard != null &&
+              _returningCard == null)
             Positioned(
               top: 16,
               right: 16,
@@ -1009,6 +1089,29 @@ class _FlashcardScreenState extends State<FlashcardScreen>
     );
   }
 
+  /// Static, non-interactive snapshot of the returning card.
+  /// Always shown on its front face with no drag offset.
+  Widget _buildReturningCardView(Flashcard card) {
+    return FlashcardView(
+      flashcard: card,
+      progress: _repetitionService.getProgress(
+        card,
+        baseLanguage: widget.baseLanguage,
+        targetLanguage: widget.targetLanguage,
+      ),
+      isFlipped: false,
+      baseLanguage: widget.baseLanguage,
+      targetLanguage: widget.targetLanguage,
+      dragDx: 0.0,
+      onFlip: () {},
+      onAddImage: () {},
+      onRemoveImage: null,
+      onRemembered: () {},
+      onForgotten: () {},
+      onPlayAudio: () {},
+    );
+  }
+
   Widget _buildActionButton({
     required IconData icon,
     required String label,
@@ -1022,7 +1125,7 @@ class _FlashcardScreenState extends State<FlashcardScreen>
       mainAxisSize: MainAxisSize.min,
       children: [
         ElevatedButton(
-          onPressed: onPressed, // Always tappable — bounce handles the block
+          onPressed: onPressed,
           style: ElevatedButton.styleFrom(
             backgroundColor: effectiveColor,
             foregroundColor: Colors.white,
