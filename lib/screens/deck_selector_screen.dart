@@ -251,19 +251,57 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
   Color _getLevelColor(int level) {
     switch (level) {
       case -1:
-        return Colors.deepOrange;
+        return const Color(0xFFFF4B4B);
       case 1:
-        return Colors.blue;
+        return const Color(0xFF1CB0F6);
       case 2:
-        return Colors.orange;
+        return const Color(0xFFFF9600);
       case 3:
-        return Colors.purple;
+        return const Color(0xFFCE82FF);
       case 4:
-        return Colors.teal;
+        return const Color(0xFF00CD9C);
       case 5:
-        return Colors.green;
+        return const Color(0xFF58CC02);
       default:
-        return Colors.grey;
+        return const Color(0xFF9E9E9E);
+    }
+  }
+
+  Color _getLevelColorMuted(int level) {
+    switch (level) {
+      case -1:
+        return const Color(0xFFE08080);
+      case 1:
+        return const Color(0xFF7BBFD4);
+      case 2:
+        return const Color(0xFFD4A96A);
+      case 3:
+        return const Color(0xFFB89FCC);
+      case 4:
+        return const Color(0xFF6DB8A8);
+      case 5:
+        return const Color(0xFF7DB85A);
+      default:
+        return const Color(0xFF9E9E9E);
+    }
+  }
+
+  Color _getLevelBottomBorderColor(int level) {
+    switch (level) {
+      case -1:
+        return const Color(0xFFCC2020);
+      case 1:
+        return const Color(0xFF0A8BBF);
+      case 2:
+        return const Color(0xFFCC7000);
+      case 3:
+        return const Color(0xFF9A50D4);
+      case 4:
+        return const Color(0xFF009E78);
+      case 5:
+        return const Color(0xFF3A9E00);
+      default:
+        return const Color(0xFF757575);
     }
   }
 
@@ -329,139 +367,138 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
       }
     }
 
+    final cardColor = isDue ? levelColor : _getLevelColorMuted(level);
+    final bottomBorderColor = isDue ? _getLevelBottomBorderColor(level) : cardColor.withOpacity(0.6);
+
     return GestureDetector(
       onTap: isDue ? () {
         _openLevelDeck(level, cards);
       } : null,
-      child: Opacity(
-        opacity: isDue ? 1.0 : 0.6,
-        child: Card(
-          key: key,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          elevation: isDue ? 4 : 2,
-          color: levelColor.withOpacity(0.1),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: levelColor.withOpacity(isDue ? 0.3 : 0.2),
-                width: 2,
-              ),
+      child: Card(
+        key: key,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        elevation: isDue ? 2 : 0,
+        color: cardColor,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            border: Border(
+              bottom: BorderSide(color: bottomBorderColor, width: 4),
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.15),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Icon(
+                        levelIcon,
+                        color: Colors.white,
+                        size: 24,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        levelName,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    if (!isDue && totalCards > 0)
+                      const Icon(
+                        Icons.schedule,
+                        size: 20,
+                        color: Colors.white70,
+                      ),
+                  ],
+                ),
+                const Spacer(),
+                Text(
+                  loc.boxLabel(level),
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                const Spacer(),
+                if (isDue)
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.18),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      loc.cardsDue(cardCount),
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  )
+                else if (totalCards > 0)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        padding: const EdgeInsets.all(8),
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
-                          color: levelColor.withOpacity(0.2),
+                          color: Colors.black.withOpacity(0.15),
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: Icon(
-                          levelIcon,
-                          color: levelColor,
-                          size: 24,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
                         child: Text(
-                          levelName,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: levelColor,
+                          loc.cardsTotal(totalCards),
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
                           ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      if (!isDue && totalCards > 0)
-                        Icon(
-                          Icons.schedule,
-                          size: 20,
-                          color: levelColor.withOpacity(0.7),
+                      const SizedBox(height: 4),
+                      Text(
+                        availableText,
+                        style: const TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white70,
                         ),
+                      ),
                     ],
-                  ),
-                  const Spacer(),
-                  Text(
-                    loc.boxLabel(level),
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: levelColor,
+                  )
+                else
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.15),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Text(
+                      '—',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white70,
+                      ),
                     ),
                   ),
-                  const Spacer(),
-                  if (isDue)
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: levelColor.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(
-                        loc.cardsDue(cardCount),
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.bold,
-                          color: levelColor,
-                        ),
-                      ),
-                    )
-                  else if (totalCards > 0)
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: levelColor.withOpacity(0.15),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Text(
-                            loc.cardsTotal(totalCards),
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: levelColor.withOpacity(0.8),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          availableText,
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w500,
-                            color: levelColor.withOpacity(0.7),
-                          ),
-                        ),
-                      ],
-                    )
-                  else
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: Colors.grey.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(
-                        loc.noCards,
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey.shade600,
-                        ),
-                      ),
-                    ),
-                ],
-              ),
+              ],
             ),
           ),
         ),
