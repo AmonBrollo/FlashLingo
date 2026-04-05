@@ -254,6 +254,11 @@ class EnglishStrings {
     }
   }
   
+  static String boxLabel(int level) {
+    if (level == -1) return 'Box ✕';
+    return 'Box $level';
+  }
+
   static const String newDifficult = 'New/Difficult';
   static const String learning = 'Learning';
   static const String familiar = 'Familiar';

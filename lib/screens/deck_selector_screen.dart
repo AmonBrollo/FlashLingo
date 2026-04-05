@@ -389,6 +389,15 @@ class _DeckSelectorScreenState extends State<DeckSelectorScreen> {
                     ],
                   ),
                   const Spacer(),
+                  Text(
+                    loc.boxLabel(level),
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: levelColor,
+                    ),
+                  ),
+                  const Spacer(),
                   if (isDue)
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),

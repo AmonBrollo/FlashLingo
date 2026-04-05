@@ -580,6 +580,12 @@ class AppLocalizations {
         : EnglishStrings.levelDescription(level);
   }
 
+  String boxLabel(int level) {
+    return language.code == 'pt'
+        ? PortugueseStrings.boxLabel(level)
+        : EnglishStrings.boxLabel(level);
+  }
+
   String cardsDue(int count) {
     return language.code == 'pt'
         ? PortugueseStrings.cardsDue(count)

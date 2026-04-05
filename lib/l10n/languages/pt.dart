@@ -254,6 +254,11 @@ class PortugueseStrings {
     }
   }
   
+  static String boxLabel(int level) {
+    if (level == -1) return 'Caixa ✕';
+    return 'Caixa $level';
+  }
+
   static const String newDifficult = 'Novo/Difícil';
   static const String learning = 'Aprendendo';
   static const String familiar = 'Familiar';
