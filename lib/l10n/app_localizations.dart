@@ -1182,6 +1182,27 @@ class AppLocalizations {
         en: EnglishStrings.cardsLowercase,
       );
 
+  // Notification settings
+  String get notifications => _getString(
+        pt: PortugueseStrings.notifications,
+        en: EnglishStrings.notifications,
+      );
+
+  String get notificationsDescription => _getString(
+        pt: PortugueseStrings.notificationsDescription,
+        en: EnglishStrings.notificationsDescription,
+      );
+
+  String get notificationsEnabled => _getString(
+        pt: PortugueseStrings.notificationsEnabled,
+        en: EnglishStrings.notificationsEnabled,
+      );
+
+  String get notificationsDisabled => _getString(
+        pt: PortugueseStrings.notificationsDisabled,
+        en: EnglishStrings.notificationsDisabled,
+      );
+
   // Convenience properties
   String get languageCode => language.code;
   bool get isPortuguese => language.code == 'pt';

@@ -1,6 +1,7 @@
 import '../models/flashcard.dart';
 import '../models/flashcard_progress.dart';
 import 'firebase_progress_service.dart';
+import 'notification_service.dart';
 import 'sync_service.dart';
 
 /// Service responsible for handling spaced repetition logic (Leitner system).
@@ -292,6 +293,7 @@ class RepetitionService {
     try {
       await FirebaseProgressService.saveProgress(card, progress, base, target);
       SyncService().markDataChanged();
+      NotificationService().rescheduleDebounced();
     } catch (e) {
       print('Error saving progress: $e');
     }

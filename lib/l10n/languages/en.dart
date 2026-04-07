@@ -365,4 +365,10 @@ class EnglishStrings {
   
   // Review Screen specific
   static const String cardsLowercase = 'cards';
+
+  // Notification settings
+  static const String notifications = 'Notifications';
+  static const String notificationsDescription = 'Get notified when your cards are due for review';
+  static const String notificationsEnabled = 'Notifications enabled';
+  static const String notificationsDisabled = 'Notifications disabled';
 }

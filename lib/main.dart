@@ -7,6 +7,7 @@ import 'services/review_state.dart';
 import 'services/app_initialization_service.dart';
 import 'services/app_state_service.dart';
 import 'services/error_handler_service.dart';
+import 'services/notification_service.dart';
 import 'services/ui_language_provider.dart'; // NEW
 import 'firebase_options.dart';
 import 'screens/auth_gate.dart';
@@ -63,6 +64,20 @@ void main() async {
           e,
           stack,
           context: 'App Services Init',
+          fatal: false,
+        );
+      });
+
+      // STEP 5: Initialize NotificationService (NON-BLOCKING)
+      debugPrint('🔧 Initializing NotificationService...');
+      NotificationService().initialize().then((_) {
+        debugPrint('✅ NotificationService initialized');
+      }).catchError((e, stack) {
+        debugPrint('⚠️ NotificationService initialization error: $e');
+        ErrorHandlerService.logError(
+          e,
+          stack,
+          context: 'NotificationService Init',
           fatal: false,
         );
       });
@@ -148,6 +163,7 @@ class _FlashLangoState extends State<FlashLango> with WidgetsBindingObserver {
         } catch (e) {
           debugPrint('⚠️ Error in onAppResumed: $e');
         }
+        NotificationService().rescheduleFromCache();
         break;
       case AppLifecycleState.inactive:
         _recordAppLifecycle('App Inactive');

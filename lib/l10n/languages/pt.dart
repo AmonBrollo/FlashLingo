@@ -365,4 +365,10 @@ class PortugueseStrings {
 
   // Review Screen specific
   static const String cardsLowercase = 'cartas';
+
+  // Notification settings
+  static const String notifications = 'Notificações';
+  static const String notificationsDescription = 'Receba notificações quando seus cartões estiverem prontos para revisão';
+  static const String notificationsEnabled = 'Notificações ativadas';
+  static const String notificationsDisabled = 'Notificações desativadas';
 }

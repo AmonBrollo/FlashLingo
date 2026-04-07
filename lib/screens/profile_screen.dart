@@ -7,6 +7,7 @@ import '../services/local_image_service.dart';
 import '../services/tutorial_service.dart';
 import '../services/firebase_user_preferences.dart';
 import '../services/deck_loader.dart';
+import '../services/notification_service.dart';
 import '../services/sync_service.dart';
 import '../services/ui_language_provider.dart';
 import 'app_router.dart';
@@ -24,6 +25,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool _isLoading = false;
   bool _isResendingVerification = false;
   bool _isManualSyncing = false;
+  bool _notificationsEnabled = true;
   Map<String, dynamic>? _storageStats;
   StreamSubscription<SyncStatus>? _syncStatusSubscription;
   SyncStatus _currentSyncStatus = SyncStatus.idle;
@@ -33,6 +35,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     super.initState();
     _loadStorageStats();
     _setupSyncStatusListener();
+    _notificationsEnabled = NotificationService().isEnabled;
   }
 
   @override
@@ -49,6 +52,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
         });
       }
     });
+  }
+
+  Future<void> _toggleNotifications(bool value) async {
+    await NotificationService().setEnabled(value);
+    if (mounted) {
+      setState(() => _notificationsEnabled = value);
+      final loc = context.read<UiLanguageProvider>().loc;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            value ? loc.notificationsEnabled : loc.notificationsDisabled,
+          ),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    }
   }
 
   Future<void> _loadStorageStats() async {
@@ -1025,6 +1044,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                     ),
+
+                  const SizedBox(height: 16),
+
+                  // Notifications Card
+                  Card(
+                    elevation: 2,
+                    child: SwitchListTile(
+                      secondary: Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Colors.brown.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Icon(
+                          Icons.notifications_outlined,
+                          color: Colors.brown,
+                        ),
+                      ),
+                      title: Text(
+                        loc.notifications,
+                        style: const TextStyle(fontWeight: FontWeight.w500),
+                      ),
+                      subtitle: Text(loc.notificationsDescription),
+                      value: _notificationsEnabled,
+                      onChanged: _toggleNotifications,
+                      activeColor: Colors.brown,
+                    ),
+                  ),
 
                   const SizedBox(height: 16),
 
