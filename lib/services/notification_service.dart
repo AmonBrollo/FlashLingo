@@ -48,9 +48,8 @@ class NotificationService {
 
     // Initialize timezone database (required by flutter_local_notifications)
     tz_data.initializeTimeZones();
-    final String localTimeZone =
-        await FlutterTimezone.getLocalTimezone();
-    tz.setLocalLocation(tz.getLocation(localTimeZone));
+    final localTimezone = await FlutterTimezone.getLocalTimezone();
+    tz.setLocalLocation(tz.getLocation(localTimezone.identifier));
 
     // Load persisted preference
     try {
