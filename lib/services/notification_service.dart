@@ -126,6 +126,37 @@ class NotificationService {
     print('NotificationService: all notifications cancelled');
   }
 
+  /// Schedule a test notification 10 seconds from now.
+  /// Only for use during development — never call from production code.
+  Future<void> scheduleTestNotification() async {
+    if (!_initialized) return;
+    final scheduledTime = DateTime.now().add(const Duration(seconds: 10));
+    final androidDetails = AndroidNotificationDetails(
+      _channelId,
+      _channelName,
+      channelDescription: _channelDescription,
+      importance: Importance.high,
+      priority: Priority.high,
+    );
+    const iosDetails = DarwinNotificationDetails();
+    final details = NotificationDetails(android: androidDetails, iOS: iosDetails);
+    try {
+      await _plugin.zonedSchedule(
+        99999,
+        '🧪 Test notification',
+        'Notifications are working correctly!',
+        _toTZDateTime(scheduledTime),
+        details,
+        androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+      );
+      print('NotificationService: test notification scheduled for $scheduledTime');
+    } catch (e) {
+      print('NotificationService: failed to schedule test notification: $e');
+    }
+  }
+
   // ─── Core scheduling logic ───────────────────────────────────────────────────
 
   /// Read the in-memory progress cache, group cards by (box, due-date),
@@ -214,7 +245,7 @@ class NotificationService {
         body,
         scheduledDate,
         details,
-        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
       );

@@ -53,6 +53,11 @@ class RepetitionService {
       print(
         'RepetitionService initialized with ${_progressCache.length} cards (FAST)',
       );
+
+      // Schedule notifications now that progress data is in memory
+      if (_progressCache.isNotEmpty) {
+        NotificationService().scheduleNotificationsFromCache();
+      }
     } catch (e) {
       print('Error initializing RepetitionService: $e');
       _cacheLoaded = true; // Continue with empty cache

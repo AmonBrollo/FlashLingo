@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
@@ -52,6 +53,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
         });
       }
     });
+  }
+
+  Future<void> _sendTestNotification() async {
+    await NotificationService().scheduleTestNotification();
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Test notification scheduled — fires in 10 seconds'),
+          duration: Duration(seconds: 3),
+        ),
+      );
+    }
   }
 
   Future<void> _toggleNotifications(bool value) async {
@@ -1072,6 +1085,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       activeColor: Colors.brown,
                     ),
                   ),
+
+                  if (kDebugMode) ...[
+                    const SizedBox(height: 8),
+                    SizedBox(
+                      width: double.infinity,
+                      child: OutlinedButton.icon(
+                        onPressed: _sendTestNotification,
+                        icon: const Icon(Icons.notifications_active, size: 18),
+                        label: const Text('Send test notification (10s)'),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: Colors.brown,
+                          side: const BorderSide(color: Colors.brown),
+                        ),
+                      ),
+                    ),
+                  ],
 
                   const SizedBox(height: 16),
 
