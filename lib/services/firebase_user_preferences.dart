@@ -11,41 +11,38 @@ class FirebaseUserPreferences {
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   static final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  /// Get the current user's document reference
+  /// Get the current user's document reference.
   static DocumentReference? _getUserDocument() {
     final user = _auth.currentUser;
     if (user == null || user.isAnonymous) return null;
-
     return _firestore.collection('users').doc(user.uid);
   }
 
-  /// Save user preferences to Firebase and local storage
+  /// Save user preferences to local storage and Firebase, then signal a sync.
   static Future<void> savePreferences({
     required String baseLanguage,
     required String targetLanguage,
     required String deckKey,
   }) async {
-    final preferences = {
-      _baseLanguageKey: baseLanguage,
-      _targetLanguageKey: targetLanguage,
-      _deckKey: deckKey,
-      'updated_at': FieldValue.serverTimestamp(),
-    };
-
-    // Always save to local storage first (fast and reliable)
+    // Local storage first — fast and reliable.
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_baseLanguageKey, baseLanguage);
     await prefs.setString(_targetLanguageKey, targetLanguage);
     await prefs.setString(_deckKey, deckKey);
 
-    // Save to Firebase in background (non-blocking)
-    _saveToFirebaseBackground(preferences);
+    // Firebase in background — non-blocking.
+    _saveToFirebaseBackground({
+      _baseLanguageKey: baseLanguage,
+      _targetLanguageKey: targetLanguage,
+      _deckKey: deckKey,
+      'updated_at': FieldValue.serverTimestamp(),
+    });
 
-    // Trigger sync after saving preferences (debounced)
+    // Notify sync service that local state changed.
     SyncService().markDataChanged();
   }
 
-  /// Save to Firebase in background without blocking
+  /// Write preferences to Firebase without blocking the caller.
   static void _saveToFirebaseBackground(Map<String, dynamic> preferences) {
     Future.microtask(() async {
       final userDoc = _getUserDocument();
@@ -54,16 +51,14 @@ class FirebaseUserPreferences {
       try {
         await userDoc
             .set({'preferences': preferences}, SetOptions(merge: true))
-            .timeout(
-              const Duration(seconds: 3),
-            );
+            .timeout(const Duration(seconds: 3));
       } catch (e) {
         print('Firebase preference save failed (expected if offline): $e');
       }
     });
   }
 
-  /// Load preferences from Firebase, fallback to local storage
+  /// Load preferences from Firebase, falling back to local storage.
   static Future<Map<String, String?>> loadPreferences() async {
     final userDoc = _getUserDocument();
 
@@ -76,12 +71,12 @@ class FirebaseUserPreferences {
           final preferences = data?['preferences'] as Map<String, dynamic>?;
 
           if (preferences != null) {
-            // Also save to local storage for offline access
-            final prefs = await SharedPreferences.getInstance();
             final baseLanguage = preferences[_baseLanguageKey] as String?;
             final targetLanguage = preferences[_targetLanguageKey] as String?;
             final deckKey = preferences[_deckKey] as String?;
 
+            // Mirror to local storage for offline access.
+            final prefs = await SharedPreferences.getInstance();
             if (baseLanguage != null) {
               await prefs.setString(_baseLanguageKey, baseLanguage);
             }
@@ -101,15 +96,14 @@ class FirebaseUserPreferences {
         }
       } catch (e) {
         print('Error loading preferences from Firebase: $e');
-        // Fall through to local storage
+        // Fall through to local storage.
       }
     }
 
-    // Fallback to local storage
     return loadPreferencesLocal();
   }
 
-  /// Load preferences from local storage only (no Firebase)
+  /// Load preferences from local storage only (no Firebase).
   static Future<Map<String, String?>> loadPreferencesLocal() async {
     final prefs = await SharedPreferences.getInstance();
     return {
@@ -119,7 +113,7 @@ class FirebaseUserPreferences {
     };
   }
 
-  /// Get a single preference
+  /// Get a single preference by its storage key.
   static Future<String?> getPreference(String key) async {
     final preferences = await loadPreferences();
     switch (key) {
@@ -134,7 +128,7 @@ class FirebaseUserPreferences {
     }
   }
 
-  /// Check if basic setup is complete
+  /// Returns true when all three setup keys are present.
   static Future<bool> isSetupComplete() async {
     final preferences = await loadPreferences();
     return preferences['baseLanguage'] != null &&
@@ -142,13 +136,11 @@ class FirebaseUserPreferences {
         preferences['deckKey'] != null;
   }
 
-  /// Clear all stored preferences
+  /// Remove all stored preferences from local storage and Firebase.
   static Future<void> clearPreferences() async {
-    // Clear local storage
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();
 
-    // Clear Firebase if user is authenticated
     final userDoc = _getUserDocument();
     if (userDoc != null) {
       try {
@@ -161,13 +153,23 @@ class FirebaseUserPreferences {
     }
   }
 
-  /// Check if a user is currently logged in and not anonymous
+  /// Returns true when a non-anonymous user is signed in.
   static bool isLoggedIn() {
     final user = _auth.currentUser;
     return user != null && !user.isAnonymous;
   }
 
-  /// Sync local preferences to Firebase after login
+  /// Push whatever is in local storage up to Firebase.
+  ///
+  /// Intentionally does NOT call [savePreferences] — that would trigger
+  /// [SyncService.markDataChanged] and schedule another sync, creating
+  /// an indirect recursive loop:
+  ///
+  ///   syncNow → syncLocalToFirebase → savePreferences → markDataChanged
+  ///           → syncNow → syncLocalToFirebase → …
+  ///
+  /// Instead we write directly to Firebase and leave sync scheduling
+  /// entirely to the [SyncService] that called us.
   static Future<void> syncLocalToFirebase() async {
     final userDoc = _getUserDocument();
     if (userDoc == null) return;
@@ -177,12 +179,25 @@ class FirebaseUserPreferences {
     final targetLanguage = prefs.getString(_targetLanguageKey);
     final deckKey = prefs.getString(_deckKey);
 
-    if (baseLanguage != null && targetLanguage != null && deckKey != null) {
-      await savePreferences(
-        baseLanguage: baseLanguage,
-        targetLanguage: targetLanguage,
-        deckKey: deckKey,
+    if (baseLanguage == null || targetLanguage == null || deckKey == null) {
+      return; // Nothing to push.
+    }
+
+    try {
+      await userDoc.set(
+        {
+          'preferences': {
+            _baseLanguageKey: baseLanguage,
+            _targetLanguageKey: targetLanguage,
+            _deckKey: deckKey,
+            'updated_at': FieldValue.serverTimestamp(),
+          },
+        },
+        SetOptions(merge: true),
       );
+    } catch (e) {
+      print('Firebase preference sync failed (expected if offline): $e');
+      rethrow; // Let SyncService handle retry logic.
     }
   }
 }

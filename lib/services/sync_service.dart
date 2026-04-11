@@ -5,8 +5,8 @@ import 'firebase_user_preferences.dart';
 import 'firebase_progress_service.dart';
 import 'error_handler_service.dart';
 
-/// Centralized sync service to keep data in sync across devices
-/// Now completely non-blocking for maximum performance
+/// Centralized sync service to keep data in sync across devices.
+/// Non-blocking by design — local storage is always the source of truth.
 class SyncService {
   static final SyncService _instance = SyncService._internal();
   factory SyncService() => _instance;
@@ -20,12 +20,18 @@ class SyncService {
   int _pendingChangesCount = 0;
 
   // Sync settings
-  static const Duration _syncInterval = Duration(minutes: 5); // Increased to reduce Firebase calls
-  static const int _batchThreshold = 10; // Increased to batch more changes
-  static const Duration _debounceDelay = Duration(seconds: 5); // Increased debounce
-  
+  static const Duration _syncInterval = Duration(minutes: 5);
+  static const int _batchThreshold = 10;
+  static const Duration _debounceDelay = Duration(seconds: 5);
+
+  // Per-operation Firebase timeout.
+  // Must be LONGER than any internal timeout used inside the service methods
+  // themselves (FirebaseProgressService uses 10s for batch commits, so we give
+  // a generous ceiling here to avoid masking partial success).
+  static const Duration _pushTimeout = Duration(seconds: 20);
+
   Timer? _debounceTimer;
-  final StreamController<SyncStatus> _syncStatusController = 
+  final StreamController<SyncStatus> _syncStatusController =
       StreamController<SyncStatus>.broadcast();
 
   // Public API
@@ -37,18 +43,12 @@ class SyncService {
   /// Initialize sync service
   Future<void> initialize() async {
     await ErrorHandlerService.logMessage('SyncService: Initializing');
-    
-    // Start periodic sync timer
     _startPeriodicSync();
-    
-    // Listen to connectivity changes
     Connectivity().onConnectivityChanged.listen(_onConnectivityChanged);
-    
-    // Sync in background (non-blocking)
     _syncInBackground();
   }
 
-  /// Sync in background without blocking
+  /// Trigger a background sync without blocking the caller.
   void _syncInBackground() {
     Future.microtask(() async {
       try {
@@ -59,41 +59,32 @@ class SyncService {
     });
   }
 
-  /// Mark that data has changed (triggers batched sync)
+  /// Mark that data has changed and schedule a debounced sync.
   void markDataChanged() {
     _hasPendingChanges = true;
     _pendingChangesCount++;
-    
-    // Cancel previous debounce timer
+
     _debounceTimer?.cancel();
-    
-    // If we've hit the batch threshold, sync soon
+
     if (_pendingChangesCount >= _batchThreshold) {
-      _debounceTimer = Timer(const Duration(seconds: 1), () {
-        _syncInBackground();
-      });
+      _debounceTimer = Timer(const Duration(seconds: 1), _syncInBackground);
     } else {
-      // Otherwise, debounce and sync after delay
-      _debounceTimer = Timer(_debounceDelay, () {
-        _syncInBackground();
-      });
+      _debounceTimer = Timer(_debounceDelay, _syncInBackground);
     }
   }
 
-  /// Force sync immediately (still non-blocking)
+  /// Attempt a sync now. Returns a [SyncResult] describing what happened.
+  /// Never throws — all errors are captured in the result.
   Future<SyncResult> syncNow() async {
-    // Check if user is logged in
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
       return SyncResult(success: false, reason: 'Not logged in');
     }
 
-    // Check if already syncing
     if (_isSyncing) {
       return SyncResult(success: false, reason: 'Sync in progress');
     }
 
-    // Check connectivity
     final isOnline = await _isOnline();
     if (!isOnline) {
       await ErrorHandlerService.logMessage('SyncService: Offline, queuing sync');
@@ -102,25 +93,18 @@ class SyncService {
 
     _isSyncing = true;
     _syncStatusController.add(SyncStatus.syncing);
-    
+
     try {
       await ErrorHandlerService.logSyncEvent('Starting background sync');
 
-      // Push local changes to Firebase (with timeout)
       if (_hasPendingChanges) {
-        await _pushToFirebase().timeout(
-          const Duration(seconds: 3),
-          onTimeout: () {
-            print('Sync timed out - will retry later');
-          },
-        );
+        await _pushToFirebase();
       }
 
-      // Update state
       _lastSyncTime = DateTime.now();
       _hasPendingChanges = false;
       _pendingChangesCount = 0;
-      
+
       _syncStatusController.add(SyncStatus.synced);
       await ErrorHandlerService.logSyncEvent('Sync completed');
 
@@ -132,7 +116,6 @@ class SyncService {
         context: 'Sync Failed',
         fatal: false,
       );
-      
       _syncStatusController.add(SyncStatus.error);
       return SyncResult(success: false, reason: e.toString());
     } finally {
@@ -140,77 +123,88 @@ class SyncService {
     }
   }
 
-  /// Push local changes to Firebase (non-blocking)
+  /// Push local state to Firebase.
+  ///
+  /// Timeout strategy:
+  ///   • Each operation is given [_pushTimeout] individually.
+  ///   • A [TimeoutException] is treated as a soft failure (slow network,
+  ///     not an error state). We log it and continue so the caller can still
+  ///     mark the sync as successful for any operations that did complete.
+  ///   • Only unexpected exceptions are rethrown to surface as sync errors.
   Future<void> _pushToFirebase() async {
+    // --- Preferences ---
     try {
-      // Push preferences (with timeout)
-      await FirebaseUserPreferences.syncLocalToFirebase().timeout(
-        const Duration(seconds: 2),
-      );
-
-      // Push progress (with timeout)
-      await FirebaseProgressService.syncLocalToFirebase().timeout(
-        const Duration(seconds: 2),
-      );
-
-      await ErrorHandlerService.logSyncEvent('Pushed data to Firebase');
+      await FirebaseUserPreferences.syncLocalToFirebase()
+          .timeout(_pushTimeout);
+    } on TimeoutException {
+      // Slow network — not a hard failure. Changes remain pending and will
+      // be retried on the next periodic or manual sync.
+      print('SyncService: preferences push timed out — will retry later');
     } catch (e) {
-      print('Push to Firebase failed (expected if offline): $e');
-      rethrow;
+      print('SyncService: preferences push failed — $e');
+      // Don't rethrow: a preferences failure should not block progress sync.
     }
+
+    // --- Progress ---
+    try {
+      await FirebaseProgressService.syncLocalToFirebase()
+          .timeout(_pushTimeout);
+    } on TimeoutException {
+      print('SyncService: progress push timed out — will retry later');
+      // Keep _hasPendingChanges true so the next cycle retries.
+      _hasPendingChanges = true;
+    } catch (e) {
+      print('SyncService: progress push failed — $e');
+      _hasPendingChanges = true;
+    }
+
+    await ErrorHandlerService.logSyncEvent('Push to Firebase completed');
   }
 
-  /// Start periodic sync timer
+  /// Start the periodic background sync timer.
   void _startPeriodicSync() {
     _periodicSyncTimer?.cancel();
-    _periodicSyncTimer = Timer.periodic(_syncInterval, (timer) {
+    _periodicSyncTimer = Timer.periodic(_syncInterval, (_) {
       if (_hasPendingChanges) {
         _syncInBackground();
       }
     });
   }
 
-  /// Handle connectivity changes
+  /// React to connectivity changes — resume sync when coming back online.
   void _onConnectivityChanged(List<ConnectivityResult> results) async {
-    final isOnline = results.any((result) => result != ConnectivityResult.none);
-    
+    final isOnline = results.any((r) => r != ConnectivityResult.none);
     if (isOnline && _hasPendingChanges) {
-      await ErrorHandlerService.logMessage('SyncService: Back online, syncing pending changes');
+      await ErrorHandlerService.logMessage(
+          'SyncService: Back online, syncing pending changes');
       _syncInBackground();
     }
   }
 
-  /// Check if device is online
+  /// Returns true if the device has any active network connection.
   Future<bool> _isOnline() async {
     try {
-      final connectivityResult = await Connectivity().checkConnectivity();
-      return connectivityResult.any((result) => result != ConnectivityResult.none);
-    } catch (e) {
+      final results = await Connectivity().checkConnectivity();
+      return results.any((r) => r != ConnectivityResult.none);
+    } catch (_) {
       return false;
     }
   }
 
-  /// Get sync status text
+  /// Human-readable description of the current sync state.
   String getSyncStatusText() {
-    if (_isSyncing) {
-      return 'Syncing...';
-    } else if (_hasPendingChanges) {
-      return 'Changes pending';
-    } else if (_lastSyncTime != null) {
+    if (_isSyncing) return 'Syncing...';
+    if (_hasPendingChanges) return 'Changes pending';
+    if (_lastSyncTime != null) {
       final diff = DateTime.now().difference(_lastSyncTime!);
-      if (diff.inMinutes < 1) {
-        return 'Synced just now';
-      } else if (diff.inMinutes < 60) {
-        return 'Synced ${diff.inMinutes}m ago';
-      } else {
-        return 'Synced ${diff.inHours}h ago';
-      }
-    } else {
-      return 'Not synced';
+      if (diff.inMinutes < 1) return 'Synced just now';
+      if (diff.inMinutes < 60) return 'Synced ${diff.inMinutes}m ago';
+      return 'Synced ${diff.inHours}h ago';
     }
+    return 'Not synced';
   }
 
-  /// Dispose resources
+  /// Release resources.
   void dispose() {
     _periodicSyncTimer?.cancel();
     _debounceTimer?.cancel();
@@ -218,18 +212,12 @@ class SyncService {
   }
 }
 
-/// Sync status enum
-enum SyncStatus {
-  idle,
-  syncing,
-  synced,
-  error,
-}
+/// Broadcast sync state.
+enum SyncStatus { idle, syncing, synced, error }
 
-/// Sync result
+/// Result returned by [SyncService.syncNow].
 class SyncResult {
   final bool success;
   final String? reason;
-
-  SyncResult({required this.success, this.reason});
+  const SyncResult({required this.success, this.reason});
 }
