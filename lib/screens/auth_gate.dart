@@ -6,6 +6,7 @@ import '../services/app_state_service.dart';
 import '../services/ui_language_provider.dart';
 import 'login_screen.dart';
 import 'app_router.dart';
+import 'onboarding_screen.dart';
 
 /// Enhanced AuthGate with proper state management and error handling
 class AuthGate extends StatefulWidget {
@@ -59,8 +60,7 @@ class _AuthGateState extends State<AuthGate> {
   @override
   Widget build(BuildContext context) {
     final loc = context.watch<UiLanguageProvider>().loc;
-    
-    // Show loading during initialization
+
     if (_isInitializing) {
       return Scaffold(
         backgroundColor: Colors.brown,
@@ -74,10 +74,7 @@ class _AuthGateState extends State<AuthGate> {
               const SizedBox(height: 16),
               Text(
                 loc.initializing,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                ),
+                style: const TextStyle(color: Colors.white, fontSize: 16),
               ),
             ],
           ),
@@ -85,7 +82,6 @@ class _AuthGateState extends State<AuthGate> {
       );
     }
 
-    // Show error if initialization failed
     if (_initError != null) {
       return Scaffold(
         backgroundColor: Colors.brown.shade50,
@@ -95,11 +91,7 @@ class _AuthGateState extends State<AuthGate> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(
-                  Icons.error_outline,
-                  size: 64,
-                  color: Colors.red,
-                ),
+                const Icon(Icons.error_outline, size: 64, color: Colors.red),
                 const SizedBox(height: 16),
                 Text(
                   loc.initializationError,
@@ -132,11 +124,9 @@ class _AuthGateState extends State<AuthGate> {
       );
     }
 
-    // Main auth stream
     return StreamBuilder<User?>(
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
-        // Log auth state changes
         if (snapshot.hasData) {
           final user = snapshot.data!;
           ErrorHandlerService.logAuthEvent(
@@ -150,7 +140,6 @@ class _AuthGateState extends State<AuthGate> {
           ErrorHandlerService.clearUserIdentifier();
         }
 
-        // Handle connection state
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Scaffold(
             backgroundColor: Colors.brown,
@@ -162,7 +151,6 @@ class _AuthGateState extends State<AuthGate> {
           );
         }
 
-        // Handle errors
         if (snapshot.hasError) {
           ErrorHandlerService.logError(
             snapshot.error!,
@@ -170,18 +158,13 @@ class _AuthGateState extends State<AuthGate> {
             context: 'Auth Stream Error',
             fatal: false,
           );
-
           return Scaffold(
             backgroundColor: Colors.brown.shade50,
             body: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(
-                    Icons.error_outline,
-                    size: 64,
-                    color: Colors.red,
-                  ),
+                  const Icon(Icons.error_outline, size: 64, color: Colors.red),
                   const SizedBox(height: 16),
                   Text(
                     loc.authenticationError,
@@ -197,9 +180,7 @@ class _AuthGateState extends State<AuthGate> {
                   ),
                   const SizedBox(height: 24),
                   ElevatedButton(
-                    onPressed: () {
-                      setState(() {});
-                    },
+                    onPressed: () => setState(() {}),
                     child: Text(loc.retry),
                   ),
                 ],
@@ -208,16 +189,70 @@ class _AuthGateState extends State<AuthGate> {
           );
         }
 
-        // Route based on authentication state
         if (snapshot.hasData) {
-          // User is logged in
           ErrorHandlerService.logScreenView('AppRouter');
-          return const AppRouter();
+          // Gate onboarding for authenticated users (including anonymous).
+          // FutureBuilder resolves the SharedPreferences check once per
+          // auth session; the inner key ensures it rebuilds if auth changes.
+          return _OnboardingGate(
+            key: ValueKey(snapshot.data!.uid),
+          );
         }
 
-        // User is not logged in
         ErrorHandlerService.logScreenView('LoginScreen');
         return const LoginScreen();
+      },
+    );
+  }
+}
+
+/// Resolves whether to show onboarding or go straight to the app.
+/// Keeps the check async without blocking the auth stream.
+class _OnboardingGate extends StatefulWidget {
+  const _OnboardingGate({super.key});
+
+  @override
+  State<_OnboardingGate> createState() => _OnboardingGateState();
+}
+
+class _OnboardingGateState extends State<_OnboardingGate> {
+  late Future<bool> _checkFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkFuture = shouldShowOnboarding();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<bool>(
+      future: _checkFuture,
+      builder: (context, snapshot) {
+        // While checking, show the same loading indicator used elsewhere.
+        if (!snapshot.hasData) {
+          return const Scaffold(
+            backgroundColor: Colors.brown,
+            body: Center(
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              ),
+            ),
+          );
+        }
+
+        if (snapshot.data == true) {
+          return OnboardingScreen(
+            onComplete: () {
+              // Rebuild this subtree — next FutureBuilder check returns false.
+              setState(() {
+                _checkFuture = shouldShowOnboarding();
+              });
+            },
+          );
+        }
+
+        return const AppRouter();
       },
     );
   }

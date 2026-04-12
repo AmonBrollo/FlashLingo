@@ -311,7 +311,7 @@ class EnglishStrings {
   static const String hungarian = 'Hungarian';
   
   // App Info
-  static const String flashLango = 'FlashLango';
+  static const String flashLango = 'FlashLingo';
   static const String somethingWentWrong = 'Something went wrong';
   static const String pleaseRestartApp = 'Please restart the app';
   
@@ -371,4 +371,32 @@ class EnglishStrings {
   static const String notificationsDescription = 'Get notified when your cards are due for review';
   static const String notificationsEnabled = 'Notifications enabled';
   static const String notificationsDisabled = 'Notifications disabled';
+
+  // ── Onboarding ────────────────────────────────────────────────────────────
+
+  // Screen 1 — What it does
+  static const String onboardingTitle1 = 'Learn faster with\nspaced repetition';
+  static const String onboardingBody1 =
+      'FlashLingo shows you each word at exactly the right moment — just before you\'d forget it. You study less, remember more.';
+
+  // Screen 2 — How cards work
+  static const String onboardingTitle2 = 'Three gestures,\nthat\'s all';
+  static const String onboardingBody2 =
+      'Each card has one job: decide if you knew it.';
+  static const String onboardingActionTap = 'Tap — reveal the answer';
+  static const String onboardingActionSwipeRight = 'Swipe right — got it ✓';
+  static const String onboardingActionSwipeLeft = 'Swipe left — need more practice';
+
+  // Screen 3 — The Leitner boxes
+  static const String onboardingTitle3 = 'Cards climb through\n5 boxes';
+  static const String onboardingBody3 =
+      'Get a card right and it moves to a higher box, reviewed less often. Get it wrong and it drops back. Box 5 means you\'ve truly learned it.';
+
+  // Screen 4 — Daily habit
+  static const String onboardingTitle4 = 'Two minutes a day\nis enough';
+  static const String onboardingBody4 =
+      'The algorithm spaces reviews so they pile up gradually. Come back daily and your vocabulary will grow on its own.';
+
+  // CTA
+  static const String onboardingGetStarted = 'Get Started';
 }

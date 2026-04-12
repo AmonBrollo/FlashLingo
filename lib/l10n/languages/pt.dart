@@ -82,16 +82,16 @@ class PortugueseStrings {
   static const String passwordTooShort = 'A senha deve ter pelo menos 6 caracteres';
   static const String confirmYourPassword = 'Confirme sua senha';
   static const String passwordsDoNotMatch = 'As senhas não coincidem';
-  static const String pleaseEnterEmailFirst = 'Por favor, digite seu email primeiro';
+  static const String pleaseEnterEmailFirst = 'Por favor, insira seu endereço de email primeiro';
   
   // Error Messages
-  static const String loginFailed = 'Falha no login. Tente novamente.';
+  static const String loginFailed = 'Falha no login. Por favor, tente novamente.';
   static const String registrationFailed = 'Falha no registro';
   static const String noAccountFound = 'Nenhuma conta encontrada com este email.';
   static const String incorrectPassword = 'Senha incorreta.';
   static const String invalidEmail = 'Endereço de email inválido.';
   static const String accountDisabled = 'Esta conta foi desativada.';
-  static const String tooManyRequests = 'Muitas tentativas. Tente novamente mais tarde.';
+  static const String tooManyRequests = 'Muitas solicitações. Por favor, tente novamente mais tarde.';
   static const String invalidCredential = 'Email ou senha inválidos.';
   static const String emailAlreadyInUse = 'Já existe uma conta com este email.';
   static const String weakPassword = 'Senha muito fraca. Use pelo menos 6 caracteres.';
@@ -104,7 +104,7 @@ class PortugueseStrings {
   }
   
   static String reviewLevel(int level) {
-    return 'Revisão - Nível $level';
+    return 'Revisar - Nível $level';
   }
   
   static String cardsCount(int current, int total) {
@@ -116,15 +116,15 @@ class PortugueseStrings {
   }
   
   static String dueInDays(int days) {
-    return 'Vencimento em ${days}d';
+    return 'Vence em ${days}d';
   }
   
   static String dueInHours(int hours) {
-    return 'Vencimento em ${hours}h';
+    return 'Vence em ${hours}h';
   }
   
   static String dueInMinutes(int minutes) {
-    return 'Vencimento em ${minutes}m';
+    return 'Vence em ${minutes}m';
   }
   
   static String availableIn(String time) {
@@ -141,41 +141,41 @@ class PortugueseStrings {
   
   // Tutorial
   static const String viewTutorial = 'Ver Tutorial';
-  static const String learnHowToUse = 'Aprenda a usar o FlashLango';
+  static const String learnHowToUse = 'Aprenda a usar o FlashLingo';
   static const String startTutorial = 'Iniciar Tutorial';
-  static const String tutorialWillStart = 'O tutorial começará na tela de seleção de baralhos.\n\nVocê pode pular a qualquer momento tocando no botão "Pular".';
+  static const String tutorialWillStart = 'O tutorial começará na tela de seleção de deck.\n\nVocê pode pulá-lo a qualquer momento tocando no botão "Pular".';
   
   // Profile
   static const String anonymousUser = 'Usuário Anônimo';
   static const String loggedIn = 'Conectado';
-  static const String signInToSaveProgress = 'Entre para Salvar Progresso';
+  static const String signInToSaveProgress = 'Faça login para salvar o progresso';
   static const String signOut = 'Sair';
   static const String emailVerified = 'Email Verificado';
   static const String emailNotVerified = 'Email Não Verificado';
   static const String resendEmail = 'Reenviar Email';
-  static const String iVerified = 'Eu Verifiquei';
+  static const String iVerified = 'Já Verifiquei';
   static const String pleaseVerifyEmail = 'Por favor, verifique seu endereço de email para proteger sua conta.';
   static const String emailVerifiedSuccessfully = 'Email verificado com sucesso! 🎉';
   static const String emailNotVerifiedYet = 'Email ainda não verificado. Por favor, verifique sua caixa de entrada.';
-  static const String errorCheckingVerification = 'Erro ao verificar';
-  static const String signInToSync = 'Entre para sincronizar seu progresso entre dispositivos';
+  static const String errorCheckingVerification = 'Erro ao verificar confirmação';
+  static const String signInToSync = 'Faça login para sincronizar seu progresso entre dispositivos';
   
   // Sync Status
   static const String syncStatus = 'Status de Sincronização';
   static const String syncNow = 'Sincronizar Agora';
   static const String syncing = 'Sincronizando...';
   static const String syncCompleted = 'Sincronização concluída com sucesso';
-  static const String syncFailed = 'Sincronização falhou';
+  static const String syncFailed = 'Falha na sincronização';
   static const String syncError = 'Erro de sincronização';
   static const String changesPending = 'Alterações pendentes';
   static const String progressSyncsAutomatically = 'Seu progresso sincroniza automaticamente entre dispositivos';
   
   // Data Management
   static const String dataManagement = 'Gerenciamento de Dados';
-  static const String resetProgress = 'Resetar Progresso de Aprendizado';
-  static const String resetAllData = 'Resetar Todos os Dados';
+  static const String resetProgress = 'Redefinir Progresso de Aprendizado';
+  static const String resetAllData = 'Redefinir Todos os Dados';
   static const String clearAllImages = 'Limpar Todas as Imagens';
-  static const String cleanupUnusedImages = 'Limpar Imagens Não Utilizadas';
+  static const String cleanupUnusedImages = 'Limpar Imagens Não Usadas';
   static const String storageUsage = 'Uso de Armazenamento';
   static const String images = 'Imagens';
   static const String files = 'arquivos';
@@ -191,16 +191,16 @@ class PortugueseStrings {
   static const String removeImageConfirm = 'Tem certeza que deseja remover esta imagem?';
   static const String remove = 'Remover';
   static const String thisWillPermanentlyDelete = 'Isso excluirá permanentemente TODOS os seus dados:';
-  static const String learningProgressAndStats = '• Progresso de aprendizado e estatísticas';
-  static const String languageAndDeckPrefs = '• Preferências de idioma e baralho';
-  static const String allFlashcardImages = '• Todas as imagens de flashcards';
+  static const String learningProgressAndStats = '• Progresso e estatísticas de aprendizado';
+  static const String languageAndDeckPrefs = '• Preferências de idioma e deck';
+  static const String allFlashcardImages = '• Todas as imagens dos flashcards';
   static const String accountPreferences = '• Preferências da conta';
   static const String thisCannotBeUndone = '⚠️ ISSO NÃO PODE SER DESFEITO';
   static const String deleteAllData = 'EXCLUIR TODOS OS DADOS';
-  static const String allDataReset = 'Todos os dados foram resetados';
-  static const String progressResetSuccessfully = 'Progresso resetado com sucesso';
-  static const String errorResettingProgress = 'Erro ao resetar o progresso';
-  static const String errorResettingAllData = 'Erro ao resetar todos os dados';
+  static const String allDataReset = 'Todos os dados foram redefinidos';
+  static const String progressResetSuccessfully = 'Progresso redefinido com sucesso';
+  static const String errorResettingProgress = 'Erro ao redefinir o progresso';
+  static const String errorResettingAllData = 'Erro ao redefinir todos os dados';
   static const String imageSavedSuccessfully = 'Imagem salva com sucesso';
   static const String failedToSaveImage = 'Falha ao salvar imagem';
   static const String imageRemoved = 'Imagem removida';
@@ -210,14 +210,14 @@ class PortugueseStrings {
   // Deck Selector
   static const String loadingProgress = 'Carregando progresso...';
   static const String couldNotLoadProgress = 'Não foi possível carregar o progresso';
-  static const String decksStillAvailable = 'Não se preocupe, seus baralhos ainda estão disponíveis!';
+  static const String decksStillAvailable = 'Não se preocupe, seus decks ainda estão disponíveis!';
   static const String retryLoadingProgress = 'Tentar Carregar Progresso Novamente';
   static const String continueWithoutProgress = 'Continuar Sem Dados de Progresso';
   static const String skipAndContinue = 'Pular e continuar';
-  static const String noCardsToReviewYet = 'Nenhuma carta para revisar ainda';
+  static const String noCardsToReviewYet = 'Sem cartas para revisar ainda';
   static const String studyFlashcardsToSeeHere = 'Estude alguns flashcards para vê-los aqui';
   static const String loadingReviewData = 'Carregando dados de revisão...';
-  static const String errorLoadingDecks = 'Erro ao carregar baralhos';
+  static const String errorLoadingDecks = 'Erro ao carregar decks';
   
   // Level Names & Descriptions
   static String levelName(int level) {
@@ -265,7 +265,7 @@ class PortugueseStrings {
   static const String known = 'Conhecido';
   static const String mastered = 'Dominado';
   static const String noCards = 'Sem cartas';
-  static const String availableSoon = 'Disponível em breve';
+  static const String availableSoon = 'Em breve';
   
   // Image Management
   static const String selectImageSource = 'Selecionar Fonte de Imagem';
@@ -278,27 +278,27 @@ class PortugueseStrings {
   static const String forgot = 'Esqueci';
   static const String remember = 'Lembrei';
   static const String flip = 'Virar';
-  static const String flipCardFirst = 'Por favor, vire o cartão primeiro para ver a tradução';
+  static const String flipCardFirst = 'Por favor, vire a carta primeiro para ver a tradução';
   
   // Password Reset Dialog
   static const String passwordResetLinkWillBeSent = 'Um link de redefinição de senha será enviado para:';
-  static const String checkEmailInboxAndSpam = 'Verifique sua caixa de entrada e pasta de spam.';
+  static const String checkEmailInboxAndSpam = 'Verifique sua caixa de entrada e a pasta de spam.';
   static const String passwordResetEmailSent = 'Email de redefinição de senha enviado para:';
-  static const String checkInboxAndSpam = 'Verifique sua caixa de entrada e pasta de spam. O link expirará em 1 hora.';
+  static const String checkInboxAndSpam = 'Verifique sua caixa de entrada e spam. O link expirará em 1 hora.';
   
   // Registration Messages
   static const String accountCreatedSuccessfully = 'Sua conta foi criada com sucesso.';
   static const String verificationEmailSentTo = 'Enviamos um email de verificação para:';
-  static const String pleaseCheckInboxToVerify = 'Por favor, verifique sua caixa de entrada e pasta de spam para verificar seu endereço de email.';
-  static const String canStartUsingAppNow = 'Você pode começar a usar o aplicativo agora. A verificação é opcional, mas recomendada.';
+  static const String pleaseCheckInboxToVerify = 'Por favor, verifique sua caixa de entrada e spam para verificar seu endereço de email.';
+  static const String canStartUsingAppNow = 'Você já pode começar a usar o aplicativo. A verificação é opcional, mas recomendada.';
   static const String verificationEmailSent = 'Email de verificação enviado! Verifique sua caixa de entrada.';
-  static const String tooManyEmailRequests = 'Muitas solicitações. Tente novamente mais tarde.';
+  static const String tooManyEmailRequests = 'Muitas solicitações. Por favor, tente novamente mais tarde.';
   static const String failedToSendVerificationEmail = 'Falha ao enviar email de verificação';
   static const String alreadyHaveAccountForgotPassword = 'Já tem uma conta mas esqueceu a senha?';
-  static const String accountCreatedButEmailFailed = 'Conta criada! No entanto, o email de verificação não pôde ser enviado. Você pode reenviá-lo do seu perfil.';
+  static const String accountCreatedButEmailFailed = 'Conta criada! No entanto, o email de verificação não pôde ser enviado. Você pode reenviar pelo seu perfil.';
   
   // Menu Items
-  static const String selectDeckMenu = 'Selecionar Baralho';
+  static const String selectDeckMenu = 'Selecionar Deck';
   
   // Storage Info
   static String freeUpStorage(String sizeMB) {
@@ -311,7 +311,7 @@ class PortugueseStrings {
   static const String hungarian = 'Húngaro';
   
   // App Info
-  static const String flashLango = 'FlashLango';
+  static const String flashLango = 'FlashLingo';
   static const String somethingWentWrong = 'Algo deu errado';
   static const String pleaseRestartApp = 'Por favor, reinicie o aplicativo';
   
@@ -322,17 +322,17 @@ class PortugueseStrings {
   // App Router specific
   static const String checkingAuthentication = 'Verificando autenticação...';
   static const String refreshingData = 'Atualizando dados...';
-  static const String loadingDecks = 'Carregando baralhos...';
-  static const String noDeckFound = 'Nenhum baralho encontrado';
-  static const String checkInstallation = 'Verifique sua instalação';
+  static const String loadingDecks = 'Carregando decks de flashcards...';
+  static const String noDeckFound = 'Nenhum deck de flashcard encontrado';
+  static const String checkInstallation = 'Por favor, verifique sua instalação';
   static const String usingOfflineData = 'Usando dados offline...';
   static const String unableToLoad = 'Não foi possível carregar';
-  static const String havingTroubleLoading = 'Estamos tendo problemas para carregar seus dados. O que você gostaria de fazer?';
-  static const String resetSetup = 'Resetar Configuração';
+  static const String havingTroubleLoading = 'Estamos com problemas para carregar seus dados. O que você gostaria de fazer?';
+  static const String resetSetup = 'Redefinir Configuração';
   static const String connectionIssue = 'Problema de Conexão';
-  static const String checkInternetConnection = 'Verifique sua conexão com a internet.';
-  static const String skipToSetup = 'Pular para Configuração';
-  static const String takesJustMoment = 'Geralmente leva apenas um momento...';
+  static const String checkInternetConnection = 'Por favor, verifique sua conexão com a internet.';
+  static const String skipToSetup = 'Ir para Configuração';
+  static const String takesJustMoment = 'Isso geralmente leva apenas um momento...';
   static const String initializing = 'Inicializando...';
   static const String initializationError = 'Erro de Inicialização';
   static const String authenticationError = 'Erro de Autenticação';
@@ -371,4 +371,32 @@ class PortugueseStrings {
   static const String notificationsDescription = 'Receba notificações quando seus cartões estiverem prontos para revisão';
   static const String notificationsEnabled = 'Notificações ativadas';
   static const String notificationsDisabled = 'Notificações desativadas';
+
+  // ── Onboarding ────────────────────────────────────────────────────────────
+
+  // Screen 1 — What it does
+  static const String onboardingTitle1 = 'Aprenda mais rápido com\nrepetição espaçada';
+  static const String onboardingBody1 =
+      'O FlashLingo mostra cada palavra no momento certo — antes que você esqueça. Você estuda menos e lembra mais.';
+
+  // Screen 2 — How cards work
+  static const String onboardingTitle2 = 'Três gestos,\nsó isso';
+  static const String onboardingBody2 =
+      'Cada carta tem um objetivo: decidir se você sabia a resposta.';
+  static const String onboardingActionTap = 'Toque — revelar a resposta';
+  static const String onboardingActionSwipeRight = 'Deslize direita — acertei ✓';
+  static const String onboardingActionSwipeLeft = 'Deslize esquerda — preciso praticar';
+
+  // Screen 3 — The Leitner boxes
+  static const String onboardingTitle3 = 'As cartas sobem por\n5 caixas';
+  static const String onboardingBody3 =
+      'Acerte uma carta e ela sobe para uma caixa maior, revisada com menos frequência. Erre e ela volta. Caixa 5 significa que você realmente aprendeu.';
+
+  // Screen 4 — Daily habit
+  static const String onboardingTitle4 = 'Dois minutos por dia\njá são suficientes';
+  static const String onboardingBody4 =
+      'O algoritmo espaça as revisões para que se acumulem aos poucos. Volte todo dia e seu vocabulário vai crescer sozinho.';
+
+  // CTA
+  static const String onboardingGetStarted = 'Começar';
 }

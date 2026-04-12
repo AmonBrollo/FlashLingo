@@ -1171,7 +1171,7 @@ class AppLocalizations {
         en: EnglishStrings.accountCreatedButEmailFailed,
       );
 
-// Review Screen specific
+  // Review Screen specific
   String get loadingReviewData => _getString(
         pt: PortugueseStrings.loadingReviewData,
         en: EnglishStrings.loadingReviewData,
@@ -1201,6 +1201,68 @@ class AppLocalizations {
   String get notificationsDisabled => _getString(
         pt: PortugueseStrings.notificationsDisabled,
         en: EnglishStrings.notificationsDisabled,
+      );
+
+  // ── Onboarding ────────────────────────────────────────────────────────────
+
+  String get onboardingTitle1 => _getString(
+        pt: PortugueseStrings.onboardingTitle1,
+        en: EnglishStrings.onboardingTitle1,
+      );
+
+  String get onboardingBody1 => _getString(
+        pt: PortugueseStrings.onboardingBody1,
+        en: EnglishStrings.onboardingBody1,
+      );
+
+  String get onboardingTitle2 => _getString(
+        pt: PortugueseStrings.onboardingTitle2,
+        en: EnglishStrings.onboardingTitle2,
+      );
+
+  String get onboardingBody2 => _getString(
+        pt: PortugueseStrings.onboardingBody2,
+        en: EnglishStrings.onboardingBody2,
+      );
+
+  String get onboardingActionTap => _getString(
+        pt: PortugueseStrings.onboardingActionTap,
+        en: EnglishStrings.onboardingActionTap,
+      );
+
+  String get onboardingActionSwipeRight => _getString(
+        pt: PortugueseStrings.onboardingActionSwipeRight,
+        en: EnglishStrings.onboardingActionSwipeRight,
+      );
+
+  String get onboardingActionSwipeLeft => _getString(
+        pt: PortugueseStrings.onboardingActionSwipeLeft,
+        en: EnglishStrings.onboardingActionSwipeLeft,
+      );
+
+  String get onboardingTitle3 => _getString(
+        pt: PortugueseStrings.onboardingTitle3,
+        en: EnglishStrings.onboardingTitle3,
+      );
+
+  String get onboardingBody3 => _getString(
+        pt: PortugueseStrings.onboardingBody3,
+        en: EnglishStrings.onboardingBody3,
+      );
+
+  String get onboardingTitle4 => _getString(
+        pt: PortugueseStrings.onboardingTitle4,
+        en: EnglishStrings.onboardingTitle4,
+      );
+
+  String get onboardingBody4 => _getString(
+        pt: PortugueseStrings.onboardingBody4,
+        en: EnglishStrings.onboardingBody4,
+      );
+
+  String get onboardingGetStarted => _getString(
+        pt: PortugueseStrings.onboardingGetStarted,
+        en: EnglishStrings.onboardingGetStarted,
       );
 
   // Convenience properties
