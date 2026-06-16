@@ -56,7 +56,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '316317586609',
     projectId: 'flashlango-2000',
     storageBucket: 'flashlango-2000.firebasestorage.app',
-    iosBundleId: 'com.example.flashlingo',
+    iosBundleId: 'com.flashlingo.app',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
@@ -83,7 +83,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '316317586609',
     projectId: 'flashlingo-2000',
     storageBucket: 'flashlingo-2000.firebasestorage.app',
-    iosBundleId: 'com.example.flashlingo',
+    iosBundleId: 'com.flashlingo.app',
   );
 
 }

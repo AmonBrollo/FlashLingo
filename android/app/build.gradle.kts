@@ -1,3 +1,13 @@
+import java.util.Properties
+import java.io.FileInputStream
+
+val keystoreProperties = Properties()
+val keystorePropertiesFile = rootProject.file("key.properties")
+
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+}
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -8,7 +18,16 @@ plugins {
 }
 
 android {
-    namespace = "com.example.flashlingo"
+    signingConfigs {
+    create("release") {
+        keyAlias = keystoreProperties["keyAlias"] as String
+        keyPassword = keystoreProperties["keyPassword"] as String
+        storeFile = file(keystoreProperties["storeFile"] as String)
+        storePassword = keystoreProperties["storePassword"] as String
+    }
+}
+
+    namespace = "com.flashlango.app"
     compileSdk = 36
 
     compileOptions {
@@ -22,25 +41,22 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.flashlingo"
+        applicationId = "com.flashlango.app"
         minSdk = 24
         targetSdk = 36
-        versionCode = 2
-        versionName = "1.0.1"
+        versionCode = 6
+        versionName = "1.0.4"
         
         multiDexEnabled = true
     }
 
     buildTypes {
         release {
-            // Disable minification to avoid R8 issues for now
-            // Enable later when you have proper ProGuard rules
+            signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = false
             isShrinkResources = false
-            
-            signingConfig = signingConfigs.getByName("debug")
         }
-    }
+}
 }
 
 flutter {
